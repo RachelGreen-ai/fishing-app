@@ -10,6 +10,24 @@ npm run dev
 
 Open `http://127.0.0.1:4173`.
 
+## iOS / Xcode
+
+The native iOS project lives in `FishingApp.xcodeproj` and is generated from `project.yml` with XcodeGen.
+
+Regenerate the project after changing `project.yml`:
+
+```bash
+xcodegen generate
+```
+
+Build from the command line:
+
+```bash
+xcodebuild -project FishingApp.xcodeproj -scheme FishingApp -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/fishing-app-derived-data build
+```
+
+Open `FishingApp.xcodeproj` in Xcode to run the `FishingApp` scheme. The native target is a SwiftUI version of the identification MVP with photo selection, privacy controls, evidence fields, confidence tiers, alternatives, and an on-device catch log.
+
 ## What Is Built
 
 - Guided photo intake with client-side quality checks for resolution, lighting, contrast, and sharpness.
