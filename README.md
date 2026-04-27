@@ -13,10 +13,11 @@ Open `http://127.0.0.1:4173`.
 ## What Is Built
 
 - Guided photo intake with client-side quality checks for resolution, lighting, contrast, and sharpness.
+- Photo privacy controls for identification consent, optional de-identified training review, and retention policy.
 - Context capture for region, water type, habitat, date, and waterbody.
 - Visual trait capture for body shape, mouth, markings, tail/fin, and color.
 - Local inference orchestrator with species scoring, location/date/habitat priors, top alternatives, confidence tiers, and cautious harvest language.
-- Mock scan-session API for creating scans, retrieving results, and submitting feedback.
+- Mock upload and scan-session APIs for upload metadata, scan creation, result retrieval, and feedback.
 - Correction flow and local review queue for active-learning style feedback.
 - Local catch log for confirmed or corrected IDs.
 
@@ -24,11 +25,13 @@ Open `http://127.0.0.1:4173`.
 
 The prototype exposes the first backend boundary:
 
+- `POST /api/uploads` creates a mock signed-upload session from image metadata and consent.
+- `POST /api/uploads/:id/complete` marks the mock upload metadata as captured.
 - `POST /api/scans` creates a scan session from photo quality, context, and visual trait evidence.
 - `GET /api/scans/:id` retrieves a scan result.
 - `POST /api/scans/:id/feedback` records confirmations, alternatives, and manual corrections.
 
-The current API stores scans and feedback in server memory. It is meant to define the shape of the product workflow before adding object storage, signed uploads, a database, and a vendor model.
+The current API stores upload metadata, scans, and feedback in server memory. It is meant to define the shape of the product workflow before adding object storage, persistent database tables, and a vendor model.
 
 ## Identification Model Boundary
 
@@ -37,15 +40,15 @@ The current classifier is a deterministic prototype in `src/inference.js`, calle
 The production path from the plan should replace or augment this boundary:
 
 1. Keep the `/api/scans` workflow as the UI contract.
-2. Add signed upload URLs and image storage to scan creation.
+2. Replace mock upload URLs with real signed upload URLs and object storage.
 3. Route primary inference to Fishial.ai or another fish-specific API.
 4. Preserve the local scoring concepts as calibration inputs: photo quality, location/date/habitat priors, lookalike groups, and abstention.
 5. Store corrections and uncertain scans for review and future proprietary training data.
 
 ## Next Steps
 
-1. Add real signed upload sessions and object-storage metadata.
+1. Add persistent storage for uploads, scans, consent, feedback, and catch logs.
 2. Integrate a fish-ID vendor behind an environment-configured service.
 3. Expand the species catalog with canonical taxonomy, synonyms, protected/invasive flags, and regional coverage.
-4. Add consent and image-retention controls before storing user photos.
-5. Build an admin review queue for uncertain IDs, corrections, rare species, and lookalike disagreements.
+4. Add review queues for uncertain IDs, corrections, rare species, and lookalike disagreements.
+5. Add location privacy controls before using GPS-level signals.

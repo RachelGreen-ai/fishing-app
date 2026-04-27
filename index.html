@@ -39,6 +39,37 @@
           </div>
 
           <div class="quality-grid" id="qualityGrid"></div>
+
+          <div class="privacy-box" aria-labelledby="privacyHeading">
+            <div class="section-title compact privacy-title">
+              <span class="step-badge">P</span>
+              <div>
+                <h2 id="privacyHeading">Photo Privacy</h2>
+                <p>Consent travels with every scan session.</p>
+              </div>
+            </div>
+
+            <label class="check-row">
+              <input id="identifyConsent" type="checkbox" checked />
+              <span>Use this photo for identification</span>
+            </label>
+
+            <label class="check-row">
+              <input id="trainingConsent" type="checkbox" />
+              <span>Allow de-identified training review</span>
+            </label>
+
+            <label>
+              <span>Retention</span>
+              <select id="retentionPolicy">
+                <option value="delete-after-scan">Delete after scan</option>
+                <option value="24-hours" selected>Keep 24 hours</option>
+                <option value="30-days">Keep 30 days</option>
+              </select>
+            </label>
+
+            <div class="upload-status" id="uploadStatus">No upload session</div>
+          </div>
         </section>
 
         <section class="panel input-panel" aria-labelledby="contextHeading">

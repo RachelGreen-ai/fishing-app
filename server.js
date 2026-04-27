@@ -7,6 +7,7 @@ const root = process.cwd();
 const port = Number(process.env.PORT || 4173);
 const host = process.env.HOST || "127.0.0.1";
 const scans = new Map();
+const uploads = new Map();
 const feedbackEvents = [];
 
 const types = {
@@ -44,16 +45,81 @@ function sendJson(res, status, payload) {
 }
 
 async function handleApi(req, res, url) {
+  if (req.method === "POST" && url.pathname === "/api/uploads") {
+    const body = await readJson(req);
+    const consent = body.consent || {};
+
+    if (!consent.identification) {
+      sendJson(res, 400, { error: "Photo identification consent is required before creating an upload session." });
+      return true;
+    }
+
+    const id = crypto.randomUUID();
+    const now = new Date();
+    const upload = {
+      id,
+      status: "upload-url-issued",
+      storageKey: `mock-uploads/${id}`,
+      uploadUrl: `/api/uploads/${id}/binary`,
+      expiresAt: new Date(now.getTime() + 10 * 60 * 1000).toISOString(),
+      metadata: {
+        contentType: body.contentType || "application/octet-stream",
+        sizeBytes: Number(body.sizeBytes || 0),
+        width: body.width || null,
+        height: body.height || null
+      },
+      consent: {
+        identification: Boolean(consent.identification),
+        training: Boolean(consent.training),
+        retentionPolicy: consent.retentionPolicy || "delete-after-scan"
+      },
+      createdAt: now.toISOString()
+    };
+
+    uploads.set(id, upload);
+    sendJson(res, 201, upload);
+    return true;
+  }
+
+  const uploadCompleteMatch = url.pathname.match(/^\/api\/uploads\/([^/]+)\/complete$/);
+  if (req.method === "POST" && uploadCompleteMatch) {
+    const upload = uploads.get(uploadCompleteMatch[1]);
+    if (!upload) {
+      sendJson(res, 404, { error: "Upload session not found" });
+      return true;
+    }
+
+    upload.status = "metadata-captured";
+    upload.completedAt = new Date().toISOString();
+    sendJson(res, 200, upload);
+    return true;
+  }
+
   if (req.method === "POST" && url.pathname === "/api/scans") {
     const body = await readJson(req);
     const id = crypto.randomUUID();
     const evidence = body.evidence || {};
+    const upload = body.uploadId ? uploads.get(body.uploadId) : null;
+
+    if (evidence.photoReady && !upload) {
+      sendJson(res, 400, { error: "A photo scan requires a valid upload session." });
+      return true;
+    }
+
     const result = identifyFish(evidence);
     const now = new Date().toISOString();
     const scan = {
       id,
       status: "complete",
       evidence,
+      uploadId: upload?.id || null,
+      image: upload ? {
+        uploadId: upload.id,
+        status: upload.status,
+        metadata: upload.metadata,
+        consent: upload.consent,
+        storageKey: upload.storageKey
+      } : null,
       result,
       createdAt: now,
       completedAt: now,

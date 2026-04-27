@@ -1,7 +1,23 @@
-export async function createScan(evidence) {
+export async function createUploadSession(metadata) {
+  return requestJson("/api/uploads", {
+    method: "POST",
+    body: JSON.stringify(metadata)
+  });
+}
+
+export async function completeUpload(uploadId) {
+  return requestJson(`/api/uploads/${encodeURIComponent(uploadId)}/complete`, {
+    method: "POST"
+  });
+}
+
+export async function createScan(evidence, options = {}) {
   return requestJson("/api/scans", {
     method: "POST",
-    body: JSON.stringify({ evidence })
+    body: JSON.stringify({
+      evidence,
+      uploadId: options.uploadId || null
+    })
   });
 }
 

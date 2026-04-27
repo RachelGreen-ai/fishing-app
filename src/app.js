@@ -1,11 +1,12 @@
 import { speciesCatalog, getSpeciesById } from "./catalog.js";
-import { createScan, submitFeedback } from "./api.js";
+import { completeUpload, createScan, createUploadSession, submitFeedback } from "./api.js";
 import { analyzeImageQuality } from "./inference.js";
 
 const state = {
   photoFile: null,
   photoDataUrl: "",
   quality: null,
+  upload: null,
   lastResult: null,
   currentScan: null
 };
@@ -16,6 +17,10 @@ const elements = {
   previewFrame: document.querySelector("#previewFrame"),
   photoPreview: document.querySelector("#photoPreview"),
   qualityGrid: document.querySelector("#qualityGrid"),
+  uploadStatus: document.querySelector("#uploadStatus"),
+  identifyConsent: document.querySelector("#identifyConsent"),
+  trainingConsent: document.querySelector("#trainingConsent"),
+  retentionPolicy: document.querySelector("#retentionPolicy"),
   resultView: document.querySelector("#resultView"),
   catchLog: document.querySelector("#catchLog"),
   identifyButton: document.querySelector("#identifyButton")
@@ -40,8 +45,14 @@ elements.identifyButton.addEventListener("click", runIdentification);
 elements.resultView.addEventListener("click", handleResultAction);
 elements.catchLog.addEventListener("click", handleLogAction);
 fields.forEach((id) => document.querySelector(`#${id}`).addEventListener("change", refreshStatus));
+[
+  elements.identifyConsent,
+  elements.trainingConsent,
+  elements.retentionPolicy
+].forEach((control) => control.addEventListener("change", handlePrivacyChange));
 
 renderQuality();
+renderUploadStatus();
 renderCatchLog();
 refreshStatus();
 
@@ -50,11 +61,13 @@ async function handlePhotoChange(event) {
   if (!file) return;
 
   state.photoFile = file;
+  state.upload = null;
   state.photoDataUrl = await readFileAsDataUrl(file);
   elements.photoPreview.src = state.photoDataUrl;
   elements.previewFrame.classList.remove("is-empty");
   elements.scanStatus.textContent = "Checking photo";
   elements.qualityGrid.innerHTML = `<div class="quality-card pending">Analyzing image...</div>`;
+  renderUploadStatus();
 
   try {
     state.quality = await analyzeImageQuality(file);
@@ -74,7 +87,8 @@ async function runIdentification() {
   elements.scanStatus.textContent = "Scanning";
 
   try {
-    const scan = await createScan(evidence);
+    const upload = await prepareUpload(evidence);
+    const scan = await createScan(evidence, { uploadId: upload?.id });
     state.currentScan = scan;
     state.lastResult = scan.result;
     renderResult(scan.result, scan);
@@ -91,7 +105,43 @@ function getEvidence() {
   return {
     ...Object.fromEntries(fields.map((id) => [id, document.querySelector(`#${id}`).value])),
     photoReady: Boolean(state.photoFile),
-    quality: state.quality
+    quality: state.quality,
+    consent: getConsent()
+  };
+}
+
+async function prepareUpload(evidence) {
+  if (!state.photoFile) {
+    return null;
+  }
+
+  if (!evidence.consent.identification) {
+    throw new Error("Photo identification consent is required for scans with images.");
+  }
+
+  if (state.upload) {
+    return state.upload;
+  }
+
+  elements.uploadStatus.textContent = "Preparing upload session";
+  const upload = await createUploadSession({
+    contentType: state.photoFile.type,
+    sizeBytes: state.photoFile.size,
+    width: state.quality?.width,
+    height: state.quality?.height,
+    consent: evidence.consent
+  });
+
+  state.upload = await completeUpload(upload.id);
+  renderUploadStatus();
+  return state.upload;
+}
+
+function getConsent() {
+  return {
+    identification: elements.identifyConsent.checked,
+    training: elements.trainingConsent.checked,
+    retentionPolicy: elements.retentionPolicy.value
   };
 }
 
@@ -118,6 +168,25 @@ function renderQuality() {
       </div>
     `).join("")}
   `;
+}
+
+function renderUploadStatus() {
+  if (!state.photoFile) {
+    elements.uploadStatus.textContent = "No upload session";
+    return;
+  }
+
+  if (!elements.identifyConsent.checked) {
+    elements.uploadStatus.textContent = "Photo consent off";
+    return;
+  }
+
+  if (!state.upload) {
+    elements.uploadStatus.textContent = "Upload session ready on scan";
+    return;
+  }
+
+  elements.uploadStatus.textContent = `Upload ${state.upload.id.slice(0, 8)} · ${readable(state.upload.consent.retentionPolicy)}`;
 }
 
 function renderPendingResult() {
@@ -150,6 +219,7 @@ function renderResult(result, scan = state.currentScan) {
         <h3>${primary.commonName}</h3>
         <p><em>${primary.scientificName}</em></p>
         <p class="scan-meta">${scan?.provider?.name || "local"} · scan ${scan?.id?.slice(0, 8) || "draft"}</p>
+        ${scan?.image ? `<p class="scan-meta">photo ${scan.image.status} · ${readable(scan.image.consent.retentionPolicy)}</p>` : ""}
       </div>
       <div class="confidence-meter" aria-label="Confidence ${result.confidence} percent">
         <span style="--confidence:${result.confidence}%"></span>
@@ -345,6 +415,12 @@ function refreshStatus() {
   }
 
   elements.scanStatus.textContent = state.quality ? `Photo ${state.quality.overall}` : "Photo added";
+}
+
+function handlePrivacyChange() {
+  state.upload = null;
+  renderUploadStatus();
+  refreshStatus();
 }
 
 function getStored(key) {
