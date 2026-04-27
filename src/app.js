@@ -1,11 +1,13 @@
 import { speciesCatalog, getSpeciesById } from "./catalog.js";
-import { analyzeImageQuality, identifyFish } from "./inference.js";
+import { createScan, submitFeedback } from "./api.js";
+import { analyzeImageQuality } from "./inference.js";
 
 const state = {
   photoFile: null,
   photoDataUrl: "",
   quality: null,
-  lastResult: null
+  lastResult: null,
+  currentScan: null
 };
 
 const elements = {
@@ -65,12 +67,24 @@ async function handlePhotoChange(event) {
   }
 }
 
-function runIdentification() {
+async function runIdentification() {
   const evidence = getEvidence();
-  const result = identifyFish(evidence);
-  state.lastResult = result;
-  renderResult(result);
-  elements.scanStatus.textContent = result.tier;
+  renderPendingResult();
+  elements.identifyButton.disabled = true;
+  elements.scanStatus.textContent = "Scanning";
+
+  try {
+    const scan = await createScan(evidence);
+    state.currentScan = scan;
+    state.lastResult = scan.result;
+    renderResult(scan.result, scan);
+    elements.scanStatus.textContent = scan.result.tier;
+  } catch (error) {
+    renderError(error);
+    elements.scanStatus.textContent = "Scan failed";
+  } finally {
+    elements.identifyButton.disabled = false;
+  }
 }
 
 function getEvidence() {
@@ -106,7 +120,27 @@ function renderQuality() {
   `;
 }
 
-function renderResult(result) {
+function renderPendingResult() {
+  elements.resultView.className = "result-view";
+  elements.resultView.innerHTML = `
+    <div class="result-empty compact-empty">
+      <strong>Running scan</strong>
+      <span>Creating scan session and applying priors.</span>
+    </div>
+  `;
+}
+
+function renderError(error) {
+  elements.resultView.className = "result-view";
+  elements.resultView.innerHTML = `
+    <div class="result-empty error-empty">
+      <strong>Scan failed</strong>
+      <span>${error.message || "Try again."}</span>
+    </div>
+  `;
+}
+
+function renderResult(result, scan = state.currentScan) {
   const primary = result.primary;
   elements.resultView.className = "result-view";
   elements.resultView.innerHTML = `
@@ -115,6 +149,7 @@ function renderResult(result) {
         <span class="tier ${tierClass(result.tier)}">${result.tier}</span>
         <h3>${primary.commonName}</h3>
         <p><em>${primary.scientificName}</em></p>
+        <p class="scan-meta">${scan?.provider?.name || "local"} · scan ${scan?.id?.slice(0, 8) || "draft"}</p>
       </div>
       <div class="confidence-meter" aria-label="Confidence ${result.confidence} percent">
         <span style="--confidence:${result.confidence}%"></span>
@@ -161,12 +196,16 @@ function renderEvidenceRow(label, value) {
   `;
 }
 
-function handleResultAction(event) {
+async function handleResultAction(event) {
   const button = event.target.closest("button");
   if (!button || !state.lastResult) return;
 
   const action = button.dataset.action;
   if (action === "save") {
+    await sendFeedback({
+      speciesId: state.lastResult.primary.id,
+      type: "confirmed"
+    });
     saveCatch(state.lastResult.primary.id, "confirmed");
   }
 
@@ -181,7 +220,10 @@ function handleResultAction(event) {
       confidence: Math.min(state.lastResult.confidence, 80)
     };
     renderResult(state.lastResult);
-    saveReviewEvent(speciesId, "alternative-selected");
+    await sendFeedback({
+      speciesId,
+      type: "alternative-selected"
+    });
   }
 
   if (action === "correct") {
@@ -208,11 +250,15 @@ function renderCorrectionForm() {
     </form>
   `);
 
-  document.querySelector("#correctionForm").addEventListener("submit", (event) => {
+  document.querySelector("#correctionForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     const speciesId = document.querySelector("#correctSpecies").value;
     const note = document.querySelector("#correctionNote").value;
-    saveReviewEvent(speciesId, "manual-correction", note);
+    await sendFeedback({
+      speciesId,
+      type: "manual-correction",
+      note
+    });
     saveCatch(speciesId, "corrected");
   }, { once: true });
 }
@@ -236,6 +282,19 @@ function saveCatch(speciesId, status) {
   localStorage.setItem("catchLog", JSON.stringify(catches.slice(0, 20)));
   renderCatchLog();
   elements.scanStatus.textContent = "Saved";
+}
+
+async function sendFeedback(feedback) {
+  if (state.currentScan?.id) {
+    try {
+      await submitFeedback(state.currentScan.id, feedback);
+    } catch (error) {
+      saveReviewEvent(feedback.speciesId, `${feedback.type}-api-failed`, error.message);
+    }
+    return;
+  }
+
+  saveReviewEvent(feedback.speciesId, feedback.type, feedback.note);
 }
 
 function saveReviewEvent(speciesId, reason, note = "") {

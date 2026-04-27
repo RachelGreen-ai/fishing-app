@@ -87,6 +87,11 @@ h3 {
   letter-spacing: 0;
 }
 
+.scan-meta {
+  margin-bottom: 0;
+  font-size: 0.78rem;
+}
+
 h4 {
   margin: 0 0 10px;
   font-size: 0.86rem;
@@ -341,6 +346,25 @@ select {
   border-radius: 8px;
   background: #f8fbf8;
   text-align: center;
+}
+
+.compact-empty {
+  min-height: 120px;
+}
+
+.error-empty {
+  border-color: rgba(182, 54, 45, 0.42);
+  background: rgba(182, 54, 45, 0.08);
+}
+
+.result-empty strong,
+.result-empty span {
+  display: block;
+}
+
+.result-empty span {
+  margin-top: 5px;
+  font-size: 0.9rem;
 }
 
 .result-head {

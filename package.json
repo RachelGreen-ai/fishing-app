@@ -5,6 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "node server.js",
-    "check": "node --check server.js && node --check src/app.js && node --check src/catalog.js && node --check src/inference.js"
+    "check": "node --check server.js && node --check src/api.js && node --check src/app.js && node --check src/catalog.js && node --check src/inference.js"
   }
 }
