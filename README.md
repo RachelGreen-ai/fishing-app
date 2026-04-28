@@ -46,6 +46,8 @@ Open `FishingApp.xcodeproj` in Xcode to run the `FishingApp` scheme. The native 
 
 The iOS training and integration plan lives in [`docs/ios-ml-training-plan.md`](docs/ios-ml-training-plan.md). The first model artifact should be exported as `FishSpeciesClassifier.mlmodel` and added to the native app target.
 
+Model progress should be benchmark-first. The evaluation plan, golden dataset schema, classification metrics, and fish size/weight metrics live in [`docs/ios-ml-evaluation-plan.md`](docs/ios-ml-evaluation-plan.md).
+
 ## API Contract
 
 The prototype exposes the first backend boundary:
