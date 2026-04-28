@@ -29,3 +29,24 @@ python3 ml/scripts/prepare_qut_kaggle_seed.py \
   ml/data/benchmarks/qut_fish_seed_v1 \
   --mode manifest-only
 ```
+
+Create a reproducible classification split from the Europe archive seed:
+
+```bash
+python3 ml/scripts/create_classification_split.py \
+  ml/data/benchmarks/europe_archive_seed_v1/manifest.jsonl \
+  ml/data/classification/europe_archive_v1 \
+  --mode symlink \
+  --min-per-class 50 \
+  --labels-json ml/fish_species_europe_v1.labels.json \
+  --taxonomy-json ml/fish_species_europe_v1.taxonomy.json
+```
+
+Validate label hierarchy:
+
+```bash
+python3 ml/scripts/validate_label_taxonomy.py \
+  ml/fish_species_europe_v1.taxonomy.json \
+  --labels-json ml/fish_species_europe_v1.labels.json \
+  --aliases-json ml/fish_species_europe_v1.aliases.json
+```

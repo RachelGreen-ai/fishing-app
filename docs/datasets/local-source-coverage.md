@@ -42,7 +42,10 @@ python3 ml/scripts/prepare_qut_kaggle_seed.py \
   --labels ml/fish_species_europe_v1.labels.json \
   --aliases ml/fish_species_europe_v1.aliases.json \
   --mode manifest-only \
-  --prefer any
+  --prefer any \
+  --source-name affine-kaggle \
+  --license CC-BY-NC-SA-4.0 \
+  --split seed
 ```
 
 Result:
@@ -99,6 +102,39 @@ Interpretation:
 - Because the dataset README notes possible citizen-science label noise, use it as seed/training data first.
 - Promote a reviewed subset into a true gold benchmark after manual or expert review.
 
+Reproducible training split:
+
+```bash
+python3 ml/scripts/create_classification_split.py \
+  ml/data/benchmarks/europe_archive_seed_v1/manifest.jsonl \
+  ml/data/classification/europe_archive_v1 \
+  --mode symlink \
+  --min-per-class 50 \
+  --train 0.7 \
+  --validation 0.15 \
+  --test 0.15 \
+  --seed 20260428 \
+  --labels-json ml/fish_species_europe_v1.labels.json \
+  --taxonomy-json ml/fish_species_europe_v1.taxonomy.json
+```
+
+Split result:
+
+- Trainable labels: 29.
+- Skipped labels: `bitterling` only, because it has 36 images and the split floor is 50.
+- Train/validation/test folders are written under `ml/data/classification/europe_archive_v1`.
+- Matching `labels.json` and `taxonomy.json` subsets are written into the split output.
+- Validation command:
+
+```bash
+python3 ml/scripts/validate_dataset.py \
+  ml/data/classification/europe_archive_v1 \
+  ml/data/classification/europe_archive_v1/labels.json \
+  --min-train 40 \
+  --min-validation 8 \
+  --min-test 8
+```
+
 ## NOAA Labeled Fishes In The Wild
 
 Local path: `docs/datasets/_LABELED-FISHES-IN-THE-WILD`
@@ -125,4 +161,3 @@ Interpretation:
 - Strong detector/abstention source.
 - Not a species classifier source.
 - Useful for fish/not-fish detection, empty-scene robustness, and underwater hard examples.
-

@@ -26,6 +26,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--mode", choices=["manifest-only", "symlink", "copy"], default="manifest-only")
     parser.add_argument("--prefer", choices=["cropped", "raw_images", "any"], default="cropped")
     parser.add_argument("--max-per-species", type=int, default=0)
+    parser.add_argument("--split", default="seed")
+    parser.add_argument("--source-name", default=DEFAULT_SOURCE)
+    parser.add_argument("--license", default=DEFAULT_LICENSE)
     return parser.parse_args()
 
 
@@ -225,14 +228,14 @@ def main() -> int:
                 "image": str(destination.relative_to(args.output_root)),
                 "species_id": species_id,
                 "scientific_name": "",
-                "split": "gold",
+                "split": args.split,
                 "scenario_tags": tags,
                 "lookalike_group": "",
                 "region": "",
                 "water_type": "",
                 "quality": quality,
-                "source": DEFAULT_SOURCE,
-                "license": DEFAULT_LICENSE,
+                "source": args.source_name,
+                "license": args.license,
                 "source_species_name": source_species_name,
                 "source_capture_type": capture_type,
                 "source_path": str(image_path),

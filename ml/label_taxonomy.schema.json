@@ -1,0 +1,40 @@
+{
+  "required_species_fields": [
+    "id",
+    "common_name",
+    "scientific_name",
+    "taxon_rank",
+    "family",
+    "family_common",
+    "order",
+    "label_group",
+    "lookalike_group",
+    "regions",
+    "water_types",
+    "habitats",
+    "app_regions",
+    "is_species_level",
+    "status"
+  ],
+  "allowed_statuses": [
+    "active",
+    "candidate",
+    "aggregate",
+    "deprecated"
+  ],
+  "allowed_water_types": [
+    "freshwater",
+    "saltwater",
+    "brackish"
+  ],
+  "allowed_app_regions": [
+    "north-america",
+    "europe"
+  ],
+  "notes": [
+    "Training labels should usually be species-level.",
+    "Aggregate labels are allowed only when source data cannot provide species-level labels, for example Acipenseridae.",
+    "label_group is the hierarchy bucket for family-level metrics and model routing.",
+    "lookalike_group is the hierarchy bucket for high-risk confusion analysis."
+  ]
+}
