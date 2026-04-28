@@ -98,5 +98,100 @@
     "id": "plaice",
     "common_name": "European Plaice",
     "scientific_name": "Pleuronectes platessa"
+  },
+  {
+    "id": "asp",
+    "common_name": "Asp",
+    "scientific_name": "Aspius aspius"
+  },
+  {
+    "id": "common-barbel",
+    "common_name": "Common Barbel",
+    "scientific_name": "Barbus barbus"
+  },
+  {
+    "id": "silver-bream",
+    "common_name": "Silver Bream",
+    "scientific_name": "Blicca bjoerkna"
+  },
+  {
+    "id": "crucian-carp",
+    "common_name": "Crucian Carp",
+    "scientific_name": "Carassius carassius"
+  },
+  {
+    "id": "prussian-carp",
+    "common_name": "Prussian Carp",
+    "scientific_name": "Carassius gibelio"
+  },
+  {
+    "id": "grass-carp",
+    "common_name": "Grass Carp",
+    "scientific_name": "Ctenopharyngodon idella"
+  },
+  {
+    "id": "three-spined-stickleback",
+    "common_name": "Three-Spined Stickleback",
+    "scientific_name": "Gasterosteus aculeatus"
+  },
+  {
+    "id": "gudgeon",
+    "common_name": "Gudgeon",
+    "scientific_name": "Gobio gobio"
+  },
+  {
+    "id": "ruffe",
+    "common_name": "Ruffe",
+    "scientific_name": "Gymnocephalus cernuus"
+  },
+  {
+    "id": "pumpkinseed",
+    "common_name": "Pumpkinseed",
+    "scientific_name": "Lepomis gibbosus"
+  },
+  {
+    "id": "chub",
+    "common_name": "Chub",
+    "scientific_name": "Leuciscus cephalus"
+  },
+  {
+    "id": "ide",
+    "common_name": "Ide",
+    "scientific_name": "Leuciscus idus"
+  },
+  {
+    "id": "common-dace",
+    "common_name": "Common Dace",
+    "scientific_name": "Leuciscus leuciscus"
+  },
+  {
+    "id": "monkey-goby",
+    "common_name": "Monkey Goby",
+    "scientific_name": "Neogobius fluviatilis"
+  },
+  {
+    "id": "bighead-goby",
+    "common_name": "Bighead Goby",
+    "scientific_name": "Neogobius kessleri"
+  },
+  {
+    "id": "round-goby",
+    "common_name": "Round Goby",
+    "scientific_name": "Neogobius melanostomus"
+  },
+  {
+    "id": "bitterling",
+    "common_name": "Bitterling",
+    "scientific_name": "Rhodeus amarus"
+  },
+  {
+    "id": "vimba-bream",
+    "common_name": "Vimba Bream",
+    "scientific_name": "Vimba vimba"
+  },
+  {
+    "id": "sturgeon",
+    "common_name": "Sturgeon",
+    "scientific_name": "Acipenseridae"
   }
 ]

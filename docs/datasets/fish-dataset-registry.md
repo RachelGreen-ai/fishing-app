@@ -2,6 +2,8 @@
 
 This registry tracks useful public datasets for the fishing app. Datasets are grouped by likely app use, not by academic importance alone.
 
+Local source coverage from the currently shared dataset drops is recorded in `docs/datasets/local-source-coverage.md`.
+
 ## Priority Sources
 
 ### AFFiNe - Angling Freshwater Fish Netherlands
@@ -105,4 +107,3 @@ For size/weight:
 ## Europe Expansion
 
 Use `ml/fish_species_europe_v1.labels.json` as the first European label set. It is intentionally broader than the first US MVP labels and should be narrowed per launch country and dataset coverage after source inspection.
-

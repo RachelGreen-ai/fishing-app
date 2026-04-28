@@ -70,6 +70,42 @@ def candidate_images(qut_root: Path, prefer: str) -> list[Path]:
     return sorted(preferred or images)
 
 
+def qut_index_records(qut_root: Path, prefer: str) -> list[tuple[Path, str, str]]:
+    index_path = qut_root / "final_all_index.txt"
+    if not index_path.exists():
+        return []
+
+    image_roots = {
+        "cropped": qut_root / "images" / "cropped",
+        "raw_images": qut_root / "images" / "raw_images",
+        "numbered": qut_root / "images" / "numbered",
+    }
+    if prefer == "any":
+        root_order = [image_roots["cropped"], image_roots["raw_images"], image_roots["numbered"]]
+    elif prefer in image_roots:
+        root_order = [image_roots[prefer], *[root for key, root in image_roots.items() if key != prefer]]
+    else:
+        root_order = [image_roots["cropped"], image_roots["raw_images"], image_roots["numbered"]]
+
+    records = []
+    with index_path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if not line:
+                continue
+            parts = line.split("=")
+            if len(parts) != 5:
+                continue
+            _, species_name, capture_type, image_key, _ = parts
+            image_path = next(
+                (root / f"{image_key}.jpg" for root in root_order if (root / f"{image_key}.jpg").exists()),
+                None,
+            )
+            if image_path:
+                records.append((image_path, species_name, capture_type))
+    return records
+
+
 def infer_species_id(path: Path, qut_root: Path, alias_lookup: dict[str, str]) -> str | None:
     relative = path.relative_to(qut_root)
     parts = [normalize(part) for part in relative.parts[:-1]]
@@ -86,7 +122,19 @@ def infer_species_id(path: Path, qut_root: Path, alias_lookup: dict[str, str]) -
     return None
 
 
-def infer_tags(path: Path) -> tuple[list[str], str]:
+def infer_species_id_from_name(species_name: str, alias_lookup: dict[str, str]) -> str | None:
+    normalized = normalize(species_name)
+    if normalized in alias_lookup:
+        return alias_lookup[normalized]
+
+    for alias, label_id in alias_lookup.items():
+        if alias and alias in normalized:
+            return label_id
+
+    return None
+
+
+def infer_tags(path: Path, capture_type: str = "") -> tuple[list[str], str]:
     text = normalize(" ".join(path.parts))
     tags = set()
     quality = "medium"
@@ -103,6 +151,16 @@ def infer_tags(path: Path) -> tuple[list[str], str]:
         tags.update(["out-of-water", "field"])
     if "in situ" in text or "in-situ" in text:
         tags.update(["in-situ", "underwater"])
+    if capture_type:
+        normalized_capture = normalize(capture_type)
+        tags.add(normalized_capture)
+        if normalized_capture == "controlled":
+            tags.add("side-profile")
+            quality = "high"
+        elif normalized_capture == "insitu":
+            tags.update(["in-situ", "underwater"])
+        elif normalized_capture == "uncontrolled":
+            tags.add("field")
 
     if not tags:
         tags.update(["public-seed"])
@@ -138,11 +196,17 @@ def main() -> int:
     matched_counts = Counter()
     unmatched_counts = Counter()
     rows = []
+    index_records = qut_index_records(args.qut_root, args.prefer)
+    source_records = index_records or [(path, "", "") for path in candidate_images(args.qut_root, args.prefer)]
 
-    for image_path in candidate_images(args.qut_root, args.prefer):
-        species_id = infer_species_id(image_path, args.qut_root, alias_lookup)
+    for image_path, source_species_name, capture_type in source_records:
+        species_id = (
+            infer_species_id_from_name(source_species_name, alias_lookup)
+            if source_species_name
+            else infer_species_id(image_path, args.qut_root, alias_lookup)
+        )
         if not species_id:
-            parent_hint = " / ".join(image_path.relative_to(args.qut_root).parts[:-1])
+            parent_hint = source_species_name or " / ".join(image_path.relative_to(args.qut_root).parts[:-1])
             unmatched_counts[parent_hint or "<root>"] += 1
             continue
 
@@ -153,7 +217,7 @@ def main() -> int:
         image_id = f"qut_{species_id}_{matched_counts[species_id]:05d}"
         destination = images_root / species_id / f"{image_id}{image_path.suffix.lower()}"
         materialize_image(image_path, destination, args.mode)
-        tags, quality = infer_tags(image_path)
+        tags, quality = infer_tags(image_path, capture_type)
 
         rows.append(
             {
@@ -169,6 +233,8 @@ def main() -> int:
                 "quality": quality,
                 "source": DEFAULT_SOURCE,
                 "license": DEFAULT_LICENSE,
+                "source_species_name": source_species_name,
+                "source_capture_type": capture_type,
                 "source_path": str(image_path),
             }
         )
@@ -182,6 +248,7 @@ def main() -> int:
         "qut_root": str(args.qut_root),
         "output_root": str(args.output_root),
         "mode": args.mode,
+        "used_final_all_index": bool(index_records),
         "matched_total": len(rows),
         "matched_per_species": dict(sorted(matched_counts.items())),
         "unmatched_directory_count": len(unmatched_counts),

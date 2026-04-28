@@ -14,3 +14,6 @@ ml/data/
 ml/runs/
 ml/checkpoints/
 ml/artifacts/
+docs/datasets/Fish_Data/
+docs/datasets/_LABELED-FISHES-IN-THE-WILD/
+docs/datasets/archive/
