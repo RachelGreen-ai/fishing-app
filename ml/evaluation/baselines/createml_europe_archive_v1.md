@@ -43,6 +43,12 @@ xcrun swift ml/scripts/predict_coreml_image_classifier.swift \
 python3 ml/scripts/evaluate_predictions.py \
   ml/data/classification/europe_archive_v1/test.manifest.jsonl \
   ml/runs/createml/europe_archive_v1/test_predictions.jsonl
+
+python3 ml/scripts/evaluate_predictions.py \
+  ml/data/classification/europe_archive_v1/test.manifest.jsonl \
+  ml/runs/createml/europe_archive_v1/test_predictions.jsonl \
+  --prior-json ml/angler_priority_v1.json \
+  --prior-region europe
 ```
 
 ## Metrics
@@ -56,6 +62,9 @@ No threshold:
 - Macro recall: 52.46%
 - Expected calibration error: 3.68%
 - Mean prediction latency: 3.43 ms
+- Europe angler-priority weighted top-1 accuracy: 61.03%
+- Europe angler-priority weighted top-3 accuracy: 76.67%
+- Europe prior coverage in this split: 84.80%
 
 Create ML built-in test accuracy:
 
@@ -68,6 +77,8 @@ Threshold `0.70`:
 - Top-1 over all known examples: 33.36%
 - Top-3 over all known examples: 36.05%
 - Macro recall: 29.72%
+- Europe angler-priority weighted coverage: 44.29%
+- Europe angler-priority weighted selective top-1 accuracy: 89.09%
 
 Threshold `0.90`:
 
@@ -76,6 +87,21 @@ Threshold `0.90`:
 - Top-1 over all known examples: 19.68%
 - Top-3 over all known examples: 20.04%
 - Macro recall: 16.55%
+- Europe angler-priority weighted coverage: 25.12%
+- Europe angler-priority weighted selective top-1 accuracy: 94.17%
+
+Missing from Europe prior coverage because this archive split does not include those labels:
+
+- `atlantic-herring`
+- `atlantic-mackerel`
+- `atlantic-salmon`
+- `bitterling`
+- `blue-whiting`
+- `cod`
+- `european-grayling`
+- `european-seabass`
+- `gilthead-seabream`
+- `plaice`
 
 ## Best And Weakest Species
 
@@ -114,9 +140,10 @@ The high-confidence behavior is encouraging: at a 0.90 threshold, selective accu
 
 Priority improvement areas:
 
+- Treat this as an imbalanced deployment problem, with both balanced macro metrics and angler-priority weighted metrics.
+- Add or promote training data for high-priority Europe species missing from the archive split: `cod`, `european-seabass`, `atlantic-salmon`, `european-grayling`, `plaice`, and `gilthead-seabream`.
 - Add more data or merge sparse labels such as `common-dace`, `vimba-bream`, and `bighead-goby`.
-- Improve lookalike groups, especially `roach-rudd-bream` and `asp-chub-ide-dace`.
+- Improve high-priority lookalike groups, especially `roach-rudd-bream`, `perch-ruffe-zander`, and `asp-chub-ide-dace`.
 - Add unknown/out-of-scope examples so abstention recall can be measured.
 - Train a stronger PyTorch/Core ML model after this Create ML baseline.
 - Review label quality in citizen-science source images before promoting anything to final gold.
-

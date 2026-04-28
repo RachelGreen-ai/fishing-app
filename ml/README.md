@@ -73,3 +73,13 @@ python3 ml/scripts/evaluate_predictions.py \
   ml/data/classification/europe_archive_v1/test.manifest.jsonl \
   ml/runs/createml/europe_archive_v1/test_predictions.jsonl
 ```
+
+Evaluate against the app's initial angler-priority prior:
+
+```bash
+python3 ml/scripts/evaluate_predictions.py \
+  ml/data/classification/europe_archive_v1/test.manifest.jsonl \
+  ml/runs/createml/europe_archive_v1/test_predictions.jsonl \
+  --prior-json ml/angler_priority_v1.json \
+  --prior-region europe
+```

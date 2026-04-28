@@ -28,9 +28,20 @@ Report all of the following:
 
 - Top-1 and top-3 species accuracy.
 - Macro recall by species.
+- Angler-priority weighted top-1 and top-3 accuracy by region.
 - Accuracy by `label_group`.
 - Accuracy inside `lookalike_group`.
 - Abstention performance for unknown/out-of-scope fish.
 
 This prevents a model from looking good overall while failing where anglers care most: confusing visually similar species with different regulations.
 
+## Imbalance Rule
+
+Do not let the source dataset decide product quality. Some public datasets are naturally skewed toward easier-to-source species, while real fishing photos are skewed toward what anglers catch and care about.
+
+Keep two scorecards:
+
+- Balanced scorecard: macro recall, per-species recall, and lookalike recall.
+- Majority-user scorecard: region-specific angler-priority weighted accuracy from `ml/angler_priority_v1.json`.
+
+Training can rebalance, oversample, or use class-weighted loss. Evaluation should still expose both views so we do not overfit to the tail or ignore the species most users bring to the app.

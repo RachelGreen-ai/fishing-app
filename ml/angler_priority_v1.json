@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "name": "angler_priority_v1",
+  "description": "Pragmatic deployment priors for fish species that anglers are more likely to photograph in the app. These are not training labels and should be revised with region-specific app telemetry, licensing, creel, and catch-report data.",
+  "regions": {
+    "north-america": {
+      "description": "Initial North America MVP prior over the current app taxonomy.",
+      "method": "Mapped broad U.S. recreational target groups onto available MVP labels. Black bass, panfish, catfish/bullheads, trout, and crappie dominate non-Great-Lakes freshwater effort; red drum and snapper are retained for saltwater MVP coverage.",
+      "sources": [
+        {
+          "title": "2016 National Survey of Fishing, Hunting, and Wildlife-Associated Recreation",
+          "url": "https://www.census.gov/library/publications/2018/demo/fhw-16-nat.html",
+          "note": "Official U.S. survey used for freshwater, Great Lakes, and saltwater target-species priorities."
+        }
+      ],
+      "priority_tiers": {
+        "tier_1_majority": ["largemouth-bass", "bluegill", "channel-catfish", "rainbow-trout"],
+        "tier_2_important": ["smallmouth-bass", "red-drum", "red-snapper"],
+        "tier_3_tail": ["spotted-bass"]
+      },
+      "species_weights": {
+        "largemouth-bass": 0.24,
+        "smallmouth-bass": 0.09,
+        "spotted-bass": 0.04,
+        "bluegill": 0.19,
+        "channel-catfish": 0.16,
+        "rainbow-trout": 0.15,
+        "red-drum": 0.08,
+        "red-snapper": 0.05
+      }
+    },
+    "europe": {
+      "description": "Initial Europe prior over the current Europe taxonomy.",
+      "method": "Blends Europe-wide inland fishery references, country/coarse-fishing target patterns, and current taxonomy coverage. Freshwater angling is weighted higher because the current app dataset and user workflow are catch-photo oriented; marine/coastal species remain represented for future expansion.",
+      "sources": [
+        {
+          "title": "FAO Inland fisheries of Europe",
+          "url": "https://www.fao.org/4/t0798e/T0798E17.htm",
+          "note": "Lists important European inland fish for commercial, food, and recreational use."
+        },
+        {
+          "title": "FAO Inland fisheries of Europe questionnaire summary",
+          "url": "https://www.fao.org/fishery/docs/CDrom/aquaculture/a0844t/docrep/009/T0377E/T0377E23.htm",
+          "note": "Includes angler catch/preference signals for roach, pike, bream, perch, carp, eel, tench, catfish, pike-perch, chub, and trout."
+        },
+        {
+          "title": "UK common coarse species guide",
+          "url": "https://tacklebox.co.uk/common-uk-coarse-species-roach-bream-carp-tench-perch-and-more/",
+          "note": "Practical coarse-angling source for common UK species patterns."
+        }
+      ],
+      "priority_tiers": {
+        "tier_1_majority": ["european-perch", "common-carp", "northern-pike", "zander", "brown-trout", "roach", "common-bream"],
+        "tier_2_important": ["wels-catfish", "tench", "cod", "european-seabass", "atlantic-salmon", "european-eel", "rudd"],
+        "tier_3_tail": ["common-barbel", "crucian-carp", "prussian-carp", "gudgeon", "chub", "atlantic-mackerel", "plaice", "gilthead-seabream", "european-grayling", "sturgeon", "grass-carp", "pumpkinseed", "ruffe", "asp", "silver-bream", "round-goby", "three-spined-stickleback", "ide", "common-dace", "monkey-goby", "bighead-goby", "vimba-bream", "bitterling", "atlantic-herring", "blue-whiting"]
+      },
+      "species_weights": {
+        "european-perch": 0.116,
+        "common-carp": 0.105,
+        "northern-pike": 0.094,
+        "zander": 0.083,
+        "brown-trout": 0.068,
+        "roach": 0.055,
+        "common-bream": 0.055,
+        "wels-catfish": 0.04,
+        "tench": 0.04,
+        "cod": 0.035,
+        "european-seabass": 0.035,
+        "atlantic-salmon": 0.03,
+        "european-eel": 0.025,
+        "rudd": 0.025,
+        "common-barbel": 0.02,
+        "crucian-carp": 0.018,
+        "prussian-carp": 0.018,
+        "gudgeon": 0.012,
+        "chub": 0.012,
+        "atlantic-mackerel": 0.012,
+        "plaice": 0.012,
+        "gilthead-seabream": 0.012,
+        "european-grayling": 0.01,
+        "sturgeon": 0.008,
+        "grass-carp": 0.008,
+        "pumpkinseed": 0.008,
+        "ruffe": 0.006,
+        "asp": 0.006,
+        "silver-bream": 0.006,
+        "round-goby": 0.005,
+        "three-spined-stickleback": 0.003,
+        "ide": 0.003,
+        "common-dace": 0.003,
+        "monkey-goby": 0.002,
+        "bighead-goby": 0.002,
+        "vimba-bream": 0.002,
+        "bitterling": 0.001,
+        "atlantic-herring": 0.003,
+        "blue-whiting": 0.002
+      }
+    }
+  }
+}

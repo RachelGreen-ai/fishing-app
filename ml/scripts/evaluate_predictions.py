@@ -19,6 +19,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("predictions_jsonl", type=Path)
     parser.add_argument("--threshold", type=float, default=0.0)
     parser.add_argument("--ece-bins", type=int, default=10)
+    parser.add_argument("--prior-json", type=Path, help="Optional angler-priority prior JSON.")
+    parser.add_argument("--prior-region", help="Region key inside --prior-json, such as europe.")
     return parser.parse_args()
 
 
@@ -34,6 +36,32 @@ def load_jsonl(path: Path) -> list[dict]:
             except json.JSONDecodeError as exc:
                 raise SystemExit(f"{path}:{line_number}: invalid JSON: {exc}") from exc
     return rows
+
+
+def load_json(path: Path) -> dict:
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def load_priority_weights(path: Path | None, region: str | None) -> dict[str, float]:
+    if not path:
+        return {}
+    if not region:
+        raise SystemExit("--prior-region is required when --prior-json is provided")
+
+    prior = load_json(path)
+    regions = prior.get("regions") or {}
+    if region not in regions:
+        available = ", ".join(sorted(regions)) or "<none>"
+        raise SystemExit(f"Region {region!r} not found in {path}. Available regions: {available}")
+
+    raw_weights = regions[region].get("species_weights") or {}
+    weights = {str(species_id): float(weight) for species_id, weight in raw_weights.items()}
+    if any(weight <= 0 for weight in weights.values()):
+        raise SystemExit("Priority weights must be positive numbers")
+    if not weights:
+        raise SystemExit(f"No species_weights found for region {region!r} in {path}")
+    return weights
 
 
 def top_labels(row: dict) -> list[str]:
@@ -70,10 +98,39 @@ def expected_calibration_error(confidences: list[float], correct: list[bool], bi
     return ece
 
 
+def weighted_sum(rows: list[dict], species_counts: Counter, weights: dict[str, float]) -> float:
+    total = 0.0
+    for row in rows:
+        species_id = row["species_id"]
+        species_count = species_counts.get(species_id, 0)
+        if species_count and species_id in weights:
+            total += weights[species_id] / species_count
+    return total
+
+
+def weighted_accuracy(
+    rows: list[dict],
+    species_counts: Counter,
+    weights: dict[str, float],
+    metric_key: str,
+) -> float | None:
+    denominator = weighted_sum(rows, species_counts, weights)
+    if denominator == 0:
+        return None
+    numerator = 0.0
+    for row in rows:
+        species_id = row["species_id"]
+        species_count = species_counts.get(species_id, 0)
+        if species_count and species_id in weights and row[metric_key]:
+            numerator += weights[species_id] / species_count
+    return numerator / denominator
+
+
 def main() -> int:
     args = parse_args()
     manifest_rows = load_jsonl(args.manifest_jsonl)
     prediction_rows = {row["image_id"]: row for row in load_jsonl(args.predictions_jsonl)}
+    priority_weights = load_priority_weights(args.prior_json, args.prior_region)
 
     missing_predictions = []
     evaluated = []
@@ -141,6 +198,7 @@ def main() -> int:
 
     known = [row for row in evaluated if row["species_id"] != UNKNOWN_LABEL]
     covered_known = [row for row in known if not row["abstained"]]
+    known_species_counts = Counter(row["species_id"] for row in known)
     coverage = len(covered_known) / len(known) if known else 0.0
     top1 = mean(1.0 if row["top1_correct"] else 0.0 for row in known) if known else 0.0
     top3 = mean(1.0 if row["top3_correct"] else 0.0 for row in known) if known else 0.0
@@ -191,6 +249,42 @@ def main() -> int:
             if counts["total"]
         },
     }
+
+    if priority_weights:
+        evaluated_species = set(known_species_counts)
+        weighted_coverage_denominator = weighted_sum(known, known_species_counts, priority_weights)
+        weighted_coverage = (
+            weighted_sum(covered_known, known_species_counts, priority_weights) / weighted_coverage_denominator
+            if weighted_coverage_denominator
+            else 0.0
+        )
+        weighted_top1 = weighted_accuracy(known, known_species_counts, priority_weights, "top1_correct")
+        weighted_top3 = weighted_accuracy(known, known_species_counts, priority_weights, "top3_correct")
+        weighted_selective_top1 = weighted_accuracy(
+            covered_known,
+            known_species_counts,
+            priority_weights,
+            "top1_correct",
+        )
+        report["priority_weighted"] = {
+            "region": args.prior_region,
+            "coverage": round(weighted_coverage, 4),
+            "top1_accuracy": round(weighted_top1, 4) if weighted_top1 is not None else None,
+            "top3_accuracy": round(weighted_top3, 4) if weighted_top3 is not None else None,
+            "selective_top1_accuracy": (
+                round(weighted_selective_top1, 4) if weighted_selective_top1 is not None else None
+            ),
+            "prior_weight_evaluated": round(
+                sum(priority_weights[species] for species in evaluated_species if species in priority_weights),
+                4,
+            ),
+            "prior_weight_missing_from_eval": round(
+                sum(weight for species, weight in priority_weights.items() if species not in evaluated_species),
+                4,
+            ),
+            "species_missing_from_eval": sorted(set(priority_weights) - evaluated_species),
+            "species_missing_from_prior": sorted(evaluated_species - set(priority_weights)),
+        }
 
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0

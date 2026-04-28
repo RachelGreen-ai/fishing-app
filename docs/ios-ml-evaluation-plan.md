@@ -80,6 +80,7 @@ Primary gates:
 - Top-1 accuracy.
 - Top-3 accuracy.
 - Macro recall.
+- Angler-priority weighted top-1 and top-3 accuracy.
 - Per-species precision, recall, and F1.
 - Lookalike-group accuracy.
 - Unknown/out-of-scope abstention recall.
@@ -94,6 +95,20 @@ Calibration and product metrics:
 - App size impact.
 - Battery/thermal behavior on device.
 
+## Imbalance And Angler Priority
+
+Treat fish identification as an imbalanced deployment problem, not a neat academic classification set.
+
+We need three distributions, each used for a different decision:
+
+- Source distribution: what the downloaded datasets happen to contain. This should be audited but not trusted as real app frequency.
+- Diagnostic distribution: class-balanced or near-balanced validation/gold slices. This catches rare-species failures and prevents the model from simply learning the most common labels.
+- Deployment prior: a regional angler-priority distribution for likely user photos. This tells us whether the app satisfies majority use cases.
+
+Use `ml/angler_priority_v1.json` for the initial deployment prior. It is intentionally versioned and evidence-backed, but still a starting point. Replace or refine it with app telemetry, region/state licensing data, creel surveys, tournament/catch-report data, and local regulation context as we learn.
+
+Training should use class balancing, weighted loss, or capped sampling so minority classes do not disappear. Product evaluation should report both macro recall and prior-weighted accuracy. A model only passes when it is strong on common catches and does not abandon rare or regulation-sensitive species.
+
 ## Pass Criteria For MVP
 
 For `fish_id_gold_v1`:
@@ -101,6 +116,8 @@ For `fish_id_gold_v1`:
 - Top-1 accuracy >= 85%.
 - Top-3 accuracy >= 95%.
 - Macro recall >= 80%.
+- Angler-priority weighted top-1 accuracy >= 88%.
+- Angler-priority weighted top-3 accuracy >= 96%.
 - No species recall below 70%.
 - Lookalike-group top-1 >= 75%.
 - Unknown abstention recall >= 85%.

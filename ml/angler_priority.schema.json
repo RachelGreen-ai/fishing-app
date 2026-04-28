@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Angler Priority Prior",
+  "type": "object",
+  "required": ["schema_version", "name", "regions"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "name": {"type": "string"},
+    "description": {"type": "string"},
+    "regions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["species_weights"],
+        "properties": {
+          "description": {"type": "string"},
+          "method": {"type": "string"},
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["title", "url"],
+              "properties": {
+                "title": {"type": "string"},
+                "url": {"type": "string"},
+                "note": {"type": "string"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "priority_tiers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          },
+          "species_weights": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
