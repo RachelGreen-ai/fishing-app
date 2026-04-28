@@ -1,0 +1,37 @@
+{
+  "benchmark_id": "fish_id_gold_v1",
+  "labels_file": "../fish_species_v1.labels.json",
+  "minimum_per_species": 200,
+  "preferred_per_species": 400,
+  "minimum_unknown": 180,
+  "minimum_difficult_fraction": 0.25,
+  "minimum_low_quality_fraction": 0.15,
+  "minimum_lookalike_fraction": 0.2,
+  "required_scenario_tags": [
+    "side-profile",
+    "angled",
+    "hand",
+    "deck",
+    "net",
+    "poor-light",
+    "motion-blur",
+    "partial-fish",
+    "multiple-fish",
+    "juvenile"
+  ],
+  "known_lookalike_groups": [
+    "black-bass",
+    "sunfish",
+    "trout",
+    "catfish",
+    "red-saltwater"
+  ],
+  "quality_values": [
+    "high",
+    "medium",
+    "low"
+  ],
+  "allowed_splits": [
+    "gold"
+  ]
+}

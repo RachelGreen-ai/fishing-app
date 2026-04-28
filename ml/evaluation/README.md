@@ -22,6 +22,14 @@ python3 ml/scripts/evaluate_predictions.py \
   ml/evaluation/examples/predictions.example.jsonl
 ```
 
+Validate the real golden benchmark before running baselines:
+
+```bash
+python3 ml/scripts/validate_gold_benchmark.py \
+  ml/data/benchmarks/fish_id_gold_v1/manifest.jsonl \
+  ml/evaluation/fish_id_gold_v1.config.json
+```
+
 Evaluate size estimates:
 
 ```bash
@@ -29,4 +37,3 @@ python3 ml/scripts/evaluate_size_estimates.py \
   ml/evaluation/examples/size_manifest.example.jsonl \
   ml/evaluation/examples/size_predictions.example.jsonl
 ```
-

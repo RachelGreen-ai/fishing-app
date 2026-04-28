@@ -11,9 +11,13 @@ The current iOS app has no bundled image model, so its honest image-only behavio
 Command:
 
 ```bash
+python3 ml/scripts/write_abstention_baseline.py \
+  ml/data/benchmarks/fish_id_gold_v1/manifest.jsonl \
+  ml/evaluation/baselines/current_app_image_only.fish_id_gold_v1.predictions.jsonl
+
 python3 ml/scripts/evaluate_predictions.py \
-  ml/evaluation/examples/gold_manifest.example.jsonl \
-  ml/evaluation/baselines/current_app_image_only.example.predictions.jsonl
+  ml/data/benchmarks/fish_id_gold_v1/manifest.jsonl \
+  ml/evaluation/baselines/current_app_image_only.fish_id_gold_v1.predictions.jsonl
 ```
 
 Smoke-test metrics:
@@ -42,4 +46,3 @@ Run these on `fish_id_gold_v1` in order:
 2. Apple Create ML baseline.
 3. Fishial pretrained classifier baseline.
 4. Our first trained `fish_species_v1` Core ML model.
-
