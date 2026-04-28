@@ -50,3 +50,26 @@ python3 ml/scripts/validate_label_taxonomy.py \
   --labels-json ml/fish_species_europe_v1.labels.json \
   --aliases-json ml/fish_species_europe_v1.aliases.json
 ```
+
+Train a first local Create ML baseline:
+
+```bash
+xcrun swift ml/scripts/train_createml_image_classifier.swift \
+  ml/data/classification/europe_archive_v1 \
+  ml/artifacts/createml/europe_archive_v1/FishSpeciesClassifier.mlmodel \
+  25
+```
+
+Run predictions for evaluator metrics:
+
+```bash
+xcrun swift ml/scripts/predict_coreml_image_classifier.swift \
+  ml/artifacts/createml/europe_archive_v1/FishSpeciesClassifier.mlmodel \
+  ml/data/classification/europe_archive_v1/test.manifest.jsonl \
+  ml/data/classification/europe_archive_v1 \
+  ml/runs/createml/europe_archive_v1/test_predictions.jsonl
+
+python3 ml/scripts/evaluate_predictions.py \
+  ml/data/classification/europe_archive_v1/test.manifest.jsonl \
+  ml/runs/createml/europe_archive_v1/test_predictions.jsonl
+```

@@ -96,6 +96,23 @@ def split_rows(rows: list[dict], train_fraction: float, validation_fraction: flo
     return splits
 
 
+def taxonomy_lookup(path: Path | None) -> dict[str, dict]:
+    if not path:
+        return {}
+    return {row["id"]: row for row in load_json(path)}
+
+
+def enrich_with_taxonomy(row: dict, taxonomy: dict[str, dict]) -> dict:
+    enriched = dict(row)
+    species_taxonomy = taxonomy.get(row["species_id"])
+    if not species_taxonomy:
+        return enriched
+
+    for field in ("family", "family_common", "label_group", "lookalike_group", "taxon_rank", "is_species_level"):
+        enriched[field] = species_taxonomy.get(field, enriched.get(field, ""))
+    return enriched
+
+
 def write_manifest(path: Path, rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as handle:
@@ -135,6 +152,7 @@ def main() -> int:
     rows = [row for row in eligible_rows if row["species_id"] not in skipped_species]
     splits = split_rows(rows, args.train, args.validation, args.seed)
     present_species = {row["species_id"] for row in rows}
+    taxonomy = taxonomy_lookup(args.taxonomy_json)
 
     args.output_root.mkdir(parents=True, exist_ok=True)
     report_counts = {}
@@ -147,7 +165,7 @@ def main() -> int:
             if not source_path.exists():
                 raise SystemExit(f"source image missing: {source_path}")
             materialize(source_path, destination, args.mode)
-            split_manifest_row = dict(row)
+            split_manifest_row = enrich_with_taxonomy(row, taxonomy)
             split_manifest_row["split"] = split_name
             split_manifest_row["image"] = str(destination.relative_to(args.output_root))
             split_manifest_rows.append(split_manifest_row)
