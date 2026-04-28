@@ -1,0 +1,102 @@
+[
+  {
+    "id": "european-perch",
+    "common_name": "European Perch",
+    "scientific_name": "Perca fluviatilis"
+  },
+  {
+    "id": "northern-pike",
+    "common_name": "Northern Pike",
+    "scientific_name": "Esox lucius"
+  },
+  {
+    "id": "zander",
+    "common_name": "Zander",
+    "scientific_name": "Sander lucioperca"
+  },
+  {
+    "id": "common-carp",
+    "common_name": "Common Carp",
+    "scientific_name": "Cyprinus carpio"
+  },
+  {
+    "id": "brown-trout",
+    "common_name": "Brown Trout",
+    "scientific_name": "Salmo trutta"
+  },
+  {
+    "id": "atlantic-salmon",
+    "common_name": "Atlantic Salmon",
+    "scientific_name": "Salmo salar"
+  },
+  {
+    "id": "european-eel",
+    "common_name": "European Eel",
+    "scientific_name": "Anguilla anguilla"
+  },
+  {
+    "id": "roach",
+    "common_name": "Roach",
+    "scientific_name": "Rutilus rutilus"
+  },
+  {
+    "id": "rudd",
+    "common_name": "Rudd",
+    "scientific_name": "Scardinius erythrophthalmus"
+  },
+  {
+    "id": "common-bream",
+    "common_name": "Common Bream",
+    "scientific_name": "Abramis brama"
+  },
+  {
+    "id": "tench",
+    "common_name": "Tench",
+    "scientific_name": "Tinca tinca"
+  },
+  {
+    "id": "european-grayling",
+    "common_name": "European Grayling",
+    "scientific_name": "Thymallus thymallus"
+  },
+  {
+    "id": "wels-catfish",
+    "common_name": "Wels Catfish",
+    "scientific_name": "Silurus glanis"
+  },
+  {
+    "id": "atlantic-mackerel",
+    "common_name": "Atlantic Mackerel",
+    "scientific_name": "Scomber scombrus"
+  },
+  {
+    "id": "atlantic-herring",
+    "common_name": "Atlantic Herring",
+    "scientific_name": "Clupea harengus"
+  },
+  {
+    "id": "blue-whiting",
+    "common_name": "Blue Whiting",
+    "scientific_name": "Micromesistius poutassou"
+  },
+  {
+    "id": "european-seabass",
+    "common_name": "European Seabass",
+    "scientific_name": "Dicentrarchus labrax"
+  },
+  {
+    "id": "gilthead-seabream",
+    "common_name": "Gilthead Seabream",
+    "scientific_name": "Sparus aurata"
+  },
+  {
+    "id": "cod",
+    "common_name": "Atlantic Cod",
+    "scientific_name": "Gadus morhua"
+  },
+  {
+    "id": "plaice",
+    "common_name": "European Plaice",
+    "scientific_name": "Pleuronectes platessa"
+  }
+]

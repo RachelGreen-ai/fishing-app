@@ -157,6 +157,7 @@ Use species-specific length-weight parameters where available, and show uncertai
 
 ## References
 
+- Dataset registry and Europe source ranking: `docs/datasets/fish-dataset-registry.md`
 - Apple Create ML image classifier workflow: https://developer.apple.com/documentation/createml/creating-an-image-classifier-model
 - Apple Vision and Core ML image classification sample: https://developer.apple.com/documentation/coreml/classifying-images-with-vision-and-core-ml
 - Fishial public training scripts and pretrained fish models: https://github.com/fishial/fish-identification

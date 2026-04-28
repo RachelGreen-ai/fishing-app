@@ -1,0 +1,35 @@
+{
+  "largemouth-bass": [
+    "largemouth bass",
+    "micropterus salmoides"
+  ],
+  "smallmouth-bass": [
+    "smallmouth bass",
+    "micropterus dolomieu"
+  ],
+  "spotted-bass": [
+    "spotted bass",
+    "micropterus punctulatus"
+  ],
+  "bluegill": [
+    "bluegill",
+    "lepomis macrochirus"
+  ],
+  "rainbow-trout": [
+    "rainbow trout",
+    "oncorhynchus mykiss"
+  ],
+  "channel-catfish": [
+    "channel catfish",
+    "ictalurus punctatus"
+  ],
+  "red-drum": [
+    "red drum",
+    "redfish",
+    "sciaenops ocellatus"
+  ],
+  "red-snapper": [
+    "red snapper",
+    "lutjanus campechanus"
+  ]
+}

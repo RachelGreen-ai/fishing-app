@@ -1,0 +1,22 @@
+{
+  "european-perch": ["european perch", "perch", "perca fluviatilis"],
+  "northern-pike": ["northern pike", "pike", "esox lucius"],
+  "zander": ["zander", "pikeperch", "sander lucioperca"],
+  "common-carp": ["common carp", "carp", "cyprinus carpio"],
+  "brown-trout": ["brown trout", "sea trout", "salmo trutta", "salmo trutta morpha trutta", "salmo trutta m fario"],
+  "atlantic-salmon": ["atlantic salmon", "salmo salar"],
+  "european-eel": ["european eel", "eel", "anguilla anguilla"],
+  "roach": ["roach", "rutilus rutilus"],
+  "rudd": ["rudd", "scardinius erythrophthalmus"],
+  "common-bream": ["common bream", "bream", "abramis brama"],
+  "tench": ["tench", "tinca tinca"],
+  "european-grayling": ["european grayling", "grayling", "thymallus thymallus"],
+  "wels-catfish": ["wels catfish", "sheatfish", "silurus glanis"],
+  "atlantic-mackerel": ["atlantic mackerel", "mackerel", "scomber scombrus"],
+  "atlantic-herring": ["atlantic herring", "herring", "clupea harengus"],
+  "blue-whiting": ["blue whiting", "micromesistius poutassou"],
+  "european-seabass": ["european seabass", "sea bass", "dicentrarchus labrax"],
+  "gilthead-seabream": ["gilthead seabream", "gilthead sea bream", "sparus aurata"],
+  "cod": ["atlantic cod", "cod", "gadus morhua"],
+  "plaice": ["european plaice", "plaice", "pleuronectes platessa"]
+}
