@@ -35,6 +35,7 @@ Open `FishingApp.xcodeproj` in Xcode to run the `FishingApp` scheme. The native 
 - Guided photo intake with client-side quality checks for resolution, lighting, contrast, and sharpness.
 - Photo privacy controls for identification consent, optional de-identified training review, and retention policy.
 - Collapsed improvement fields for region, water type, habitat, and visual traits.
+- Native model transparency card showing the current Local Evidence Scorer and its limitations.
 - Local inference orchestrator with species scoring, location/date/habitat priors, top alternatives, confidence tiers, and cautious harvest language.
 - Mock upload and scan-session APIs for upload metadata, scan creation, result retrieval, and feedback.
 - Correction flow and local review queue for active-learning style feedback.

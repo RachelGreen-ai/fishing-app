@@ -28,6 +28,7 @@ struct IdentifyView: View {
                 VStack(spacing: 16) {
                     photoCard
                     resultCard
+                    modelCard
                     improveResultCard
                     catchLogCard
                 }
@@ -124,6 +125,26 @@ struct IdentifyView: View {
                 .padding(.top, 8)
             }
             .padding(.top, 8)
+        }
+    }
+
+    private var modelCard: some View {
+        Card {
+            SectionHeader(number: "M", title: "Model", subtitle: "Current native identification engine.")
+
+            let info = InferenceService.engineInfo
+
+            LabeledContent("Engine", value: "\(info.name) \(info.version)")
+            LabeledContent("Type", value: info.family)
+            Text(info.summary)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            ForEach(info.limitations, id: \.self) { item in
+                Label(item, systemImage: "exclamationmark.triangle")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 
@@ -244,11 +265,16 @@ struct IdentifyView: View {
                             Text(result.tier.rawValue)
                                 .font(.caption.bold())
                                 .foregroundStyle(tierColor(result.tier))
-                            Text(result.primary.commonName)
+                            Text(result.isAbstained ? "Need More Evidence" : result.primary.commonName)
                                 .font(.largeTitle.bold())
-                            Text(result.primary.scientificName)
-                                .italic()
-                                .foregroundStyle(.secondary)
+                            if result.isAbstained {
+                                Text("Best current candidate: \(result.primary.commonName)")
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text(result.primary.scientificName)
+                                    .italic()
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                         Spacer()
                         Text("\(result.confidence)%")
@@ -310,6 +336,7 @@ struct IdentifyView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
+                    .disabled(result.isAbstained)
                 }
             } else {
                 ContentUnavailableView("Add a fish photo to start.", systemImage: "fish")

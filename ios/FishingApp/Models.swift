@@ -38,6 +38,14 @@ struct FishEvidence {
     var consent: PhotoConsent
 }
 
+struct IdentificationEngineInfo {
+    let name: String
+    let version: String
+    let family: String
+    let summary: String
+    let limitations: [String]
+}
+
 struct PhotoConsent {
     var identification: Bool = true
     var trainingReview: Bool = false
@@ -52,8 +60,11 @@ struct SpeciesCandidate: Identifiable {
 }
 
 struct IdentificationResult {
+    let modelInfo: IdentificationEngineInfo
     let tier: ConfidenceTier
     let confidence: Int
+    let visualSignalCount: Int
+    let isAbstained: Bool
     var primary: Species
     let alternatives: [SpeciesCandidate]
     let evidenceRows: [EvidenceRow]

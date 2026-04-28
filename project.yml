@@ -29,6 +29,7 @@ targets:
         UILaunchScreen: {}
         NSPhotoLibraryUsageDescription: Select a fish photo for identification evidence.
         NSCameraUsageDescription: Capture a fish photo for identification evidence.
+        NSLocationWhenInUseUsageDescription: Use your approximate location to improve fish range and season context for identification.
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
 schemes:
