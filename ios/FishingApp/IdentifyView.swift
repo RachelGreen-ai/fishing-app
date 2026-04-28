@@ -1,7 +1,9 @@
+import CoreLocation
 import PhotosUI
 import SwiftUI
 
 struct IdentifyView: View {
+    @StateObject private var locationProvider = LocationProvider()
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var hasPhoto = false
     @State private var photoQuality = 82
@@ -33,6 +35,16 @@ struct IdentifyView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Identify Fish")
+            .onAppear {
+                caughtDate = Date()
+            }
+            .onChange(of: locationProvider.region) {
+                guard let region = locationProvider.region else { return }
+                self.region = region
+                if hasPhoto, consent.identification {
+                    result = InferenceService.identify(evidence)
+                }
+            }
         }
     }
 
@@ -47,6 +59,7 @@ struct IdentifyView: View {
             .buttonStyle(.borderedProminent)
             .onChange(of: selectedPhoto) {
                 hasPhoto = selectedPhoto != nil
+                caughtDate = Date()
                 if hasPhoto && consent.identification {
                     result = InferenceService.identify(evidence)
                 } else {
@@ -56,12 +69,30 @@ struct IdentifyView: View {
 
             HStack {
                 ContextPill(label: "Date", value: caughtDate.formatted(date: .abbreviated, time: .omitted))
-                ContextPill(label: "Season", value: seasonName(for: caughtDate))
+                ContextPill(label: "Time", value: caughtDate.formatted(date: .omitted, time: .shortened))
             }
 
             HStack {
+                ContextPill(label: "Season", value: seasonName(for: caughtDate))
                 ContextPill(label: "Range", value: region.isEmpty ? "Not set" : readable(region))
+            }
+
+            HStack {
                 ContextPill(label: "Water", value: waterType.isEmpty ? "Ask if needed" : readable(waterType))
+                Button {
+                    locationProvider.requestRegion()
+                } label: {
+                    Label(locationProvider.isLocating ? "Locating" : "Use GPS", systemImage: "location")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .disabled(locationProvider.isLocating)
+            }
+
+            if let locationStatus = locationProvider.statusMessage {
+                Label(locationStatus, systemImage: locationProvider.region == nil ? "info.circle" : "checkmark.circle")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
 
             Stepper("Photo quality: \(photoQuality)", value: $photoQuality, in: 20...100, step: 5)
@@ -132,7 +163,12 @@ struct IdentifyView: View {
                 option("Offshore", "offshore")
             }
 
-            DatePicker("Date", selection: $caughtDate, displayedComponents: .date)
+            DatePicker("Date & time", selection: $caughtDate, displayedComponents: [.date, .hourAndMinute])
+                .onChange(of: caughtDate) {
+                    if hasPhoto {
+                        result = InferenceService.identify(evidence)
+                    }
+                }
 
                     SectionHeader(number: "B", title: "Visible Traits", subtitle: "Answer only what is obvious from the photo.")
 
@@ -369,6 +405,122 @@ private struct ContextPill: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+@MainActor
+private final class LocationProvider: NSObject, ObservableObject, CLLocationManagerDelegate {
+    @Published var region: String?
+    @Published var statusMessage: String?
+    @Published var isLocating = false
+
+    private let manager = CLLocationManager()
+
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+    }
+
+    func requestRegion() {
+        guard CLLocationManager.locationServicesEnabled() else {
+            statusMessage = "Location services are off. Set range manually."
+            return
+        }
+
+        isLocating = true
+        statusMessage = "Getting broad range from GPS..."
+
+        switch manager.authorizationStatus {
+        case .notDetermined:
+            manager.requestWhenInUseAuthorization()
+        case .authorizedAlways, .authorizedWhenInUse:
+            manager.requestLocation()
+        case .denied, .restricted:
+            isLocating = false
+            statusMessage = "Location permission is off. Set range manually."
+        @unknown default:
+            isLocating = false
+            statusMessage = "Location is unavailable. Set range manually."
+        }
+    }
+
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        Task { @MainActor in
+            switch manager.authorizationStatus {
+            case .authorizedAlways, .authorizedWhenInUse:
+                manager.requestLocation()
+            case .denied, .restricted:
+                isLocating = false
+                statusMessage = "Location permission is off. Set range manually."
+            case .notDetermined:
+                break
+            @unknown default:
+                isLocating = false
+                statusMessage = "Location is unavailable. Set range manually."
+            }
+        }
+    }
+
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let coordinate = locations.last?.coordinate else { return }
+
+        Task { @MainActor in
+            if let detectedRegion = Self.region(for: coordinate) {
+                region = detectedRegion
+                statusMessage = "Range set to \(Self.readable(detectedRegion)) from GPS."
+            } else {
+                region = nil
+                statusMessage = "GPS is outside supported U.S. ranges. Set range manually."
+            }
+            isLocating = false
+        }
+    }
+
+    nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        Task { @MainActor in
+            isLocating = false
+            statusMessage = "Could not read GPS. Set range manually."
+        }
+    }
+
+    private static func region(for coordinate: CLLocationCoordinate2D) -> String? {
+        let latitude = coordinate.latitude
+        let longitude = coordinate.longitude
+
+        if latitude < 25 || latitude > 50 || longitude < -125 || longitude > -66 {
+            return nil
+        }
+
+        if longitude <= -118 {
+            return "pacific"
+        }
+
+        if latitude <= 31 && longitude >= -98 {
+            return "gulf"
+        }
+
+        if longitude >= -82 && latitude <= 39 {
+            return "atlantic"
+        }
+
+        if latitude >= 41 && longitude >= -93 && longitude <= -75 {
+            return "great-lakes"
+        }
+
+        if longitude >= -90 {
+            return latitude >= 38 ? "northeast" : "southeast"
+        }
+
+        if longitude <= -104 {
+            return "west"
+        }
+
+        return "midwest"
+    }
+
+    private static func readable(_ value: String) -> String {
+        value.replacingOccurrences(of: "-", with: " ")
     }
 }
 

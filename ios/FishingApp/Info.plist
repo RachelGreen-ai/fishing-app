@@ -24,6 +24,8 @@
 	<string>Capture a fish photo for identification evidence.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Select a fish photo for identification evidence.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Use your approximate location to improve fish range and season context for identification.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

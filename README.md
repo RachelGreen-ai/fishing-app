@@ -26,12 +26,12 @@ Build from the command line:
 xcodebuild -project FishingApp.xcodeproj -scheme FishingApp -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/fishing-app-derived-data build
 ```
 
-Open `FishingApp.xcodeproj` in Xcode to run the `FishingApp` scheme. The native target is a SwiftUI version of the identification MVP with photo selection, privacy controls, evidence fields, confidence tiers, alternatives, and an on-device catch log.
+Open `FishingApp.xcodeproj` in Xcode to run the `FishingApp` scheme. The native target is a SwiftUI version of the identification MVP with photo selection, opt-in GPS range context, device date/time capture, privacy controls, evidence fields, confidence tiers, alternatives, and an on-device catch log.
 
 ## What Is Built
 
 - Capture-first identification flow: take/select a photo first, then improve only if needed.
-- Automatic context chips for date, season, saved range, and water type.
+- Automatic context chips for date, time, season, saved/GPS-assisted range, and water type.
 - Guided photo intake with client-side quality checks for resolution, lighting, contrast, and sharpness.
 - Photo privacy controls for identification consent, optional de-identified training review, and retention policy.
 - Collapsed improvement fields for region, water type, habitat, and visual traits.
