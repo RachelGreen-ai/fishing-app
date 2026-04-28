@@ -52,6 +52,16 @@ struct PhotoConsent {
     var retentionPolicy: String = "24-hours"
 }
 
+struct ImageModelPrediction: Identifiable, Hashable {
+    let id = UUID()
+    let label: String
+    let confidence: Double
+
+    var confidencePercent: Int {
+        Int((confidence * 100).rounded())
+    }
+}
+
 struct SpeciesCandidate: Identifiable {
     let id = UUID()
     let species: Species

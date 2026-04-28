@@ -5,7 +5,7 @@ enum InferenceService {
         name: "Local Evidence Scorer",
         version: "0.2",
         family: "Heuristic, not Core ML",
-        summary: "Ranks the local species catalog from user-visible traits plus GPS/date/water context. The selected photo is used as required evidence, but this build does not classify pixels yet.",
+        summary: "Ranks the local species catalog from user-visible traits plus GPS/date/water context. A Core ML/Vision adapter is ready for FishSpeciesClassifier.mlmodel, but no trained model is bundled yet.",
         limitations: [
             "No bundled fish species Core ML model is currently in the iOS app.",
             "Photo pixels are not converted into species labels yet.",

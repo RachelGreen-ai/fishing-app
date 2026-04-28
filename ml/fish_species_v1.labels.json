@@ -1,0 +1,42 @@
+[
+  {
+    "id": "largemouth-bass",
+    "common_name": "Largemouth Bass",
+    "scientific_name": "Micropterus salmoides"
+  },
+  {
+    "id": "smallmouth-bass",
+    "common_name": "Smallmouth Bass",
+    "scientific_name": "Micropterus dolomieu"
+  },
+  {
+    "id": "spotted-bass",
+    "common_name": "Spotted Bass",
+    "scientific_name": "Micropterus punctulatus"
+  },
+  {
+    "id": "bluegill",
+    "common_name": "Bluegill",
+    "scientific_name": "Lepomis macrochirus"
+  },
+  {
+    "id": "rainbow-trout",
+    "common_name": "Rainbow Trout",
+    "scientific_name": "Oncorhynchus mykiss"
+  },
+  {
+    "id": "channel-catfish",
+    "common_name": "Channel Catfish",
+    "scientific_name": "Ictalurus punctatus"
+  },
+  {
+    "id": "red-drum",
+    "common_name": "Red Drum",
+    "scientific_name": "Sciaenops ocellatus"
+  },
+  {
+    "id": "red-snapper",
+    "common_name": "Red Snapper",
+    "scientific_name": "Lutjanus campechanus"
+  }
+]

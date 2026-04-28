@@ -10,6 +10,7 @@
 		349DE05E48BEFE66BAA94DB5 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35A66C6758FE7A32715876B /* Models.swift */; };
 		4622715C43264B6D20292451 /* SpeciesCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17503BD0ED14420BBE71DC1 /* SpeciesCatalog.swift */; };
 		4C55AEE1259E36CB3793EB5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35F2B36F834E5849AB6CF563 /* Assets.xcassets */; };
+		71DA71CB036E574FD7281719 /* FishImageClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */; };
 		B9180EE4D70EC450998C6740 /* FishingAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E892A8057C73FB50C538379 /* FishingAppApp.swift */; };
 		DD91CC6CB08C36FB577206DF /* IdentifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F3BDC62FF6A2E6E99914CC /* IdentifyView.swift */; };
 		EE6788011BF0BD02A187F7D5 /* InferenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D697535A5208CED487670904 /* InferenceService.swift */; };
@@ -20,7 +21,8 @@
 		7E892A8057C73FB50C538379 /* FishingAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingAppApp.swift; sourceTree = "<group>"; };
 		B23870F8DA1DBC83E501CD1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B3F3BDC62FF6A2E6E99914CC /* IdentifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyView.swift; sourceTree = "<group>"; };
-		C1CF0EB6679C592407CA36A7 /* Catch ID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Catch ID.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishImageClassifier.swift; sourceTree = "<group>"; };
+		C1CF0EB6679C592407CA36A7 /* FishingApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FishingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D35A66C6758FE7A32715876B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		D697535A5208CED487670904 /* InferenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceService.swift; sourceTree = "<group>"; };
 		F17503BD0ED14420BBE71DC1 /* SpeciesCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesCatalog.swift; sourceTree = "<group>"; };
@@ -30,7 +32,7 @@
 		40991318CD05B6518916984E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C1CF0EB6679C592407CA36A7 /* Catch ID.app */,
+				C1CF0EB6679C592407CA36A7 /* FishingApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -47,6 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				35F2B36F834E5849AB6CF563 /* Assets.xcassets */,
+				BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */,
 				7E892A8057C73FB50C538379 /* FishingAppApp.swift */,
 				B3F3BDC62FF6A2E6E99914CC /* IdentifyView.swift */,
 				D697535A5208CED487670904 /* InferenceService.swift */,
@@ -76,7 +79,7 @@
 			packageProductDependencies = (
 			);
 			productName = FishingApp;
-			productReference = C1CF0EB6679C592407CA36A7 /* Catch ID.app */;
+			productReference = C1CF0EB6679C592407CA36A7 /* FishingApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -89,6 +92,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					5C73D1246F4B50566A68673A = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -128,6 +132,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71DA71CB036E574FD7281719 /* FishImageClassifier.swift in Sources */,
 				B9180EE4D70EC450998C6740 /* FishingAppApp.swift in Sources */,
 				DD91CC6CB08C36FB577206DF /* IdentifyView.swift in Sources */,
 				EE6788011BF0BD02A187F7D5 /* InferenceService.swift in Sources */,

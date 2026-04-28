@@ -1,6 +1,8 @@
 node_modules/
 .DS_Store
 *.log
+__pycache__/
+*.pyc
 .env
 .env.*
 dist/
@@ -8,3 +10,7 @@ coverage/
 build/
 *.xcuserstate
 xcuserdata/
+ml/data/
+ml/runs/
+ml/checkpoints/
+ml/artifacts/

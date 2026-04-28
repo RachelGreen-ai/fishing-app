@@ -36,10 +36,15 @@ Open `FishingApp.xcodeproj` in Xcode to run the `FishingApp` scheme. The native 
 - Photo privacy controls for identification consent, optional de-identified training review, and retention policy.
 - Collapsed improvement fields for region, water type, habitat, and visual traits.
 - Native model transparency card showing the current Local Evidence Scorer and its limitations.
+- Core ML/Vision classifier boundary ready for a bundled `FishSpeciesClassifier.mlmodel`.
 - Local inference orchestrator with species scoring, location/date/habitat priors, top alternatives, confidence tiers, and cautious harvest language.
 - Mock upload and scan-session APIs for upload metadata, scan creation, result retrieval, and feedback.
 - Correction flow and local review queue for active-learning style feedback.
 - Local catch log for confirmed or corrected IDs.
+
+## Native ML Track
+
+The iOS training and integration plan lives in [`docs/ios-ml-training-plan.md`](docs/ios-ml-training-plan.md). The first model artifact should be exported as `FishSpeciesClassifier.mlmodel` and added to the native app target.
 
 ## API Contract
 
@@ -57,11 +62,11 @@ The current API stores upload metadata, scans, and feedback in server memory. It
 
 The current classifier is a deterministic prototype in `src/inference.js`, called through the scan-session API in `server.js`. It is intentionally honest about uncertainty and should not be treated as a real computer-vision model.
 
-The production path from the plan should replace or augment this boundary:
+The native production path should replace or augment this boundary:
 
 1. Keep the `/api/scans` workflow as the UI contract.
 2. Replace mock upload URLs with real signed upload URLs and object storage.
-3. Route primary inference to Fishial.ai or another fish-specific API.
+3. Route primary inference to the trained `FishSpeciesClassifier.mlmodel` on iOS, or to a server model with the same label IDs.
 4. Preserve the local scoring concepts as calibration inputs: photo quality, location/date/habitat priors, lookalike groups, and abstention.
 5. Store corrections and uncertain scans for review and future proprietary training data.
 

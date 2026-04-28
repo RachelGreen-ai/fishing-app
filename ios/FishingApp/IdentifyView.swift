@@ -4,7 +4,12 @@ import SwiftUI
 
 struct IdentifyView: View {
     @StateObject private var locationProvider = LocationProvider()
+    @StateObject private var imageClassifier = FishImageClassifier()
     @State private var selectedPhoto: PhotosPickerItem?
+    @State private var selectedImageData: Data?
+    @State private var imageModelPredictions: [ImageModelPrediction] = []
+    @State private var imageModelStatus = "No Core ML species model bundled yet."
+    @State private var isClassifyingPhoto = false
     @State private var hasPhoto = false
     @State private var photoQuality = 82
     @State private var region = ""
@@ -59,12 +64,8 @@ struct IdentifyView: View {
             }
             .buttonStyle(.borderedProminent)
             .onChange(of: selectedPhoto) {
-                hasPhoto = selectedPhoto != nil
-                caughtDate = Date()
-                if hasPhoto && consent.identification {
-                    result = InferenceService.identify(evidence)
-                } else {
-                    result = nil
+                Task {
+                    await handleSelectedPhotoChange()
                 }
             }
 
@@ -136,9 +137,26 @@ struct IdentifyView: View {
 
             LabeledContent("Engine", value: "\(info.name) \(info.version)")
             LabeledContent("Type", value: info.family)
+            LabeledContent("Core ML", value: imageClassifier.isModelBundled ? "FishSpeciesClassifier loaded" : "Awaiting FishSpeciesClassifier.mlmodel")
             Text(info.summary)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+
+            if isClassifyingPhoto {
+                ProgressView("Classifying photo")
+            } else {
+                Text(imageModelStatus)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
+            if !imageModelPredictions.isEmpty {
+                Text("Image Model Predictions")
+                    .font(.headline)
+                ForEach(imageModelPredictions) { prediction in
+                    LabeledContent(prediction.label, value: "\(prediction.confidencePercent)%")
+                }
+            }
 
             ForEach(info.limitations, id: \.self) { item in
                 Label(item, systemImage: "exclamationmark.triangle")
@@ -385,6 +403,57 @@ struct IdentifyView: View {
             color: color,
             consent: consent
         )
+    }
+
+    private func handleSelectedPhotoChange() async {
+        hasPhoto = selectedPhoto != nil
+        caughtDate = Date()
+        selectedImageData = nil
+        imageModelPredictions = []
+
+        guard let selectedPhoto else {
+            imageModelStatus = "No Core ML species model bundled yet."
+            result = nil
+            return
+        }
+
+        do {
+            selectedImageData = try await selectedPhoto.loadTransferable(type: Data.self)
+        } catch {
+            imageModelStatus = "Could not load the selected photo."
+        }
+
+        await classifySelectedPhotoIfPossible()
+
+        if hasPhoto && consent.identification {
+            result = InferenceService.identify(evidence)
+        } else {
+            result = nil
+        }
+    }
+
+    private func classifySelectedPhotoIfPossible() async {
+        guard let selectedImageData else {
+            return
+        }
+
+        guard imageClassifier.isModelBundled else {
+            imageModelStatus = "Ready for FishSpeciesClassifier.mlmodel. Using evidence scorer until a trained Core ML model is bundled."
+            return
+        }
+
+        isClassifyingPhoto = true
+        imageModelStatus = "Classifying selected photo..."
+        defer { isClassifyingPhoto = false }
+
+        do {
+            let predictions = try await imageClassifier.classify(imageData: selectedImageData)
+            imageModelPredictions = predictions
+            imageModelStatus = "Core ML returned \(predictions.count) species candidates."
+        } catch {
+            imageModelPredictions = []
+            imageModelStatus = error.localizedDescription
+        }
     }
 
     private func option(_ label: String, _ value: String) -> some View {
