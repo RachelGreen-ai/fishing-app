@@ -8,7 +8,8 @@ const state = {
   quality: null,
   upload: null,
   lastResult: null,
-  currentScan: null
+  currentScan: null,
+  isScanning: false
 };
 
 const elements = {
@@ -17,13 +18,16 @@ const elements = {
   previewFrame: document.querySelector("#previewFrame"),
   photoPreview: document.querySelector("#photoPreview"),
   qualityGrid: document.querySelector("#qualityGrid"),
+  contextSummary: document.querySelector("#contextSummary"),
   uploadStatus: document.querySelector("#uploadStatus"),
   identifyConsent: document.querySelector("#identifyConsent"),
   trainingConsent: document.querySelector("#trainingConsent"),
   retentionPolicy: document.querySelector("#retentionPolicy"),
   resultView: document.querySelector("#resultView"),
   catchLog: document.querySelector("#catchLog"),
-  identifyButton: document.querySelector("#identifyButton")
+  identifyButton: document.querySelector("#identifyButton"),
+  rescanButton: document.querySelector("#rescanButton"),
+  locationButton: document.querySelector("#locationButton")
 };
 
 const fields = [
@@ -39,12 +43,14 @@ const fields = [
   "color"
 ];
 
-document.querySelector("#caughtDate").valueAsDate = new Date();
+applyAutomaticContext();
 elements.photoInput.addEventListener("change", handlePhotoChange);
 elements.identifyButton.addEventListener("click", runIdentification);
+elements.rescanButton.addEventListener("click", runIdentification);
+elements.locationButton.addEventListener("click", useCurrentLocation);
 elements.resultView.addEventListener("click", handleResultAction);
 elements.catchLog.addEventListener("click", handleLogAction);
-fields.forEach((id) => document.querySelector(`#${id}`).addEventListener("change", refreshStatus));
+fields.forEach((id) => document.querySelector(`#${id}`).addEventListener("change", handleFieldChange));
 [
   elements.identifyConsent,
   elements.trainingConsent,
@@ -53,6 +59,7 @@ fields.forEach((id) => document.querySelector(`#${id}`).addEventListener("change
 
 renderQuality();
 renderUploadStatus();
+renderContextSummary();
 renderCatchLog();
 refreshStatus();
 
@@ -62,6 +69,8 @@ async function handlePhotoChange(event) {
 
   state.photoFile = file;
   state.upload = null;
+  state.lastResult = null;
+  state.currentScan = null;
   state.photoDataUrl = await readFileAsDataUrl(file);
   elements.photoPreview.src = state.photoDataUrl;
   elements.previewFrame.classList.remove("is-empty");
@@ -73,6 +82,9 @@ async function handlePhotoChange(event) {
     state.quality = await analyzeImageQuality(file);
     renderQuality();
     refreshStatus();
+    if (elements.identifyConsent.checked) {
+      await runIdentification();
+    }
   } catch (error) {
     state.quality = null;
     elements.qualityGrid.innerHTML = `<div class="quality-card fail">Image check failed</div>`;
@@ -81,9 +93,20 @@ async function handlePhotoChange(event) {
 }
 
 async function runIdentification() {
+  if (!state.photoFile) {
+    renderError(new Error("Take or choose a fish photo first."));
+    return;
+  }
+
+  if (state.isScanning) {
+    return;
+  }
+
+  state.isScanning = true;
   const evidence = getEvidence();
   renderPendingResult();
   elements.identifyButton.disabled = true;
+  elements.rescanButton.disabled = true;
   elements.scanStatus.textContent = "Scanning";
 
   try {
@@ -97,7 +120,12 @@ async function runIdentification() {
     renderError(error);
     elements.scanStatus.textContent = "Scan failed";
   } finally {
+    state.isScanning = false;
     elements.identifyButton.disabled = false;
+    elements.rescanButton.disabled = false;
+    if (!state.lastResult) {
+      refreshStatus();
+    }
   }
 }
 
@@ -145,12 +173,77 @@ function getConsent() {
   };
 }
 
+function applyAutomaticContext() {
+  const date = document.querySelector("#caughtDate");
+  date.valueAsDate = new Date();
+
+  const savedContext = getStoredObject("catchIdContext");
+  if (savedContext.region) document.querySelector("#region").value = savedContext.region;
+  if (savedContext.waterType) document.querySelector("#waterType").value = savedContext.waterType;
+  if (savedContext.habitat) document.querySelector("#habitat").value = savedContext.habitat;
+}
+
+function handleFieldChange(event) {
+  if (["region", "waterType", "habitat"].includes(event.target.id)) {
+    localStorage.setItem("catchIdContext", JSON.stringify({
+      region: document.querySelector("#region").value,
+      waterType: document.querySelector("#waterType").value,
+      habitat: document.querySelector("#habitat").value
+    }));
+  }
+
+  renderContextSummary();
+  refreshStatus();
+}
+
+function renderContextSummary() {
+  const evidence = getEvidence();
+  const season = seasonForDate(evidence.caughtDate);
+  const chips = [
+    ["Date", evidence.caughtDate || "today"],
+    ["Season", season],
+    ["Range", readable(evidence.region) || "not set"],
+    ["Water", readable(evidence.waterType) || "ask if needed"]
+  ];
+
+  elements.contextSummary.innerHTML = chips.map(([label, value]) => `
+    <span class="context-chip">
+      <strong>${label}</strong>
+      ${value}
+    </span>
+  `).join("");
+}
+
+function useCurrentLocation() {
+  if (!navigator.geolocation) {
+    elements.scanStatus.textContent = "Location unavailable";
+    return;
+  }
+
+  elements.scanStatus.textContent = "Locating";
+  navigator.geolocation.getCurrentPosition((position) => {
+    const region = coarseRegionFromCoordinates(
+      position.coords.latitude,
+      position.coords.longitude
+    );
+    document.querySelector("#region").value = region;
+    handleFieldChange({ target: { id: "region" } });
+    elements.scanStatus.textContent = "Range set";
+  }, () => {
+    elements.scanStatus.textContent = "Location skipped";
+  }, {
+    enableHighAccuracy: false,
+    maximumAge: 60 * 60 * 1000,
+    timeout: 8000
+  });
+}
+
 function renderQuality() {
   if (!state.quality) {
     elements.qualityGrid.innerHTML = `
       <div class="quality-card pending">
-        <strong>Waiting</strong>
-        <span>Add a photo to run checks.</span>
+        <strong>Ready</strong>
+        <span>Add a photo to start.</span>
       </div>
     `;
     return;
@@ -194,7 +287,7 @@ function renderPendingResult() {
   elements.resultView.innerHTML = `
     <div class="result-empty compact-empty">
       <strong>Running scan</strong>
-      <span>Creating scan session and applying priors.</span>
+      <span>Checking the photo, applying date and range, then looking for likely matches.</span>
     </div>
   `;
 }
@@ -251,6 +344,7 @@ function renderResult(result, scan = state.currentScan) {
     </div>
 
     <div class="feedback-row">
+      <button type="button" class="secondary-action" data-action="improve">Improve Result</button>
       <button type="button" class="secondary-action" data-action="correct">Correct ID</button>
       <button type="button" class="primary-action" data-action="save">Confirm & Save</button>
     </div>
@@ -277,6 +371,11 @@ async function handleResultAction(event) {
       type: "confirmed"
     });
     saveCatch(state.lastResult.primary.id, "confirmed");
+  }
+
+  if (action === "improve") {
+    document.querySelector(".input-panel").open = true;
+    document.querySelector("#bodyShape").focus();
   }
 
   if (action === "choose-alternative") {
@@ -410,16 +509,26 @@ function handleLogAction(event) {
 
 function refreshStatus() {
   if (!state.photoFile) {
-    elements.scanStatus.textContent = "No scan";
+    elements.scanStatus.textContent = "Ready";
+    elements.identifyButton.disabled = true;
+    elements.identifyButton.textContent = "Add Photo First";
     return;
   }
 
-  elements.scanStatus.textContent = state.quality ? `Photo ${state.quality.overall}` : "Photo added";
+  elements.identifyButton.disabled = false;
+  elements.identifyButton.textContent = state.quality && state.quality.overall < 58
+    ? "Identify Anyway"
+    : "Identify Now";
+
+  if (!state.isScanning) {
+    elements.scanStatus.textContent = state.quality ? `Photo ${state.quality.overall}` : "Photo added";
+  }
 }
 
 function handlePrivacyChange() {
   state.upload = null;
   renderUploadStatus();
+  renderContextSummary();
   refreshStatus();
 }
 
@@ -428,6 +537,14 @@ function getStored(key) {
     return JSON.parse(localStorage.getItem(key) || "[]");
   } catch {
     return [];
+  }
+}
+
+function getStoredObject(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key) || "{}");
+  } catch {
+    return {};
   }
 }
 
@@ -452,4 +569,24 @@ function tierClass(tier) {
 
 function readable(value) {
   return value ? value.replaceAll("-", " ") : "";
+}
+
+function seasonForDate(dateValue) {
+  const month = dateValue ? Number(dateValue.slice(5, 7)) : new Date().getMonth() + 1;
+  if ([12, 1, 2].includes(month)) return "winter";
+  if ([3, 4, 5].includes(month)) return "spring";
+  if ([6, 7, 8].includes(month)) return "summer";
+  return "fall";
+}
+
+function coarseRegionFromCoordinates(latitude, longitude) {
+  if (longitude <= -124 && latitude <= 49 && latitude >= 32) return "pacific";
+  if (longitude <= -104) return "west";
+  if (latitude >= 41 && longitude >= -93 && longitude <= -75) return "great-lakes";
+  if (latitude >= 39 && longitude > -104 && longitude < -82) return "midwest";
+  if (latitude >= 39 && longitude >= -82) return "northeast";
+  if (latitude < 31 && longitude >= -98 && longitude <= -80) return "gulf";
+  if (longitude >= -82 && latitude < 39) return "southeast";
+  if (longitude >= -80) return "atlantic";
+  return "";
 }

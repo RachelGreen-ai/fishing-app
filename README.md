@@ -30,10 +30,11 @@ Open `FishingApp.xcodeproj` in Xcode to run the `FishingApp` scheme. The native 
 
 ## What Is Built
 
+- Capture-first identification flow: take/select a photo first, then improve only if needed.
+- Automatic context chips for date, season, saved range, and water type.
 - Guided photo intake with client-side quality checks for resolution, lighting, contrast, and sharpness.
 - Photo privacy controls for identification consent, optional de-identified training review, and retention policy.
-- Context capture for region, water type, habitat, date, and waterbody.
-- Visual trait capture for body shape, mouth, markings, tail/fin, and color.
+- Collapsed improvement fields for region, water type, habitat, and visual traits.
 - Local inference orchestrator with species scoring, location/date/habitat priors, top alternatives, confidence tiers, and cautious harvest language.
 - Mock upload and scan-session APIs for upload metadata, scan creation, result retrieval, and feedback.
 - Correction flow and local review queue for active-learning style feedback.

@@ -11,43 +11,43 @@
       <header class="topbar">
         <div>
           <p class="eyebrow">Catch ID</p>
-          <h1>Identify Fish</h1>
+          <h1>What fish is this?</h1>
         </div>
-        <div class="status-pill" id="scanStatus">No scan</div>
+        <div class="status-pill" id="scanStatus">Ready</div>
       </header>
 
-      <main class="workspace">
-        <section class="panel capture-panel" aria-labelledby="photoHeading">
+      <main class="capture-workspace">
+        <section class="panel capture-panel primary-panel" aria-labelledby="photoHeading">
           <div class="section-title">
             <span class="step-badge">1</span>
             <div>
-              <h2 id="photoHeading">Photo Evidence</h2>
-              <p>Side profile, good light, full fish visible.</p>
+              <h2 id="photoHeading">Take Or Choose A Photo</h2>
+              <p>Open the camera, frame the full side of the fish, and we will start from there.</p>
             </div>
           </div>
 
-          <label class="drop-zone" for="fishPhoto" id="dropZone">
+          <label class="drop-zone hero-drop-zone" for="fishPhoto" id="dropZone">
             <input id="fishPhoto" type="file" accept="image/*" capture="environment" />
             <span class="upload-icon" aria-hidden="true">+</span>
-            <span class="upload-title">Add fish photo</span>
-            <span class="upload-meta">Camera or gallery</span>
+            <span class="upload-title">Take Photo</span>
+            <span class="upload-meta">or choose from gallery</span>
           </label>
 
           <div class="preview-frame is-empty" id="previewFrame">
             <img id="photoPreview" alt="" />
-            <div class="empty-preview">Image preview</div>
+            <div class="empty-preview">Your fish photo appears here</div>
           </div>
 
+          <div class="quick-actions">
+            <button class="primary-action" id="identifyButton" type="button">Identify Now</button>
+            <button class="secondary-action" id="locationButton" type="button">Use Location</button>
+          </div>
+
+          <div class="auto-context" id="contextSummary"></div>
           <div class="quality-grid" id="qualityGrid"></div>
 
-          <div class="privacy-box" aria-labelledby="privacyHeading">
-            <div class="section-title compact privacy-title">
-              <span class="step-badge">P</span>
-              <div>
-                <h2 id="privacyHeading">Photo Privacy</h2>
-                <p>Consent travels with every scan session.</p>
-              </div>
-            </div>
+          <details class="privacy-box">
+            <summary>Photo privacy</summary>
 
             <label class="check-row">
               <input id="identifyConsent" type="checkbox" checked />
@@ -69,15 +69,31 @@
             </label>
 
             <div class="upload-status" id="uploadStatus">No upload session</div>
-          </div>
+          </details>
         </section>
 
-        <section class="panel input-panel" aria-labelledby="contextHeading">
+        <section class="panel result-panel" aria-live="polite" aria-labelledby="resultHeading">
           <div class="section-title">
             <span class="step-badge">2</span>
             <div>
-              <h2 id="contextHeading">Context</h2>
-              <p>Range and season help handle lookalikes.</p>
+              <h2 id="resultHeading">Result</h2>
+              <p>We show uncertainty, lookalikes, and what would improve the ID.</p>
+            </div>
+          </div>
+          <div id="resultView" class="result-empty">
+            <strong>Add a fish photo</strong>
+            <span>The app will check photo quality and run identification from the photo first.</span>
+          </div>
+        </section>
+
+        <details class="panel input-panel collapsed-panel">
+          <summary>Improve result</summary>
+
+          <div class="section-title compact">
+            <span class="step-badge">A</span>
+            <div>
+              <h2>Auto Context</h2>
+              <p>Date is automatic. Region can come from location or a saved manual choice.</p>
             </div>
           </div>
 
@@ -125,18 +141,13 @@
               <span>Date</span>
               <input id="caughtDate" type="date" />
             </label>
-
-            <label class="wide-field">
-              <span>Waterbody</span>
-              <input id="waterbody" type="text" placeholder="Optional" autocomplete="off" />
-            </label>
           </div>
 
           <div class="section-title compact">
-            <span class="step-badge">3</span>
+            <span class="step-badge">B</span>
             <div>
-              <h2>Visual Traits</h2>
-              <p>Use what is visible; unknown is fine.</p>
+              <h2>Visible Traits</h2>
+              <p>Answer only when the result asks for more evidence.</p>
             </div>
           </div>
 
@@ -203,32 +214,25 @@
               </select>
             </label>
 
-            <button class="primary-action" id="identifyButton" type="button">Run Identification</button>
+            <button class="secondary-action" id="rescanButton" type="button">Update Result</button>
           </div>
-        </section>
+        </details>
 
-        <section class="results-column">
-          <section class="panel result-panel" aria-live="polite" aria-labelledby="resultHeading">
-            <div class="section-title">
-              <span class="step-badge">4</span>
-              <div>
-                <h2 id="resultHeading">Result</h2>
-                <p>Confidence tier, evidence, and alternatives.</p>
-              </div>
+        <section class="panel log-panel" aria-labelledby="logHeading">
+          <div class="section-title">
+            <span class="step-badge">3</span>
+            <div>
+              <h2 id="logHeading">Catch Log</h2>
+              <p>Save after the ID, then add details if you want.</p>
             </div>
-            <div id="resultView" class="result-empty">Run a scan to see candidates.</div>
-          </section>
+          </div>
 
-          <section class="panel log-panel" aria-labelledby="logHeading">
-            <div class="section-title">
-              <span class="step-badge">5</span>
-              <div>
-                <h2 id="logHeading">Catch Log</h2>
-                <p>Confirmed IDs stay local in this prototype.</p>
-              </div>
-            </div>
-            <div id="catchLog" class="catch-log"></div>
-          </section>
+          <label class="wide-field catch-detail">
+            <span>Waterbody</span>
+            <input id="waterbody" type="text" placeholder="Optional, for saved catch" autocomplete="off" />
+          </label>
+
+          <div id="catchLog" class="catch-log"></div>
         </section>
       </main>
     </div>

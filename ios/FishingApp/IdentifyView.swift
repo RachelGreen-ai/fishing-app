@@ -5,28 +5,28 @@ struct IdentifyView: View {
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var hasPhoto = false
     @State private var photoQuality = 82
-    @State private var region = "southeast"
-    @State private var waterType = "freshwater"
-    @State private var habitat = "lake"
+    @State private var region = ""
+    @State private var waterType = ""
+    @State private var habitat = ""
     @State private var caughtDate = Date()
     @State private var waterbody = ""
-    @State private var bodyShape = "stout"
-    @State private var mouth = "large"
-    @State private var markings = "horizontal-stripe"
-    @State private var finTail = "rounded"
-    @State private var color = "green"
+    @State private var bodyShape = ""
+    @State private var mouth = ""
+    @State private var markings = ""
+    @State private var finTail = ""
+    @State private var color = ""
     @State private var consent = PhotoConsent()
     @State private var result: IdentificationResult?
     @State private var catchLog: [CatchLogItem] = []
+    @State private var showImproveResult = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
                     photoCard
-                    contextCard
-                    traitsCard
                     resultCard
+                    improveResultCard
                     catchLogCard
                 }
                 .padding()
@@ -38,22 +38,50 @@ struct IdentifyView: View {
 
     private var photoCard: some View {
         Card {
-            SectionHeader(number: "1", title: "Photo Evidence", subtitle: "Side profile, good light, full fish visible.")
+            SectionHeader(number: "1", title: "Take Or Choose A Photo", subtitle: "Start with the fish. Details can come later if they matter.")
 
             PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                Label(hasPhoto ? "Photo selected" : "Add fish photo", systemImage: hasPhoto ? "checkmark.circle.fill" : "camera.viewfinder")
+                Label(hasPhoto ? "Photo selected" : "Take Photo Or Choose From Gallery", systemImage: hasPhoto ? "checkmark.circle.fill" : "camera.viewfinder")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
             .onChange(of: selectedPhoto) {
                 hasPhoto = selectedPhoto != nil
-                result = nil
+                if hasPhoto && consent.identification {
+                    result = InferenceService.identify(evidence)
+                } else {
+                    result = nil
+                }
+            }
+
+            HStack {
+                ContextPill(label: "Date", value: caughtDate.formatted(date: .abbreviated, time: .omitted))
+                ContextPill(label: "Season", value: seasonName(for: caughtDate))
+            }
+
+            HStack {
+                ContextPill(label: "Range", value: region.isEmpty ? "Not set" : readable(region))
+                ContextPill(label: "Water", value: waterType.isEmpty ? "Ask if needed" : readable(waterType))
             }
 
             Stepper("Photo quality: \(photoQuality)", value: $photoQuality, in: 20...100, step: 5)
+                .onChange(of: photoQuality) {
+                    if hasPhoto {
+                        result = InferenceService.identify(evidence)
+                    }
+                }
 
-            VStack(alignment: .leading, spacing: 10) {
-                SectionHeader(number: "P", title: "Photo Privacy", subtitle: "Consent travels with every scan session.")
+            Button {
+                result = InferenceService.identify(evidence)
+            } label: {
+                Label(hasPhoto ? "Identify Now" : "Add Photo First", systemImage: "sparkles")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(!hasPhoto || !consent.identification)
+
+            DisclosureGroup("Photo privacy") {
+                VStack(alignment: .leading, spacing: 10) {
                 Toggle("Use this photo for identification", isOn: $consent.identification)
                 Toggle("Allow de-identified training review", isOn: $consent.trainingReview)
                 Picker("Retention", selection: $consent.retentionPolicy) {
@@ -61,14 +89,18 @@ struct IdentifyView: View {
                     Text("Keep 24 hours").tag("24-hours")
                     Text("Keep 30 days").tag("30-days")
                 }
+                }
+                .padding(.top, 8)
             }
             .padding(.top, 8)
         }
     }
 
-    private var contextCard: some View {
+    private var improveResultCard: some View {
         Card {
-            SectionHeader(number: "2", title: "Context", subtitle: "Range and season help handle lookalikes.")
+            DisclosureGroup("Improve result", isExpanded: $showImproveResult) {
+                VStack(alignment: .leading, spacing: 14) {
+                    SectionHeader(number: "A", title: "Auto Context", subtitle: "Date is automatic. Add range or water only when it helps.")
 
             Picker("Region", selection: $region) {
                 option("Unknown", "")
@@ -101,14 +133,8 @@ struct IdentifyView: View {
             }
 
             DatePicker("Date", selection: $caughtDate, displayedComponents: .date)
-            TextField("Waterbody", text: $waterbody)
-                .textFieldStyle(.roundedBorder)
-        }
-    }
 
-    private var traitsCard: some View {
-        Card {
-            SectionHeader(number: "3", title: "Visual Traits", subtitle: "Use what is visible; unknown is fine.")
+                    SectionHeader(number: "B", title: "Visible Traits", subtitle: "Answer only what is obvious from the photo.")
 
             Picker("Body", selection: $bodyShape) {
                 option("Unknown", "")
@@ -160,18 +186,20 @@ struct IdentifyView: View {
             Button {
                 result = InferenceService.identify(evidence)
             } label: {
-                Label("Run Identification", systemImage: "sparkles")
+                        Label("Update Result", systemImage: "arrow.clockwise")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
-            .disabled(hasPhoto && !consent.identification)
+                    .buttonStyle(.bordered)
+                }
+                .padding(.top, 8)
+            }
         }
     }
 
     @ViewBuilder
     private var resultCard: some View {
         Card {
-            SectionHeader(number: "4", title: "Result", subtitle: "Confidence tier, evidence, and alternatives.")
+            SectionHeader(number: "2", title: "Result", subtitle: "Confidence tier, evidence, and alternatives.")
 
             if let result {
                 VStack(alignment: .leading, spacing: 14) {
@@ -223,6 +251,14 @@ struct IdentifyView: View {
                     }
 
                     Button {
+                        showImproveResult = true
+                    } label: {
+                        Label("Improve Result", systemImage: "slider.horizontal.3")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button {
                         catchLog.insert(
                             CatchLogItem(
                                 speciesName: result.primary.commonName,
@@ -240,14 +276,17 @@ struct IdentifyView: View {
                     .buttonStyle(.borderedProminent)
                 }
             } else {
-                ContentUnavailableView("Run a scan to see candidates.", systemImage: "fish")
+                ContentUnavailableView("Add a fish photo to start.", systemImage: "fish")
             }
         }
     }
 
     private var catchLogCard: some View {
         Card {
-            SectionHeader(number: "5", title: "Catch Log", subtitle: "Confirmed IDs stay on device in this target.")
+            SectionHeader(number: "3", title: "Catch Log", subtitle: "Confirmed IDs stay on device in this target.")
+
+            TextField("Waterbody for saved catch", text: $waterbody)
+                .textFieldStyle(.roundedBorder)
 
             if catchLog.isEmpty {
                 ContentUnavailableView("No confirmed catches yet.", systemImage: "list.bullet.clipboard")
@@ -298,6 +337,38 @@ struct IdentifyView: View {
         case .notEnoughEvidence:
             return .red
         }
+    }
+
+    private func seasonName(for date: Date) -> String {
+        let month = Calendar.current.component(.month, from: date)
+        if [12, 1, 2].contains(month) { return "winter" }
+        if [3, 4, 5].contains(month) { return "spring" }
+        if [6, 7, 8].contains(month) { return "summer" }
+        return "fall"
+    }
+
+    private func readable(_ value: String) -> String {
+        value.replacingOccurrences(of: "-", with: " ")
+    }
+}
+
+private struct ContextPill: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label.uppercased())
+                .font(.caption2.bold())
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.subheadline.weight(.semibold))
+                .lineLimit(1)
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(.secondarySystemGroupedBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
 
