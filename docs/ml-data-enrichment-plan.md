@@ -45,6 +45,8 @@ Do not mix generic `fish` detection labels into the species classifier as specie
 
 Build `inaturalist_na_v3` with at least 800 train images for the high-priority weak classes and 400+ for the remaining classes. Keep `inaturalist_na_v2` frozen as the current benchmark until v3 has a documented split and baseline.
 
+In parallel, build a `geo_gold_v1` benchmark with image labels plus state/county/waterbody/HUC/date metadata so we can evaluate GPS and seasonal priors independently of image-only model improvements.
+
 ## Sources
 
 - Fishial external dataset registry: https://docs.fishial.ai/otherprojects/externalfishdatasets
