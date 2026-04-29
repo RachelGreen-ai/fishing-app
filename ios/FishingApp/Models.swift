@@ -25,6 +25,7 @@ struct Species: Identifiable, Hashable {
 struct FishEvidence {
     var hasPhoto: Bool
     var photoQuality: Int
+    var imagePredictions: [ImageModelPrediction]
     var region: String
     var waterType: String
     var habitat: String

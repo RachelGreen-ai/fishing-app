@@ -137,7 +137,7 @@ struct IdentifyView: View {
 
             LabeledContent("Engine", value: "\(info.name) \(info.version)")
             LabeledContent("Type", value: info.family)
-            LabeledContent("Core ML", value: imageClassifier.isModelBundled ? "FishSpeciesClassifier loaded" : "Awaiting FishSpeciesClassifier.mlmodel")
+            LabeledContent("Core ML", value: imageClassifier.isModelBundled ? "FishSpeciesClassifier loaded" : "Awaiting FishSpeciesClassifier")
             Text(info.summary)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -391,6 +391,7 @@ struct IdentifyView: View {
         FishEvidence(
             hasPhoto: hasPhoto,
             photoQuality: hasPhoto ? photoQuality : 0,
+            imagePredictions: imageModelPredictions,
             region: region,
             waterType: waterType,
             habitat: habitat,
@@ -438,7 +439,7 @@ struct IdentifyView: View {
         }
 
         guard imageClassifier.isModelBundled else {
-            imageModelStatus = "Ready for FishSpeciesClassifier.mlmodel. Using evidence scorer until a trained Core ML model is bundled."
+            imageModelStatus = "Ready for FishSpeciesClassifier. Using hybrid evidence until the model is bundled."
             return
         }
 
@@ -450,6 +451,9 @@ struct IdentifyView: View {
             let predictions = try await imageClassifier.classify(imageData: selectedImageData)
             imageModelPredictions = predictions
             imageModelStatus = "Core ML returned \(predictions.count) species candidates."
+            if hasPhoto && consent.identification {
+                result = InferenceService.identify(evidence)
+            }
         } catch {
             imageModelPredictions = []
             imageModelStatus = error.localizedDescription

@@ -11,6 +11,7 @@
 		4622715C43264B6D20292451 /* SpeciesCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17503BD0ED14420BBE71DC1 /* SpeciesCatalog.swift */; };
 		4C55AEE1259E36CB3793EB5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35F2B36F834E5849AB6CF563 /* Assets.xcassets */; };
 		71DA71CB036E574FD7281719 /* FishImageClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */; };
+		8E5948307CB3A8B97C11B402 /* GeoSeasonalPrior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3C15F3D14F49D9A6E1006D /* GeoSeasonalPrior.swift */; };
 		B9180EE4D70EC450998C6740 /* FishingAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E892A8057C73FB50C538379 /* FishingAppApp.swift */; };
 		DD91CC6CB08C36FB577206DF /* IdentifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F3BDC62FF6A2E6E99914CC /* IdentifyView.swift */; };
 		EE6788011BF0BD02A187F7D5 /* InferenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D697535A5208CED487670904 /* InferenceService.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		35F2B36F834E5849AB6CF563 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1F3C15F3D14F49D9A6E1006D /* GeoSeasonalPrior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoSeasonalPrior.swift; sourceTree = "<group>"; };
 		7E892A8057C73FB50C538379 /* FishingAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingAppApp.swift; sourceTree = "<group>"; };
 		B23870F8DA1DBC83E501CD1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B3F3BDC62FF6A2E6E99914CC /* IdentifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyView.swift; sourceTree = "<group>"; };
@@ -51,6 +53,7 @@
 				35F2B36F834E5849AB6CF563 /* Assets.xcassets */,
 				BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */,
 				7E892A8057C73FB50C538379 /* FishingAppApp.swift */,
+				1F3C15F3D14F49D9A6E1006D /* GeoSeasonalPrior.swift */,
 				B3F3BDC62FF6A2E6E99914CC /* IdentifyView.swift */,
 				D697535A5208CED487670904 /* InferenceService.swift */,
 				B23870F8DA1DBC83E501CD1E /* Info.plist */,
@@ -136,6 +139,7 @@
 				B9180EE4D70EC450998C6740 /* FishingAppApp.swift in Sources */,
 				DD91CC6CB08C36FB577206DF /* IdentifyView.swift in Sources */,
 				EE6788011BF0BD02A187F7D5 /* InferenceService.swift in Sources */,
+				8E5948307CB3A8B97C11B402 /* GeoSeasonalPrior.swift in Sources */,
 				349DE05E48BEFE66BAA94DB5 /* Models.swift in Sources */,
 				4622715C43264B6D20292451 /* SpeciesCatalog.swift in Sources */,
 			);

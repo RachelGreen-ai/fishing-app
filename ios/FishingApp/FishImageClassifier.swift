@@ -13,7 +13,7 @@ enum FishImageClassifierError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingModel:
-            return "FishSpeciesClassifier.mlmodel is not bundled yet."
+            return "FishSpeciesClassifier is not bundled yet."
         case .unreadableImage:
             return "The selected photo could not be read."
         case .noPredictions:

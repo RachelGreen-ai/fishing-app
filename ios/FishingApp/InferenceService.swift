@@ -2,20 +2,20 @@ import Foundation
 
 enum InferenceService {
     static let engineInfo = IdentificationEngineInfo(
-        name: "Local Evidence Scorer",
-        version: "0.2",
-        family: "Heuristic, not Core ML",
-        summary: "Ranks the local species catalog from user-visible traits plus GPS/date/water context. A Core ML/Vision adapter is ready for FishSpeciesClassifier.mlmodel, but no trained model is bundled yet.",
+        name: "Hybrid Local Identifier",
+        version: "0.3",
+        family: "Core ML + geo-seasonal priors + optional traits",
+        summary: "Ranks the local species catalog from on-device image model predictions when available, then gently reranks with GPS/date/water context and optional visible traits.",
         limitations: [
-            "No bundled fish species Core ML model is currently in the iOS app.",
-            "Photo pixels are not converted into species labels yet.",
-            "Range, season, water, and habitat are supporting signals only."
+            "Geo-seasonal priors are supporting signals only.",
+            "A visually strong rare catch should remain possible.",
+            "Harvest decisions still require current local regulations."
         ]
     )
 
     static func identify(_ evidence: FishEvidence) -> IdentificationResult {
         let month = Calendar.current.component(.month, from: evidence.date)
-        let visualSignalCount = visualSignals(in: evidence)
+        let visualSignalCount = visualSignals(in: evidence) + (evidence.imagePredictions.isEmpty ? 0 : 2)
         let scored = SpeciesCatalog.all
             .map { score(species: $0, evidence: evidence, month: month) }
             .sorted { $0.score > $1.score }
@@ -67,6 +67,14 @@ enum InferenceService {
         var reasons: [String] = []
         let traits = traitValues(in: evidence)
 
+        if let imagePrediction = imagePrediction(for: species, in: evidence.imagePredictions) {
+            let contribution = Int((Double(imagePrediction.confidencePercent) * 0.72).rounded())
+            score += contribution
+            reasons.append("image model \(imagePrediction.confidencePercent)%")
+        } else if !evidence.imagePredictions.isEmpty {
+            score -= 10
+        }
+
         for (key, value) in traits where !value.isEmpty {
             if species.traits[key]?.contains(value) == true {
                 score += visualWeight(for: key)
@@ -76,39 +84,9 @@ enum InferenceService {
             }
         }
 
-        if !evidence.waterType.isEmpty {
-            if species.waterTypes.contains(evidence.waterType) {
-                score += 10
-                reasons.append("water type supports it")
-            } else {
-                score -= 18
-            }
-        }
-
-        if !evidence.region.isEmpty {
-            if species.regions.contains(evidence.region) {
-                score += 8
-                reasons.append("regional range supports it")
-            } else {
-                score -= 12
-            }
-        }
-
-        if !evidence.habitat.isEmpty {
-            if species.habitats.contains(evidence.habitat) {
-                score += 6
-                reasons.append("habitat supports it")
-            } else {
-                score -= 5
-            }
-        }
-
-        if species.peakMonths.contains(month) {
-            score += 4
-            reasons.append("season supports it")
-        } else {
-            score -= 1
-        }
+        let prior = GeoSeasonalPrior.signal(for: species, evidence: evidence, month: month)
+        score += prior.score
+        reasons.append(contentsOf: prior.reasons)
 
         if evidence.photoQuality >= 80 {
             score += 4
@@ -128,8 +106,8 @@ enum InferenceService {
 
         return [
             EvidenceRow(label: "Model", value: "\(engineInfo.name) \(engineInfo.version)"),
-            EvidenceRow(label: "Visual", value: matched.isEmpty ? "No species image ML yet; visible traits are needed" : "Matches \(matched.joined(separator: ", "))"),
-            EvidenceRow(label: "Location", value: locationText(top: top, evidence: evidence)),
+            EvidenceRow(label: "Visual", value: visualText(top: top, evidence: evidence, matchedTraits: matched)),
+            EvidenceRow(label: "Local Prior", value: GeoSeasonalPrior.explanation(for: top, evidence: evidence, month: month)),
             EvidenceRow(label: "Season", value: top.peakMonths.contains(month) ? "Date is within common angling months" : "Date is not a strong seasonal signal"),
             EvidenceRow(label: "Missing", value: missing.isEmpty ? "No major trait gaps" : missing.joined(separator: ", ")),
             EvidenceRow(label: "Caution", value: top.caution)
@@ -143,8 +121,8 @@ enum InferenceService {
             items.append("Retake with the full fish in frame and sharper side detail.")
         }
 
-        if visualSignals(in: evidence) == 0 {
-            items.append("This build needs visible traits because no Core ML species classifier is bundled yet.")
+        if evidence.imagePredictions.isEmpty && visualSignals(in: evidence) == 0 {
+            items.append("Add visible traits if the image model is unavailable or uncertain.")
         }
 
         if evidence.markings.isEmpty {
@@ -160,7 +138,7 @@ enum InferenceService {
         }
 
         if evidence.region.isEmpty || evidence.waterType.isEmpty {
-            items.append("Add water type and region before using this for harvest decisions.")
+            items.append("Add GPS/range and water type before using this for harvest decisions.")
         }
 
         return Array(Set(items)).prefix(4).map { $0 }
@@ -189,14 +167,6 @@ enum InferenceService {
         return .notEnoughEvidence
     }
 
-    private static func locationText(top: Species, evidence: FishEvidence) -> String {
-        if evidence.region.isEmpty {
-            return "No region supplied"
-        }
-
-        return top.regions.contains(evidence.region) ? "Region supports this species" : "Region is weak or outside normal range"
-    }
-
     private static func traitValues(in evidence: FishEvidence) -> [(String, String)] {
         [
             ("bodyShape", evidence.bodyShape),
@@ -209,6 +179,30 @@ enum InferenceService {
 
     private static func visualSignals(in evidence: FishEvidence) -> Int {
         traitValues(in: evidence).filter { !$0.1.isEmpty }.count
+    }
+
+    private static func imagePrediction(for species: Species, in predictions: [ImageModelPrediction]) -> ImageModelPrediction? {
+        predictions.first { prediction in
+            normalized(prediction.label) == species.id || normalized(prediction.label) == normalized(species.commonName)
+        }
+    }
+
+    private static func visualText(top: Species, evidence: FishEvidence, matchedTraits: [String]) -> String {
+        if let imagePrediction = imagePrediction(for: top, in: evidence.imagePredictions) {
+            if matchedTraits.isEmpty {
+                return "Image model supports this at \(imagePrediction.confidencePercent)%"
+            }
+            return "Image model \(imagePrediction.confidencePercent)% plus \(matchedTraits.joined(separator: ", "))"
+        }
+
+        return matchedTraits.isEmpty ? "No image model prediction yet; visible traits help" : "Matches \(matchedTraits.joined(separator: ", "))"
+    }
+
+    private static func normalized(_ value: String) -> String {
+        value
+            .lowercased()
+            .replacingOccurrences(of: " ", with: "-")
+            .replacingOccurrences(of: "_", with: "-")
     }
 
     private static func visualWeight(for key: String) -> Int {
