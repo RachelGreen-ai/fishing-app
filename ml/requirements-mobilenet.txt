@@ -1,0 +1,4 @@
+tensorflow>=2.16,<2.18
+coremltools>=7.2,<9
+pillow>=10,<12
+scikit-learn>=1.4,<1.6

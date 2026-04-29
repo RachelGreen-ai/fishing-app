@@ -14,6 +14,10 @@ ml/data/
 ml/runs/
 ml/checkpoints/
 ml/artifacts/
+ml/.venv-mobilenet/
+ml/.venv-yolo/
+runs/
+yolo26*.pt
 docs/datasets/Fish_Data/
 docs/datasets/_LABELED-FISHES-IN-THE-WILD/
 docs/datasets/archive/
