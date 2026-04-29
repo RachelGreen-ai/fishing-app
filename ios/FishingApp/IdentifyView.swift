@@ -1,6 +1,7 @@
 import CoreLocation
 import PhotosUI
 import SwiftUI
+import UIKit
 
 struct IdentifyView: View {
     @StateObject private var locationProvider = LocationProvider()
@@ -8,9 +9,11 @@ struct IdentifyView: View {
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImageData: Data?
     @State private var imageModelPredictions: [ImageModelPrediction] = []
-    @State private var imageModelStatus = "No Core ML species model bundled yet."
+    @State private var imageModelStatus = "Add or capture a fish photo."
     @State private var isClassifyingPhoto = false
     @State private var hasPhoto = false
+    @State private var showCamera = false
+    @State private var didAutoRequestLocation = false
     @State private var photoQuality = 82
     @State private var region = ""
     @State private var waterType = ""
@@ -44,6 +47,13 @@ struct IdentifyView: View {
             .onAppear {
                 caughtDate = Date()
             }
+            .sheet(isPresented: $showCamera) {
+                CameraCaptureView { imageData in
+                    Task {
+                        await handleCapturedPhotoData(imageData)
+                    }
+                }
+            }
             .onChange(of: locationProvider.region) {
                 guard let region = locationProvider.region else { return }
                 self.region = region
@@ -58,14 +68,55 @@ struct IdentifyView: View {
         Card {
             SectionHeader(number: "1", title: "Take Or Choose A Photo", subtitle: "Start with the fish. Details can come later if they matter.")
 
-            PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                Label(hasPhoto ? "Photo selected" : "Take Photo Or Choose From Gallery", systemImage: hasPhoto ? "checkmark.circle.fill" : "camera.viewfinder")
-                    .frame(maxWidth: .infinity)
+            HStack {
+                Button {
+                    showCamera = true
+                } label: {
+                    Label("Camera", systemImage: "camera")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!UIImagePickerController.isSourceTypeAvailable(.camera))
+
+                PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                    Label("Library", systemImage: "photo.on.rectangle")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .onChange(of: selectedPhoto) {
+                    Task {
+                        await handleSelectedPhotoChange()
+                    }
+                }
             }
-            .buttonStyle(.borderedProminent)
-            .onChange(of: selectedPhoto) {
-                Task {
-                    await handleSelectedPhotoChange()
+
+            if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxHeight: 220)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .accessibilityLabel("Selected fish photo")
+            } else {
+                ContentUnavailableView("No photo selected.", systemImage: "camera.viewfinder")
+                    .frame(minHeight: 120)
+            }
+
+            if isClassifyingPhoto {
+                ProgressView("Identifying fish")
+            } else {
+                Label(imageModelStatus, systemImage: hasPhoto ? "checkmark.circle" : "info.circle")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
+            if !imageModelPredictions.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Top Image Matches")
+                        .font(.headline)
+                    ForEach(imageModelPredictions.prefix(3)) { prediction in
+                        LabeledContent(prediction.label, value: "\(prediction.confidencePercent)%")
+                    }
                 }
             }
 
@@ -96,13 +147,6 @@ struct IdentifyView: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
-
-            Stepper("Photo quality: \(photoQuality)", value: $photoQuality, in: 20...100, step: 5)
-                .onChange(of: photoQuality) {
-                    if hasPhoto {
-                        result = InferenceService.identify(evidence)
-                    }
-                }
 
             Button {
                 result = InferenceService.identify(evidence)
@@ -204,6 +248,13 @@ struct IdentifyView: View {
 
             DatePicker("Date & time", selection: $caughtDate, displayedComponents: [.date, .hourAndMinute])
                 .onChange(of: caughtDate) {
+                    if hasPhoto {
+                        result = InferenceService.identify(evidence)
+                    }
+                }
+
+            Stepper("Photo quality: \(photoQuality)", value: $photoQuality, in: 20...100, step: 5)
+                .onChange(of: photoQuality) {
                     if hasPhoto {
                         result = InferenceService.identify(evidence)
                     }
@@ -407,22 +458,34 @@ struct IdentifyView: View {
     }
 
     private func handleSelectedPhotoChange() async {
-        hasPhoto = selectedPhoto != nil
-        caughtDate = Date()
-        selectedImageData = nil
-        imageModelPredictions = []
-
         guard let selectedPhoto else {
-            imageModelStatus = "No Core ML species model bundled yet."
-            result = nil
+            resetPhotoState()
             return
         }
 
         do {
-            selectedImageData = try await selectedPhoto.loadTransferable(type: Data.self)
+            guard let imageData = try await selectedPhoto.loadTransferable(type: Data.self) else {
+                imageModelStatus = "Could not load the selected photo."
+                return
+            }
+            await processNewPhotoData(imageData)
         } catch {
             imageModelStatus = "Could not load the selected photo."
         }
+    }
+
+    private func handleCapturedPhotoData(_ imageData: Data) async {
+        selectedPhoto = nil
+        await processNewPhotoData(imageData)
+    }
+
+    private func processNewPhotoData(_ imageData: Data) async {
+        hasPhoto = true
+        caughtDate = Date()
+        selectedImageData = imageData
+        imageModelPredictions = []
+        imageModelStatus = "Photo ready. Preparing local context..."
+        requestAutomaticLocationContextIfNeeded()
 
         await classifySelectedPhotoIfPossible()
 
@@ -433,13 +496,27 @@ struct IdentifyView: View {
         }
     }
 
+    private func resetPhotoState() {
+        hasPhoto = false
+        selectedImageData = nil
+        imageModelPredictions = []
+        imageModelStatus = "Add or capture a fish photo."
+        result = nil
+    }
+
+    private func requestAutomaticLocationContextIfNeeded() {
+        guard region.isEmpty, !didAutoRequestLocation else { return }
+        didAutoRequestLocation = true
+        locationProvider.requestRegion()
+    }
+
     private func classifySelectedPhotoIfPossible() async {
         guard let selectedImageData else {
             return
         }
 
         guard imageClassifier.isModelBundled else {
-            imageModelStatus = "Ready for FishSpeciesClassifier. Using hybrid evidence until the model is bundled."
+            imageModelStatus = "FishSpeciesClassifier is not bundled. Using context only."
             return
         }
 
@@ -505,6 +582,54 @@ private struct ContextPill: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+private struct CameraCaptureView: UIViewControllerRepresentable {
+    @Environment(\.dismiss) private var dismiss
+    let onCapture: (Data) -> Void
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.cameraCaptureMode = .photo
+        picker.delegate = context.coordinator
+        picker.allowsEditing = false
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onCapture: onCapture, dismiss: dismiss)
+    }
+
+    final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let onCapture: (Data) -> Void
+        let dismiss: DismissAction
+
+        init(onCapture: @escaping (Data) -> Void, dismiss: DismissAction) {
+            self.onCapture = onCapture
+            self.dismiss = dismiss
+        }
+
+        func imagePickerController(
+            _ picker: UIImagePickerController,
+            didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+        ) {
+            defer { dismiss() }
+
+            guard let image = info[.originalImage] as? UIImage,
+                  let imageData = image.jpegData(compressionQuality: 0.92) else {
+                return
+            }
+
+            onCapture(imageData)
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            dismiss()
+        }
     }
 }
 
