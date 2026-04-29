@@ -112,6 +112,15 @@ ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
 
 The MobileNet Core ML export writes `FishSpeciesClassifier.mlpackage`.
 
+Export an already-trained Keras classifier to Core ML:
+
+```bash
+ml/.venv-mobilenet/bin/python ml/scripts/export_keras_classifier_to_coreml.py \
+  ml/artifacts/keras/mobilenet_v3_large_na_v2_weighted_smooth/final.keras \
+  ml/artifacts/keras/mobilenet_v3_large_na_v2_weighted_smooth/labels.json \
+  ios/FishingApp/FishSpeciesClassifier.mlpackage
+```
+
 Train the current best MobileNetV3Large weighted/smoothed baseline:
 
 ```bash

@@ -46,7 +46,7 @@ final class FishImageClassifier: ObservableObject {
             let coreMLModel = try MLModel(contentsOf: modelURL)
             let visionModel = try VNCoreMLModel(for: coreMLModel)
             let request = VNCoreMLRequest(model: visionModel)
-            request.imageCropAndScaleOption = .centerCrop
+            request.imageCropAndScaleOption = .scaleFill
 
             let handler = VNImageRequestHandler(
                 cgImage: cgImage,

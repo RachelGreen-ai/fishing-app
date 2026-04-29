@@ -12,6 +12,7 @@
 		4C55AEE1259E36CB3793EB5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35F2B36F834E5849AB6CF563 /* Assets.xcassets */; };
 		71DA71CB036E574FD7281719 /* FishImageClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */; };
 		8E5948307CB3A8B97C11B402 /* GeoSeasonalPrior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3C15F3D14F49D9A6E1006D /* GeoSeasonalPrior.swift */; };
+		AB087E31FD014151BF2A15B2 /* FishSpeciesClassifier.mlpackage in Resources */ = {isa = PBXBuildFile; fileRef = E70605B7BBBC43FDA395924D /* FishSpeciesClassifier.mlpackage */; };
 		B9180EE4D70EC450998C6740 /* FishingAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E892A8057C73FB50C538379 /* FishingAppApp.swift */; };
 		DD91CC6CB08C36FB577206DF /* IdentifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F3BDC62FF6A2E6E99914CC /* IdentifyView.swift */; };
 		EE6788011BF0BD02A187F7D5 /* InferenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D697535A5208CED487670904 /* InferenceService.swift */; };
@@ -27,6 +28,7 @@
 		C1CF0EB6679C592407CA36A7 /* FishingApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FishingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D35A66C6758FE7A32715876B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		D697535A5208CED487670904 /* InferenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceService.swift; sourceTree = "<group>"; };
+		E70605B7BBBC43FDA395924D /* FishSpeciesClassifier.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper.mlpackage; path = FishSpeciesClassifier.mlpackage; sourceTree = "<group>"; };
 		F17503BD0ED14420BBE71DC1 /* SpeciesCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesCatalog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -51,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				35F2B36F834E5849AB6CF563 /* Assets.xcassets */,
+				E70605B7BBBC43FDA395924D /* FishSpeciesClassifier.mlpackage */,
 				BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */,
 				7E892A8057C73FB50C538379 /* FishingAppApp.swift */,
 				1F3C15F3D14F49D9A6E1006D /* GeoSeasonalPrior.swift */,
@@ -125,6 +128,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C55AEE1259E36CB3793EB5E /* Assets.xcassets in Resources */,
+				AB087E31FD014151BF2A15B2 /* FishSpeciesClassifier.mlpackage in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
