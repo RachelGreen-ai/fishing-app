@@ -44,6 +44,7 @@ Data requirements per species:
 Useful public starting points:
 
 - Fishial.AI open fish recognition work and model scripts: https://github.com/fishial/fish-identification
+- Fishial leverage notes for our roadmap: `docs/ml-fishial-leverage.md`
 - Fishial.AI dataset/model project overview: https://www.fishial.ai/
 - iNaturalist 2021 for broad taxonomic pretraining or fish subset extraction: https://www.tensorflow.org/datasets/catalog/i_naturalist2021
 - USGS annotated freshwater fish imagery for a small, clean evaluation baseline: https://www.usgs.gov/data/annotated-fish-imagery-data-individual-and-species-recognition-deep-learning
@@ -125,4 +126,3 @@ The iOS app will:
 - Show top image predictions in the Model card.
 - Continue showing the evidence scorer and context reasons.
 - Require strong image evidence before enabling confident save flows.
-
