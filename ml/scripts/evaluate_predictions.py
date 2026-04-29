@@ -136,6 +136,7 @@ def main() -> int:
     evaluated = []
     by_species: dict[str, Counter] = defaultdict(Counter)
     by_lookalike: dict[str, Counter] = defaultdict(Counter)
+    predicted_by_species: Counter = Counter()
     confidences = []
     confidence_correct = []
     latencies = []
@@ -168,6 +169,8 @@ def main() -> int:
             by_species[species_id]["total"] += 1
             by_species[species_id]["top1"] += int(top1_correct)
             by_species[species_id]["top3"] += int(top3_correct)
+            if not abstained and top1 != UNKNOWN_LABEL:
+                predicted_by_species[top1] += 1
 
         lookalike_group = truth.get("lookalike_group") or ""
         if lookalike_group and not is_unknown:
@@ -233,8 +236,25 @@ def main() -> int:
         "per_species": {
             species: {
                 "count": counts["total"],
+                "predicted_count": predicted_by_species[species],
+                "precision": (
+                    round(counts["top1"] / predicted_by_species[species], 4)
+                    if predicted_by_species[species]
+                    else None
+                ),
                 "top1_recall": round(counts["top1"] / counts["total"], 4),
                 "top3_recall": round(counts["top3"] / counts["total"], 4),
+                "f1": (
+                    round(
+                        2
+                        * (counts["top1"] / predicted_by_species[species])
+                        * (counts["top1"] / counts["total"])
+                        / ((counts["top1"] / predicted_by_species[species]) + (counts["top1"] / counts["total"])),
+                        4,
+                    )
+                    if predicted_by_species[species] and counts["top1"]
+                    else 0.0
+                ),
             }
             for species, counts in sorted(by_species.items())
             if counts["total"]

@@ -75,6 +75,17 @@ Local source coverage from the currently shared dataset drops is recorded in `do
 - Coverage noted by NOAA: dataset archive v1.1 is 423 MB; training positive set has 929 image files with 1,005 marked fish; negative image set includes 3,167 images; test video annotations mark 2,061 fish objects.
 - App fit: Medium for detector/abstention training, low for recreational species classification.
 
+### iNaturalist Public Observation Photos
+
+- Source: https://www.inaturalist.org/
+- API: https://api.inaturalist.org/v1/docs/
+- Region: global, filterable by taxon and observation metadata.
+- Best use: North America MVP species classification seed, especially when local Kaggle/source drops do not overlap U.S. recreational species.
+- Local importer: `ml/scripts/prepare_inaturalist_seed.py`
+- Current seed: `ml/data/benchmarks/inaturalist_na_seed_v1`
+- License handling: importer keeps only photos with permissive Creative Commons license codes from the observation photo metadata.
+- App fit: High for bootstrapping U.S. MVP classes, but not a final gold benchmark because photos are public/citizen-science observations and may include context or source bias.
+
 ### alzayats/fish-datasets
 
 - Source: https://github.com/alzayats/fish-datasets
@@ -87,9 +98,10 @@ Local source coverage from the currently shared dataset drops is recorded in `do
 For species classification:
 
 1. AFFiNe for Europe angler freshwater photos.
-2. QUT FISH for broad visual morphology and public seed experiments.
-3. Deep Vision for North Atlantic marine species.
-4. FishCLEF for underwater species-video evaluation.
+2. iNaturalist public observation photos for North America MVP seed coverage.
+3. QUT FISH for broad visual morphology and public seed experiments.
+4. Deep Vision for North Atlantic marine species.
+5. FishCLEF for underwater species-video evaluation.
 
 For detection/cropping:
 

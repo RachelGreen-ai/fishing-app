@@ -161,3 +161,79 @@ Interpretation:
 - Strong detector/abstention source.
 - Not a species classifier source.
 - Useful for fish/not-fish detection, empty-scene robustness, and underwater hard examples.
+
+## iNaturalist North America Seed
+
+Local path: `ml/data/benchmarks/inaturalist_na_seed_v1`
+
+Importer:
+
+```bash
+python3 ml/scripts/prepare_inaturalist_seed.py \
+  ml/data/benchmarks/inaturalist_na_seed_v1 \
+  --max-per-species 160 \
+  --min-per-species 80 \
+  --image-size medium
+```
+
+Result:
+
+- Matched images: 1,280.
+- Matched species: 8.
+- Images per species: 160.
+- Source: public iNaturalist research-grade observations.
+- License handling: importer accepts only permissive Creative Commons photo licenses.
+
+Matched species counts:
+
+| Species | Count |
+| --- | ---: |
+| largemouth-bass | 160 |
+| smallmouth-bass | 160 |
+| spotted-bass | 160 |
+| bluegill | 160 |
+| rainbow-trout | 160 |
+| channel-catfish | 160 |
+| red-drum | 160 |
+| red-snapper | 160 |
+
+Reproducible training split:
+
+```bash
+python3 ml/scripts/create_classification_split.py \
+  ml/data/benchmarks/inaturalist_na_seed_v1/manifest.jsonl \
+  ml/data/classification/inaturalist_na_v1 \
+  --mode symlink \
+  --min-per-class 80 \
+  --train 0.7 \
+  --validation 0.15 \
+  --test 0.15 \
+  --seed 20260428 \
+  --labels-json ml/fish_species_v1.labels.json \
+  --taxonomy-json ml/fish_species_v1.taxonomy.json
+```
+
+Split result:
+
+- Trainable labels: 8.
+- Skipped labels: none.
+- Train: 112 images per species.
+- Validation: 24 images per species.
+- Test: 24 images per species.
+
+Validation command:
+
+```bash
+python3 ml/scripts/validate_dataset.py \
+  ml/data/classification/inaturalist_na_v1 \
+  ml/data/classification/inaturalist_na_v1/labels.json \
+  --min-train 100 \
+  --min-validation 20 \
+  --min-test 20
+```
+
+Interpretation:
+
+- This is now the first local U.S./North America classification seed that covers every MVP label.
+- It is suitable for baseline training and failure-mode discovery.
+- It is not a final gold benchmark; we still need a held-out expert-reviewed U.S. catch-photo benchmark.

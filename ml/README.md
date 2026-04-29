@@ -42,6 +42,28 @@ python3 ml/scripts/create_classification_split.py \
   --taxonomy-json ml/fish_species_europe_v1.taxonomy.json
 ```
 
+Prepare the North America iNaturalist seed:
+
+```bash
+python3 ml/scripts/prepare_inaturalist_seed.py \
+  ml/data/benchmarks/inaturalist_na_seed_v1 \
+  --max-per-species 160 \
+  --min-per-species 80 \
+  --image-size medium
+```
+
+Create a reproducible North America split:
+
+```bash
+python3 ml/scripts/create_classification_split.py \
+  ml/data/benchmarks/inaturalist_na_seed_v1/manifest.jsonl \
+  ml/data/classification/inaturalist_na_v1 \
+  --mode symlink \
+  --min-per-class 80 \
+  --labels-json ml/fish_species_v1.labels.json \
+  --taxonomy-json ml/fish_species_v1.taxonomy.json
+```
+
 Validate label hierarchy:
 
 ```bash
@@ -57,6 +79,15 @@ Train a first local Create ML baseline:
 xcrun swift ml/scripts/train_createml_image_classifier.swift \
   ml/data/classification/europe_archive_v1 \
   ml/artifacts/createml/europe_archive_v1/FishSpeciesClassifier.mlmodel \
+  25
+```
+
+Train the North America Create ML baseline:
+
+```bash
+xcrun swift ml/scripts/train_createml_image_classifier.swift \
+  ml/data/classification/inaturalist_na_v1 \
+  ml/artifacts/createml/inaturalist_na_v1/FishSpeciesClassifier.mlmodel \
   25
 ```
 
