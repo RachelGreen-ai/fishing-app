@@ -145,10 +145,49 @@ python3 ml/scripts/map_teacher_labels_to_taxonomy.py \
 Collapse Fishial teacher predictions into app labels before evaluation:
 
 ```bash
+mkdir -p ml/artifacts/fishial ml/runs/fishial/angler_v1
+curl -L \
+  https://storage.googleapis.com/fishial-ml-resources/classification_model_v0.10.2.zip \
+  -o ml/artifacts/fishial/classification_model_v0.10.2.zip
+
+# Extract the 866-class mapping embedded in the TorchScript bundle.
+ml/.venv-yolo/bin/python - <<'PY'
+from pathlib import Path
+import json, torch
+from ml.scripts.predict_fishial_torchscript_classifier import torchscript_path, labels_from_json, labels_from_model
+model = torch.jit.load(str(torchscript_path(Path("ml/artifacts/fishial/classification_model_v0.10.2.zip"))), map_location="cpu")
+labels = labels_from_model(model, labels_from_json(Path("ml/external/fishial_labels.json")))
+Path("ml/external/fishial_v0.10.2_labels.json").write_text(
+    json.dumps({str(k): v for k, v in sorted(labels.items())}, indent=2, sort_keys=True) + "\n",
+    encoding="utf-8",
+)
+PY
+
+python3 ml/scripts/map_teacher_labels_to_taxonomy.py \
+  ml/fish_species_angler_v1.taxonomy.json \
+  ml/external/fishial_v0.10.2_labels.json \
+  ml/teacher_maps/fishial_v0.10.2_to_angler_v1.json \
+  --manual-map-json ml/teacher_maps/fishial_manual_map_v1.json
+
+ml/.venv-yolo/bin/python ml/scripts/predict_fishial_torchscript_classifier.py \
+  ml/artifacts/fishial/classification_model_v0.10.2.zip \
+  ml/external/fishial_v0.10.2_labels.json \
+  ml/data/classification/inaturalist_na_v2/test.manifest.jsonl \
+  ml/data/classification/inaturalist_na_v2 \
+  ml/runs/fishial/angler_v1/inaturalist_na_v2_teacher_predictions.jsonl \
+  --batch-size 8 \
+  --top-k 50
+
 python3 ml/scripts/collapse_teacher_predictions.py \
-  ml/runs/fishial/angler_v1/test_teacher_predictions.jsonl \
-  ml/teacher_maps/fishial_to_angler_v1.json \
-  ml/runs/fishial/angler_v1/test_predictions_collapsed.jsonl
+  ml/runs/fishial/angler_v1/inaturalist_na_v2_teacher_predictions.jsonl \
+  ml/teacher_maps/fishial_v0.10.2_to_angler_v1.json \
+  ml/runs/fishial/angler_v1/inaturalist_na_v2_predictions_collapsed.jsonl
+
+python3 ml/scripts/evaluate_predictions.py \
+  ml/data/classification/inaturalist_na_v2/test.manifest.jsonl \
+  ml/runs/fishial/angler_v1/inaturalist_na_v2_predictions_collapsed.jsonl \
+  --prior-json ml/angler_priority_v1.json \
+  --prior-region north-america
 ```
 
 Train a first local Create ML baseline:

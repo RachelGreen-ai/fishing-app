@@ -38,6 +38,7 @@ The generated map is `ml/teacher_maps/fishial_to_angler_v1.json`:
 - missing app labels: `chub`
 
 Manual synonym overrides live in `ml/teacher_maps/fishial_manual_map_v1.json`.
+`chub` uses the current scientific name `Squalius cephalus`; `Leuciscus cephalus` is kept as an alias for older source labels.
 
 ## Evaluation Flow
 
@@ -58,6 +59,8 @@ Manual synonym overrides live in `ml/teacher_maps/fishial_manual_map_v1.json`.
      ml/data/classification/inaturalist_angler_v1/test.manifest.jsonl \
      ml/runs/fishial/angler_v1/test_predictions_collapsed.jsonl
    ```
+
+The Fishial TorchScript runner is `ml/scripts/predict_fishial_torchscript_classifier.py`. It accepts either a `.pt`/`.pth` TorchScript file or the downloaded Fishial zip and writes the same JSONL prediction format as the rest of this repo.
 
 ## Distillation Strategy
 

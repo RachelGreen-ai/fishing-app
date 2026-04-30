@@ -1,57 +1,1565 @@
 [
-  {"id":"largemouth-bass","common_name":"Largemouth Bass","scientific_name":"Micropterus salmoides","taxon_rank":"species","family":"Centrarchidae","family_common":"Sunfishes","order":"Centrarchiformes","label_group":"black-bass","lookalike_group":"black-bass","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","pond","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"smallmouth-bass","common_name":"Smallmouth Bass","scientific_name":"Micropterus dolomieu","taxon_rank":"species","family":"Centrarchidae","family_common":"Sunfishes","order":"Centrarchiformes","label_group":"black-bass","lookalike_group":"black-bass","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","river","stream"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"spotted-bass","common_name":"Spotted Bass","scientific_name":"Micropterus punctulatus","taxon_rank":"species","family":"Centrarchidae","family_common":"Sunfishes","order":"Centrarchiformes","label_group":"black-bass","lookalike_group":"black-bass","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"striped-bass","common_name":"Striped Bass","scientific_name":"Morone saxatilis","taxon_rank":"species","family":"Moronidae","family_common":"Temperate basses","order":"Moroniformes","label_group":"temperate-bass","lookalike_group":"striped-white-hybrid-bass","regions":["North America"],"water_types":["freshwater","saltwater","brackish"],"habitats":["lake","river","inshore","coast"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"white-bass","common_name":"White Bass","scientific_name":"Morone chrysops","taxon_rank":"species","family":"Moronidae","family_common":"Temperate basses","order":"Moroniformes","label_group":"temperate-bass","lookalike_group":"striped-white-hybrid-bass","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"bluegill","common_name":"Bluegill","scientific_name":"Lepomis macrochirus","taxon_rank":"species","family":"Centrarchidae","family_common":"Sunfishes","order":"Centrarchiformes","label_group":"sunfish","lookalike_group":"lepomis-sunfish","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","pond","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"pumpkinseed","common_name":"Pumpkinseed","scientific_name":"Lepomis gibbosus","taxon_rank":"species","family":"Centrarchidae","family_common":"Sunfishes","order":"Centrarchiformes","label_group":"sunfish","lookalike_group":"lepomis-sunfish","regions":["North America","introduced Europe"],"water_types":["freshwater"],"habitats":["lake","pond","river","canal"],"app_regions":["north-america","europe"],"is_species_level":true,"status":"active"},
-  {"id":"green-sunfish","common_name":"Green Sunfish","scientific_name":"Lepomis cyanellus","taxon_rank":"species","family":"Centrarchidae","family_common":"Sunfishes","order":"Centrarchiformes","label_group":"sunfish","lookalike_group":"lepomis-sunfish","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","pond","river","stream"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"black-crappie","common_name":"Black Crappie","scientific_name":"Pomoxis nigromaculatus","taxon_rank":"species","family":"Centrarchidae","family_common":"Sunfishes","order":"Centrarchiformes","label_group":"crappie","lookalike_group":"crappie","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","pond","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"white-crappie","common_name":"White Crappie","scientific_name":"Pomoxis annularis","taxon_rank":"species","family":"Centrarchidae","family_common":"Sunfishes","order":"Centrarchiformes","label_group":"crappie","lookalike_group":"crappie","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","pond","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"walleye","common_name":"Walleye","scientific_name":"Sander vitreus","taxon_rank":"species","family":"Percidae","family_common":"Perches","order":"Perciformes","label_group":"perch","lookalike_group":"walleye-sauger-zander","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"yellow-perch","common_name":"Yellow Perch","scientific_name":"Perca flavescens","taxon_rank":"species","family":"Percidae","family_common":"Perches","order":"Perciformes","label_group":"perch","lookalike_group":"perch-ruffe-zander","regions":["North America"],"water_types":["freshwater","brackish"],"habitats":["lake","river","pond"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"rainbow-trout","common_name":"Rainbow Trout","scientific_name":"Oncorhynchus mykiss","taxon_rank":"species","family":"Salmonidae","family_common":"Salmonids","order":"Salmoniformes","label_group":"salmonid","lookalike_group":"trout-salmonid","regions":["North America","introduced elsewhere"],"water_types":["freshwater"],"habitats":["lake","river","stream"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"brown-trout","common_name":"Brown Trout","scientific_name":"Salmo trutta","taxon_rank":"species","family":"Salmonidae","family_common":"Salmonids","order":"Salmoniformes","label_group":"salmonid","lookalike_group":"trout-salmonid","regions":["Europe","Western Asia","introduced elsewhere"],"water_types":["freshwater","saltwater","brackish"],"habitats":["river","stream","lake","coast"],"app_regions":["europe","north-america"],"is_species_level":true,"status":"active"},
-  {"id":"brook-trout","common_name":"Brook Trout","scientific_name":"Salvelinus fontinalis","taxon_rank":"species","family":"Salmonidae","family_common":"Salmonids","order":"Salmoniformes","label_group":"salmonid","lookalike_group":"trout-salmonid","regions":["North America","introduced elsewhere"],"water_types":["freshwater"],"habitats":["stream","river","lake"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"lake-trout","common_name":"Lake Trout","scientific_name":"Salvelinus namaycush","taxon_rank":"species","family":"Salmonidae","family_common":"Salmonids","order":"Salmoniformes","label_group":"salmonid","lookalike_group":"trout-salmonid","regions":["North America"],"water_types":["freshwater"],"habitats":["lake"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"atlantic-salmon","common_name":"Atlantic Salmon","scientific_name":"Salmo salar","taxon_rank":"species","family":"Salmonidae","family_common":"Salmonids","order":"Salmoniformes","label_group":"salmonid","lookalike_group":"trout-salmonid","regions":["North Atlantic","Europe","North America"],"water_types":["freshwater","saltwater","brackish"],"habitats":["river","coast","offshore"],"app_regions":["europe","north-america"],"is_species_level":true,"status":"active"},
-  {"id":"chinook-salmon","common_name":"Chinook Salmon","scientific_name":"Oncorhynchus tshawytscha","taxon_rank":"species","family":"Salmonidae","family_common":"Salmonids","order":"Salmoniformes","label_group":"salmonid","lookalike_group":"pacific-salmon","regions":["North Pacific","North America"],"water_types":["freshwater","saltwater","brackish"],"habitats":["river","coast","offshore"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"coho-salmon","common_name":"Coho Salmon","scientific_name":"Oncorhynchus kisutch","taxon_rank":"species","family":"Salmonidae","family_common":"Salmonids","order":"Salmoniformes","label_group":"salmonid","lookalike_group":"pacific-salmon","regions":["North Pacific","North America"],"water_types":["freshwater","saltwater","brackish"],"habitats":["river","coast","offshore"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"channel-catfish","common_name":"Channel Catfish","scientific_name":"Ictalurus punctatus","taxon_rank":"species","family":"Ictaluridae","family_common":"North American catfishes","order":"Siluriformes","label_group":"catfish","lookalike_group":"catfish","regions":["North America"],"water_types":["freshwater","brackish"],"habitats":["lake","pond","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"blue-catfish","common_name":"Blue Catfish","scientific_name":"Ictalurus furcatus","taxon_rank":"species","family":"Ictaluridae","family_common":"North American catfishes","order":"Siluriformes","label_group":"catfish","lookalike_group":"catfish","regions":["North America"],"water_types":["freshwater","brackish"],"habitats":["lake","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"flathead-catfish","common_name":"Flathead Catfish","scientific_name":"Pylodictis olivaris","taxon_rank":"species","family":"Ictaluridae","family_common":"North American catfishes","order":"Siluriformes","label_group":"catfish","lookalike_group":"catfish","regions":["North America"],"water_types":["freshwater"],"habitats":["river","lake"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"common-carp","common_name":"Common Carp","scientific_name":"Cyprinus carpio","taxon_rank":"species","family":"Cyprinidae","family_common":"Carps and minnows","order":"Cypriniformes","label_group":"carp","lookalike_group":"carp-crucian-grass","regions":["Europe","Asia","introduced elsewhere"],"water_types":["freshwater","brackish"],"habitats":["lake","pond","river","canal"],"app_regions":["europe","north-america"],"is_species_level":true,"status":"active"},
-  {"id":"northern-pike","common_name":"Northern Pike","scientific_name":"Esox lucius","taxon_rank":"species","family":"Esocidae","family_common":"Pikes","order":"Esociformes","label_group":"pike","lookalike_group":"pike","regions":["Europe","North America","Asia"],"water_types":["freshwater","brackish"],"habitats":["lake","river","canal"],"app_regions":["europe","north-america"],"is_species_level":true,"status":"active"},
-  {"id":"muskellunge","common_name":"Muskellunge","scientific_name":"Esox masquinongy","taxon_rank":"species","family":"Esocidae","family_common":"Pikes","order":"Esociformes","label_group":"pike","lookalike_group":"pike","regions":["North America"],"water_types":["freshwater"],"habitats":["lake","river"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"red-drum","common_name":"Red Drum","scientific_name":"Sciaenops ocellatus","taxon_rank":"species","family":"Sciaenidae","family_common":"Drums","order":"Acanthuriformes","label_group":"drum","lookalike_group":"red-coastal","regions":["Western Atlantic","Gulf of Mexico"],"water_types":["saltwater","brackish"],"habitats":["inshore"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"black-drum","common_name":"Black Drum","scientific_name":"Pogonias cromis","taxon_rank":"species","family":"Sciaenidae","family_common":"Drums","order":"Acanthuriformes","label_group":"drum","lookalike_group":"drum","regions":["Western Atlantic","Gulf of Mexico"],"water_types":["saltwater","brackish"],"habitats":["inshore","coast"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"spotted-seatrout","common_name":"Spotted Seatrout","scientific_name":"Cynoscion nebulosus","taxon_rank":"species","family":"Sciaenidae","family_common":"Drums","order":"Acanthuriformes","label_group":"drum","lookalike_group":"seatrout-weakfish","regions":["Western Atlantic","Gulf of Mexico"],"water_types":["saltwater","brackish"],"habitats":["inshore","coast"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"flounder","common_name":"Summer Flounder","scientific_name":"Paralichthys dentatus","taxon_rank":"species","family":"Paralichthyidae","family_common":"Large-tooth flounders","order":"Pleuronectiformes","label_group":"flatfish","lookalike_group":"flatfish","regions":["Western Atlantic"],"water_types":["saltwater","brackish"],"habitats":["inshore","coast","offshore"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"red-snapper","common_name":"Red Snapper","scientific_name":"Lutjanus campechanus","taxon_rank":"species","family":"Lutjanidae","family_common":"Snappers","order":"Lutjaniformes","label_group":"snapper","lookalike_group":"red-coastal","regions":["Western Atlantic","Gulf of Mexico"],"water_types":["saltwater"],"habitats":["reef","offshore"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"mangrove-snapper","common_name":"Mangrove Snapper","scientific_name":"Lutjanus griseus","taxon_rank":"species","family":"Lutjanidae","family_common":"Snappers","order":"Lutjaniformes","label_group":"snapper","lookalike_group":"snapper","regions":["Western Atlantic","Gulf of Mexico"],"water_types":["saltwater","brackish"],"habitats":["inshore","reef","offshore"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"sheepshead","common_name":"Sheepshead","scientific_name":"Archosargus probatocephalus","taxon_rank":"species","family":"Sparidae","family_common":"Porgies and seabreams","order":"Spariformes","label_group":"marine-coastal","lookalike_group":"porgy-sheepshead","regions":["Western Atlantic","Gulf of Mexico"],"water_types":["saltwater","brackish"],"habitats":["inshore","reef","coast"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"cobia","common_name":"Cobia","scientific_name":"Rachycentron canadum","taxon_rank":"species","family":"Rachycentridae","family_common":"Cobias","order":"Carangiformes","label_group":"marine-pelagic","lookalike_group":"cobia-remora","regions":["Atlantic","Gulf of Mexico","Indo-Pacific"],"water_types":["saltwater","brackish"],"habitats":["inshore","offshore","coast"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"mahi-mahi","common_name":"Mahi-Mahi","scientific_name":"Coryphaena hippurus","taxon_rank":"species","family":"Coryphaenidae","family_common":"Dolphinfishes","order":"Carangiformes","label_group":"marine-pelagic","lookalike_group":"mahi","regions":["Tropical and subtropical oceans"],"water_types":["saltwater"],"habitats":["offshore"],"app_regions":["north-america"],"is_species_level":true,"status":"active"},
-  {"id":"bluefish","common_name":"Bluefish","scientific_name":"Pomatomus saltatrix","taxon_rank":"species","family":"Pomatomidae","family_common":"Bluefishes","order":"Scombriformes","label_group":"marine-pelagic","lookalike_group":"atlantic-pelagic","regions":["Atlantic","Mediterranean","Indo-Pacific"],"water_types":["saltwater","brackish"],"habitats":["coast","inshore","offshore"],"app_regions":["north-america","europe"],"is_species_level":true,"status":"active"},
-  {"id":"atlantic-mackerel","common_name":"Atlantic Mackerel","scientific_name":"Scomber scombrus","taxon_rank":"species","family":"Scombridae","family_common":"Mackerels and tunas","order":"Scombriformes","label_group":"marine-pelagic","lookalike_group":"atlantic-pelagic","regions":["North Atlantic","Europe"],"water_types":["saltwater"],"habitats":["offshore","coast"],"app_regions":["europe","north-america"],"is_species_level":true,"status":"active"},
-  {"id":"yellowfin-tuna","common_name":"Yellowfin Tuna","scientific_name":"Thunnus albacares","taxon_rank":"species","family":"Scombridae","family_common":"Mackerels and tunas","order":"Scombriformes","label_group":"tuna","lookalike_group":"tuna","regions":["Tropical and subtropical oceans"],"water_types":["saltwater"],"habitats":["offshore"],"app_regions":["north-america","europe"],"is_species_level":true,"status":"active"},
-  {"id":"european-perch","common_name":"European Perch","scientific_name":"Perca fluviatilis","taxon_rank":"species","family":"Percidae","family_common":"Perches","order":"Perciformes","label_group":"perch","lookalike_group":"perch-ruffe-zander","regions":["Europe","Asia"],"water_types":["freshwater","brackish"],"habitats":["lake","river","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"zander","common_name":"Zander","scientific_name":"Sander lucioperca","taxon_rank":"species","family":"Percidae","family_common":"Perches","order":"Perciformes","label_group":"perch","lookalike_group":"walleye-sauger-zander","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["lake","river","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"european-eel","common_name":"European Eel","scientific_name":"Anguilla anguilla","taxon_rank":"species","family":"Anguillidae","family_common":"Freshwater eels","order":"Anguilliformes","label_group":"eel","lookalike_group":"eel","regions":["Europe","North Africa","Western Asia"],"water_types":["freshwater","saltwater","brackish"],"habitats":["river","lake","canal","coast"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"roach","common_name":"Roach","scientific_name":"Rutilus rutilus","taxon_rank":"species","family":"Leuciscidae","family_common":"Minnows and daces","order":"Cypriniformes","label_group":"cyprinid","lookalike_group":"roach-rudd-bream","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["lake","river","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"rudd","common_name":"Rudd","scientific_name":"Scardinius erythrophthalmus","taxon_rank":"species","family":"Leuciscidae","family_common":"Minnows and daces","order":"Cypriniformes","label_group":"cyprinid","lookalike_group":"roach-rudd-bream","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["lake","pond","river","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"common-bream","common_name":"Common Bream","scientific_name":"Abramis brama","taxon_rank":"species","family":"Leuciscidae","family_common":"Minnows and daces","order":"Cypriniformes","label_group":"cyprinid","lookalike_group":"roach-rudd-bream","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["lake","river","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"tench","common_name":"Tench","scientific_name":"Tinca tinca","taxon_rank":"species","family":"Tincidae","family_common":"Tench","order":"Cypriniformes","label_group":"tench","lookalike_group":"tench","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["lake","pond","river","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"european-grayling","common_name":"European Grayling","scientific_name":"Thymallus thymallus","taxon_rank":"species","family":"Salmonidae","family_common":"Salmonids","order":"Salmoniformes","label_group":"salmonid","lookalike_group":"trout-salmonid","regions":["Europe"],"water_types":["freshwater"],"habitats":["river","stream"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"wels-catfish","common_name":"Wels Catfish","scientific_name":"Silurus glanis","taxon_rank":"species","family":"Siluridae","family_common":"Sheatfishes","order":"Siluriformes","label_group":"catfish","lookalike_group":"catfish","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["lake","river","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"european-seabass","common_name":"European Seabass","scientific_name":"Dicentrarchus labrax","taxon_rank":"species","family":"Moronidae","family_common":"Temperate basses","order":"Moroniformes","label_group":"marine-coastal","lookalike_group":"seabass-seabream","regions":["Europe","Mediterranean","North Africa"],"water_types":["saltwater","brackish"],"habitats":["coast","inshore"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"gilthead-seabream","common_name":"Gilthead Seabream","scientific_name":"Sparus aurata","taxon_rank":"species","family":"Sparidae","family_common":"Porgies and seabreams","order":"Spariformes","label_group":"marine-coastal","lookalike_group":"seabass-seabream","regions":["Europe","Mediterranean","North Africa"],"water_types":["saltwater","brackish"],"habitats":["coast","inshore"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"cod","common_name":"Atlantic Cod","scientific_name":"Gadus morhua","taxon_rank":"species","family":"Gadidae","family_common":"Cods","order":"Gadiformes","label_group":"codfish","lookalike_group":"codfish","regions":["North Atlantic","Europe","North America"],"water_types":["saltwater","brackish"],"habitats":["offshore","coast"],"app_regions":["europe","north-america"],"is_species_level":true,"status":"active"},
-  {"id":"plaice","common_name":"European Plaice","scientific_name":"Pleuronectes platessa","taxon_rank":"species","family":"Pleuronectidae","family_common":"Righteye flounders","order":"Pleuronectiformes","label_group":"flatfish","lookalike_group":"flatfish","regions":["Northeast Atlantic","Europe"],"water_types":["saltwater","brackish"],"habitats":["coast","offshore"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"asp","common_name":"Asp","scientific_name":"Aspius aspius","taxon_rank":"species","family":"Leuciscidae","family_common":"Minnows and daces","order":"Cypriniformes","label_group":"cyprinid","lookalike_group":"asp-chub-ide-dace","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["river","lake","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"common-barbel","common_name":"Common Barbel","scientific_name":"Barbus barbus","taxon_rank":"species","family":"Cyprinidae","family_common":"Carps and minnows","order":"Cypriniformes","label_group":"barbel","lookalike_group":"barbel-gudgeon","regions":["Europe"],"water_types":["freshwater"],"habitats":["river","stream"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"chub","common_name":"Chub","scientific_name":"Leuciscus cephalus","taxon_rank":"species","family":"Leuciscidae","family_common":"Minnows and daces","order":"Cypriniformes","label_group":"cyprinid","lookalike_group":"asp-chub-ide-dace","regions":["Europe","Western Asia"],"water_types":["freshwater"],"habitats":["river","stream","lake"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"ide","common_name":"Ide","scientific_name":"Leuciscus idus","taxon_rank":"species","family":"Leuciscidae","family_common":"Minnows and daces","order":"Cypriniformes","label_group":"cyprinid","lookalike_group":"asp-chub-ide-dace","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["river","lake","canal"],"app_regions":["europe"],"is_species_level":true,"status":"active"},
-  {"id":"common-dace","common_name":"Common Dace","scientific_name":"Leuciscus leuciscus","taxon_rank":"species","family":"Leuciscidae","family_common":"Minnows and daces","order":"Cypriniformes","label_group":"cyprinid","lookalike_group":"asp-chub-ide-dace","regions":["Europe","Western Asia"],"water_types":["freshwater","brackish"],"habitats":["river","stream"],"app_regions":["europe"],"is_species_level":true,"status":"active"}
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Largemouth Bass",
+    "family": "Centrarchidae",
+    "family_common": "Sunfishes",
+    "habitats": [
+      "lake",
+      "pond",
+      "river"
+    ],
+    "id": "largemouth-bass",
+    "is_species_level": true,
+    "label_group": "black-bass",
+    "lookalike_group": "black-bass",
+    "order": "Centrarchiformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Micropterus salmoides",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Smallmouth Bass",
+    "family": "Centrarchidae",
+    "family_common": "Sunfishes",
+    "habitats": [
+      "lake",
+      "river",
+      "stream"
+    ],
+    "id": "smallmouth-bass",
+    "is_species_level": true,
+    "label_group": "black-bass",
+    "lookalike_group": "black-bass",
+    "order": "Centrarchiformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Micropterus dolomieu",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Spotted Bass",
+    "family": "Centrarchidae",
+    "family_common": "Sunfishes",
+    "habitats": [
+      "lake",
+      "river"
+    ],
+    "id": "spotted-bass",
+    "is_species_level": true,
+    "label_group": "black-bass",
+    "lookalike_group": "black-bass",
+    "order": "Centrarchiformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Micropterus punctulatus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Striped Bass",
+    "family": "Moronidae",
+    "family_common": "Temperate basses",
+    "habitats": [
+      "lake",
+      "river",
+      "inshore",
+      "coast"
+    ],
+    "id": "striped-bass",
+    "is_species_level": true,
+    "label_group": "temperate-bass",
+    "lookalike_group": "striped-white-hybrid-bass",
+    "order": "Moroniformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Morone saxatilis",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "White Bass",
+    "family": "Moronidae",
+    "family_common": "Temperate basses",
+    "habitats": [
+      "lake",
+      "river"
+    ],
+    "id": "white-bass",
+    "is_species_level": true,
+    "label_group": "temperate-bass",
+    "lookalike_group": "striped-white-hybrid-bass",
+    "order": "Moroniformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Morone chrysops",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Bluegill",
+    "family": "Centrarchidae",
+    "family_common": "Sunfishes",
+    "habitats": [
+      "lake",
+      "pond",
+      "river"
+    ],
+    "id": "bluegill",
+    "is_species_level": true,
+    "label_group": "sunfish",
+    "lookalike_group": "lepomis-sunfish",
+    "order": "Centrarchiformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Lepomis macrochirus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america",
+      "europe"
+    ],
+    "common_name": "Pumpkinseed",
+    "family": "Centrarchidae",
+    "family_common": "Sunfishes",
+    "habitats": [
+      "lake",
+      "pond",
+      "river",
+      "canal"
+    ],
+    "id": "pumpkinseed",
+    "is_species_level": true,
+    "label_group": "sunfish",
+    "lookalike_group": "lepomis-sunfish",
+    "order": "Centrarchiformes",
+    "regions": [
+      "North America",
+      "introduced Europe"
+    ],
+    "scientific_name": "Lepomis gibbosus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Green Sunfish",
+    "family": "Centrarchidae",
+    "family_common": "Sunfishes",
+    "habitats": [
+      "lake",
+      "pond",
+      "river",
+      "stream"
+    ],
+    "id": "green-sunfish",
+    "is_species_level": true,
+    "label_group": "sunfish",
+    "lookalike_group": "lepomis-sunfish",
+    "order": "Centrarchiformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Lepomis cyanellus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Black Crappie",
+    "family": "Centrarchidae",
+    "family_common": "Sunfishes",
+    "habitats": [
+      "lake",
+      "pond",
+      "river"
+    ],
+    "id": "black-crappie",
+    "is_species_level": true,
+    "label_group": "crappie",
+    "lookalike_group": "crappie",
+    "order": "Centrarchiformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Pomoxis nigromaculatus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "White Crappie",
+    "family": "Centrarchidae",
+    "family_common": "Sunfishes",
+    "habitats": [
+      "lake",
+      "pond",
+      "river"
+    ],
+    "id": "white-crappie",
+    "is_species_level": true,
+    "label_group": "crappie",
+    "lookalike_group": "crappie",
+    "order": "Centrarchiformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Pomoxis annularis",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Walleye",
+    "family": "Percidae",
+    "family_common": "Perches",
+    "habitats": [
+      "lake",
+      "river"
+    ],
+    "id": "walleye",
+    "is_species_level": true,
+    "label_group": "perch",
+    "lookalike_group": "walleye-sauger-zander",
+    "order": "Perciformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Sander vitreus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Yellow Perch",
+    "family": "Percidae",
+    "family_common": "Perches",
+    "habitats": [
+      "lake",
+      "river",
+      "pond"
+    ],
+    "id": "yellow-perch",
+    "is_species_level": true,
+    "label_group": "perch",
+    "lookalike_group": "perch-ruffe-zander",
+    "order": "Perciformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Perca flavescens",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Rainbow Trout",
+    "family": "Salmonidae",
+    "family_common": "Salmonids",
+    "habitats": [
+      "lake",
+      "river",
+      "stream"
+    ],
+    "id": "rainbow-trout",
+    "is_species_level": true,
+    "label_group": "salmonid",
+    "lookalike_group": "trout-salmonid",
+    "order": "Salmoniformes",
+    "regions": [
+      "North America",
+      "introduced elsewhere"
+    ],
+    "scientific_name": "Oncorhynchus mykiss",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe",
+      "north-america"
+    ],
+    "common_name": "Brown Trout",
+    "family": "Salmonidae",
+    "family_common": "Salmonids",
+    "habitats": [
+      "river",
+      "stream",
+      "lake",
+      "coast"
+    ],
+    "id": "brown-trout",
+    "is_species_level": true,
+    "label_group": "salmonid",
+    "lookalike_group": "trout-salmonid",
+    "order": "Salmoniformes",
+    "regions": [
+      "Europe",
+      "Western Asia",
+      "introduced elsewhere"
+    ],
+    "scientific_name": "Salmo trutta",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Brook Trout",
+    "family": "Salmonidae",
+    "family_common": "Salmonids",
+    "habitats": [
+      "stream",
+      "river",
+      "lake"
+    ],
+    "id": "brook-trout",
+    "is_species_level": true,
+    "label_group": "salmonid",
+    "lookalike_group": "trout-salmonid",
+    "order": "Salmoniformes",
+    "regions": [
+      "North America",
+      "introduced elsewhere"
+    ],
+    "scientific_name": "Salvelinus fontinalis",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Lake Trout",
+    "family": "Salmonidae",
+    "family_common": "Salmonids",
+    "habitats": [
+      "lake"
+    ],
+    "id": "lake-trout",
+    "is_species_level": true,
+    "label_group": "salmonid",
+    "lookalike_group": "trout-salmonid",
+    "order": "Salmoniformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Salvelinus namaycush",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe",
+      "north-america"
+    ],
+    "common_name": "Atlantic Salmon",
+    "family": "Salmonidae",
+    "family_common": "Salmonids",
+    "habitats": [
+      "river",
+      "coast",
+      "offshore"
+    ],
+    "id": "atlantic-salmon",
+    "is_species_level": true,
+    "label_group": "salmonid",
+    "lookalike_group": "trout-salmonid",
+    "order": "Salmoniformes",
+    "regions": [
+      "North Atlantic",
+      "Europe",
+      "North America"
+    ],
+    "scientific_name": "Salmo salar",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Chinook Salmon",
+    "family": "Salmonidae",
+    "family_common": "Salmonids",
+    "habitats": [
+      "river",
+      "coast",
+      "offshore"
+    ],
+    "id": "chinook-salmon",
+    "is_species_level": true,
+    "label_group": "salmonid",
+    "lookalike_group": "pacific-salmon",
+    "order": "Salmoniformes",
+    "regions": [
+      "North Pacific",
+      "North America"
+    ],
+    "scientific_name": "Oncorhynchus tshawytscha",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Coho Salmon",
+    "family": "Salmonidae",
+    "family_common": "Salmonids",
+    "habitats": [
+      "river",
+      "coast",
+      "offshore"
+    ],
+    "id": "coho-salmon",
+    "is_species_level": true,
+    "label_group": "salmonid",
+    "lookalike_group": "pacific-salmon",
+    "order": "Salmoniformes",
+    "regions": [
+      "North Pacific",
+      "North America"
+    ],
+    "scientific_name": "Oncorhynchus kisutch",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Channel Catfish",
+    "family": "Ictaluridae",
+    "family_common": "North American catfishes",
+    "habitats": [
+      "lake",
+      "pond",
+      "river"
+    ],
+    "id": "channel-catfish",
+    "is_species_level": true,
+    "label_group": "catfish",
+    "lookalike_group": "catfish",
+    "order": "Siluriformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Ictalurus punctatus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Blue Catfish",
+    "family": "Ictaluridae",
+    "family_common": "North American catfishes",
+    "habitats": [
+      "lake",
+      "river"
+    ],
+    "id": "blue-catfish",
+    "is_species_level": true,
+    "label_group": "catfish",
+    "lookalike_group": "catfish",
+    "order": "Siluriformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Ictalurus furcatus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Flathead Catfish",
+    "family": "Ictaluridae",
+    "family_common": "North American catfishes",
+    "habitats": [
+      "river",
+      "lake"
+    ],
+    "id": "flathead-catfish",
+    "is_species_level": true,
+    "label_group": "catfish",
+    "lookalike_group": "catfish",
+    "order": "Siluriformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Pylodictis olivaris",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe",
+      "north-america"
+    ],
+    "common_name": "Common Carp",
+    "family": "Cyprinidae",
+    "family_common": "Carps and minnows",
+    "habitats": [
+      "lake",
+      "pond",
+      "river",
+      "canal"
+    ],
+    "id": "common-carp",
+    "is_species_level": true,
+    "label_group": "carp",
+    "lookalike_group": "carp-crucian-grass",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Asia",
+      "introduced elsewhere"
+    ],
+    "scientific_name": "Cyprinus carpio",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe",
+      "north-america"
+    ],
+    "common_name": "Northern Pike",
+    "family": "Esocidae",
+    "family_common": "Pikes",
+    "habitats": [
+      "lake",
+      "river",
+      "canal"
+    ],
+    "id": "northern-pike",
+    "is_species_level": true,
+    "label_group": "pike",
+    "lookalike_group": "pike",
+    "order": "Esociformes",
+    "regions": [
+      "Europe",
+      "North America",
+      "Asia"
+    ],
+    "scientific_name": "Esox lucius",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Muskellunge",
+    "family": "Esocidae",
+    "family_common": "Pikes",
+    "habitats": [
+      "lake",
+      "river"
+    ],
+    "id": "muskellunge",
+    "is_species_level": true,
+    "label_group": "pike",
+    "lookalike_group": "pike",
+    "order": "Esociformes",
+    "regions": [
+      "North America"
+    ],
+    "scientific_name": "Esox masquinongy",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Red Drum",
+    "family": "Sciaenidae",
+    "family_common": "Drums",
+    "habitats": [
+      "inshore"
+    ],
+    "id": "red-drum",
+    "is_species_level": true,
+    "label_group": "drum",
+    "lookalike_group": "red-coastal",
+    "order": "Acanthuriformes",
+    "regions": [
+      "Western Atlantic",
+      "Gulf of Mexico"
+    ],
+    "scientific_name": "Sciaenops ocellatus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Black Drum",
+    "family": "Sciaenidae",
+    "family_common": "Drums",
+    "habitats": [
+      "inshore",
+      "coast"
+    ],
+    "id": "black-drum",
+    "is_species_level": true,
+    "label_group": "drum",
+    "lookalike_group": "drum",
+    "order": "Acanthuriformes",
+    "regions": [
+      "Western Atlantic",
+      "Gulf of Mexico"
+    ],
+    "scientific_name": "Pogonias cromis",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Spotted Seatrout",
+    "family": "Sciaenidae",
+    "family_common": "Drums",
+    "habitats": [
+      "inshore",
+      "coast"
+    ],
+    "id": "spotted-seatrout",
+    "is_species_level": true,
+    "label_group": "drum",
+    "lookalike_group": "seatrout-weakfish",
+    "order": "Acanthuriformes",
+    "regions": [
+      "Western Atlantic",
+      "Gulf of Mexico"
+    ],
+    "scientific_name": "Cynoscion nebulosus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Summer Flounder",
+    "family": "Paralichthyidae",
+    "family_common": "Large-tooth flounders",
+    "habitats": [
+      "inshore",
+      "coast",
+      "offshore"
+    ],
+    "id": "flounder",
+    "is_species_level": true,
+    "label_group": "flatfish",
+    "lookalike_group": "flatfish",
+    "order": "Pleuronectiformes",
+    "regions": [
+      "Western Atlantic"
+    ],
+    "scientific_name": "Paralichthys dentatus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Red Snapper",
+    "family": "Lutjanidae",
+    "family_common": "Snappers",
+    "habitats": [
+      "reef",
+      "offshore"
+    ],
+    "id": "red-snapper",
+    "is_species_level": true,
+    "label_group": "snapper",
+    "lookalike_group": "red-coastal",
+    "order": "Lutjaniformes",
+    "regions": [
+      "Western Atlantic",
+      "Gulf of Mexico"
+    ],
+    "scientific_name": "Lutjanus campechanus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Mangrove Snapper",
+    "family": "Lutjanidae",
+    "family_common": "Snappers",
+    "habitats": [
+      "inshore",
+      "reef",
+      "offshore"
+    ],
+    "id": "mangrove-snapper",
+    "is_species_level": true,
+    "label_group": "snapper",
+    "lookalike_group": "snapper",
+    "order": "Lutjaniformes",
+    "regions": [
+      "Western Atlantic",
+      "Gulf of Mexico"
+    ],
+    "scientific_name": "Lutjanus griseus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Sheepshead",
+    "family": "Sparidae",
+    "family_common": "Porgies and seabreams",
+    "habitats": [
+      "inshore",
+      "reef",
+      "coast"
+    ],
+    "id": "sheepshead",
+    "is_species_level": true,
+    "label_group": "marine-coastal",
+    "lookalike_group": "porgy-sheepshead",
+    "order": "Spariformes",
+    "regions": [
+      "Western Atlantic",
+      "Gulf of Mexico"
+    ],
+    "scientific_name": "Archosargus probatocephalus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Cobia",
+    "family": "Rachycentridae",
+    "family_common": "Cobias",
+    "habitats": [
+      "inshore",
+      "offshore",
+      "coast"
+    ],
+    "id": "cobia",
+    "is_species_level": true,
+    "label_group": "marine-pelagic",
+    "lookalike_group": "cobia-remora",
+    "order": "Carangiformes",
+    "regions": [
+      "Atlantic",
+      "Gulf of Mexico",
+      "Indo-Pacific"
+    ],
+    "scientific_name": "Rachycentron canadum",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america"
+    ],
+    "common_name": "Mahi-Mahi",
+    "family": "Coryphaenidae",
+    "family_common": "Dolphinfishes",
+    "habitats": [
+      "offshore"
+    ],
+    "id": "mahi-mahi",
+    "is_species_level": true,
+    "label_group": "marine-pelagic",
+    "lookalike_group": "mahi",
+    "order": "Carangiformes",
+    "regions": [
+      "Tropical and subtropical oceans"
+    ],
+    "scientific_name": "Coryphaena hippurus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america",
+      "europe"
+    ],
+    "common_name": "Bluefish",
+    "family": "Pomatomidae",
+    "family_common": "Bluefishes",
+    "habitats": [
+      "coast",
+      "inshore",
+      "offshore"
+    ],
+    "id": "bluefish",
+    "is_species_level": true,
+    "label_group": "marine-pelagic",
+    "lookalike_group": "atlantic-pelagic",
+    "order": "Scombriformes",
+    "regions": [
+      "Atlantic",
+      "Mediterranean",
+      "Indo-Pacific"
+    ],
+    "scientific_name": "Pomatomus saltatrix",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe",
+      "north-america"
+    ],
+    "common_name": "Atlantic Mackerel",
+    "family": "Scombridae",
+    "family_common": "Mackerels and tunas",
+    "habitats": [
+      "offshore",
+      "coast"
+    ],
+    "id": "atlantic-mackerel",
+    "is_species_level": true,
+    "label_group": "marine-pelagic",
+    "lookalike_group": "atlantic-pelagic",
+    "order": "Scombriformes",
+    "regions": [
+      "North Atlantic",
+      "Europe"
+    ],
+    "scientific_name": "Scomber scombrus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "north-america",
+      "europe"
+    ],
+    "common_name": "Yellowfin Tuna",
+    "family": "Scombridae",
+    "family_common": "Mackerels and tunas",
+    "habitats": [
+      "offshore"
+    ],
+    "id": "yellowfin-tuna",
+    "is_species_level": true,
+    "label_group": "tuna",
+    "lookalike_group": "tuna",
+    "order": "Scombriformes",
+    "regions": [
+      "Tropical and subtropical oceans"
+    ],
+    "scientific_name": "Thunnus albacares",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "European Perch",
+    "family": "Percidae",
+    "family_common": "Perches",
+    "habitats": [
+      "lake",
+      "river",
+      "canal"
+    ],
+    "id": "european-perch",
+    "is_species_level": true,
+    "label_group": "perch",
+    "lookalike_group": "perch-ruffe-zander",
+    "order": "Perciformes",
+    "regions": [
+      "Europe",
+      "Asia"
+    ],
+    "scientific_name": "Perca fluviatilis",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Zander",
+    "family": "Percidae",
+    "family_common": "Perches",
+    "habitats": [
+      "lake",
+      "river",
+      "canal"
+    ],
+    "id": "zander",
+    "is_species_level": true,
+    "label_group": "perch",
+    "lookalike_group": "walleye-sauger-zander",
+    "order": "Perciformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Sander lucioperca",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "European Eel",
+    "family": "Anguillidae",
+    "family_common": "Freshwater eels",
+    "habitats": [
+      "river",
+      "lake",
+      "canal",
+      "coast"
+    ],
+    "id": "european-eel",
+    "is_species_level": true,
+    "label_group": "eel",
+    "lookalike_group": "eel",
+    "order": "Anguilliformes",
+    "regions": [
+      "Europe",
+      "North Africa",
+      "Western Asia"
+    ],
+    "scientific_name": "Anguilla anguilla",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Roach",
+    "family": "Leuciscidae",
+    "family_common": "Minnows and daces",
+    "habitats": [
+      "lake",
+      "river",
+      "canal"
+    ],
+    "id": "roach",
+    "is_species_level": true,
+    "label_group": "cyprinid",
+    "lookalike_group": "roach-rudd-bream",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Rutilus rutilus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Rudd",
+    "family": "Leuciscidae",
+    "family_common": "Minnows and daces",
+    "habitats": [
+      "lake",
+      "pond",
+      "river",
+      "canal"
+    ],
+    "id": "rudd",
+    "is_species_level": true,
+    "label_group": "cyprinid",
+    "lookalike_group": "roach-rudd-bream",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Scardinius erythrophthalmus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Common Bream",
+    "family": "Leuciscidae",
+    "family_common": "Minnows and daces",
+    "habitats": [
+      "lake",
+      "river",
+      "canal"
+    ],
+    "id": "common-bream",
+    "is_species_level": true,
+    "label_group": "cyprinid",
+    "lookalike_group": "roach-rudd-bream",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Abramis brama",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Tench",
+    "family": "Tincidae",
+    "family_common": "Tench",
+    "habitats": [
+      "lake",
+      "pond",
+      "river",
+      "canal"
+    ],
+    "id": "tench",
+    "is_species_level": true,
+    "label_group": "tench",
+    "lookalike_group": "tench",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Tinca tinca",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "European Grayling",
+    "family": "Salmonidae",
+    "family_common": "Salmonids",
+    "habitats": [
+      "river",
+      "stream"
+    ],
+    "id": "european-grayling",
+    "is_species_level": true,
+    "label_group": "salmonid",
+    "lookalike_group": "trout-salmonid",
+    "order": "Salmoniformes",
+    "regions": [
+      "Europe"
+    ],
+    "scientific_name": "Thymallus thymallus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Wels Catfish",
+    "family": "Siluridae",
+    "family_common": "Sheatfishes",
+    "habitats": [
+      "lake",
+      "river",
+      "canal"
+    ],
+    "id": "wels-catfish",
+    "is_species_level": true,
+    "label_group": "catfish",
+    "lookalike_group": "catfish",
+    "order": "Siluriformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Silurus glanis",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "European Seabass",
+    "family": "Moronidae",
+    "family_common": "Temperate basses",
+    "habitats": [
+      "coast",
+      "inshore"
+    ],
+    "id": "european-seabass",
+    "is_species_level": true,
+    "label_group": "marine-coastal",
+    "lookalike_group": "seabass-seabream",
+    "order": "Moroniformes",
+    "regions": [
+      "Europe",
+      "Mediterranean",
+      "North Africa"
+    ],
+    "scientific_name": "Dicentrarchus labrax",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Gilthead Seabream",
+    "family": "Sparidae",
+    "family_common": "Porgies and seabreams",
+    "habitats": [
+      "coast",
+      "inshore"
+    ],
+    "id": "gilthead-seabream",
+    "is_species_level": true,
+    "label_group": "marine-coastal",
+    "lookalike_group": "seabass-seabream",
+    "order": "Spariformes",
+    "regions": [
+      "Europe",
+      "Mediterranean",
+      "North Africa"
+    ],
+    "scientific_name": "Sparus aurata",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe",
+      "north-america"
+    ],
+    "common_name": "Atlantic Cod",
+    "family": "Gadidae",
+    "family_common": "Cods",
+    "habitats": [
+      "offshore",
+      "coast"
+    ],
+    "id": "cod",
+    "is_species_level": true,
+    "label_group": "codfish",
+    "lookalike_group": "codfish",
+    "order": "Gadiformes",
+    "regions": [
+      "North Atlantic",
+      "Europe",
+      "North America"
+    ],
+    "scientific_name": "Gadus morhua",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "European Plaice",
+    "family": "Pleuronectidae",
+    "family_common": "Righteye flounders",
+    "habitats": [
+      "coast",
+      "offshore"
+    ],
+    "id": "plaice",
+    "is_species_level": true,
+    "label_group": "flatfish",
+    "lookalike_group": "flatfish",
+    "order": "Pleuronectiformes",
+    "regions": [
+      "Northeast Atlantic",
+      "Europe"
+    ],
+    "scientific_name": "Pleuronectes platessa",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "saltwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Asp",
+    "family": "Leuciscidae",
+    "family_common": "Minnows and daces",
+    "habitats": [
+      "river",
+      "lake",
+      "canal"
+    ],
+    "id": "asp",
+    "is_species_level": true,
+    "label_group": "cyprinid",
+    "lookalike_group": "asp-chub-ide-dace",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Aspius aspius",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Common Barbel",
+    "family": "Cyprinidae",
+    "family_common": "Carps and minnows",
+    "habitats": [
+      "river",
+      "stream"
+    ],
+    "id": "common-barbel",
+    "is_species_level": true,
+    "label_group": "barbel",
+    "lookalike_group": "barbel-gudgeon",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe"
+    ],
+    "scientific_name": "Barbus barbus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "aliases": [
+      "Leuciscus cephalus"
+    ],
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Chub",
+    "family": "Leuciscidae",
+    "family_common": "Minnows and daces",
+    "habitats": [
+      "river",
+      "stream",
+      "lake"
+    ],
+    "id": "chub",
+    "is_species_level": true,
+    "label_group": "cyprinid",
+    "lookalike_group": "asp-chub-ide-dace",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Squalius cephalus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Ide",
+    "family": "Leuciscidae",
+    "family_common": "Minnows and daces",
+    "habitats": [
+      "river",
+      "lake",
+      "canal"
+    ],
+    "id": "ide",
+    "is_species_level": true,
+    "label_group": "cyprinid",
+    "lookalike_group": "asp-chub-ide-dace",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Leuciscus idus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  },
+  {
+    "app_regions": [
+      "europe"
+    ],
+    "common_name": "Common Dace",
+    "family": "Leuciscidae",
+    "family_common": "Minnows and daces",
+    "habitats": [
+      "river",
+      "stream"
+    ],
+    "id": "common-dace",
+    "is_species_level": true,
+    "label_group": "cyprinid",
+    "lookalike_group": "asp-chub-ide-dace",
+    "order": "Cypriniformes",
+    "regions": [
+      "Europe",
+      "Western Asia"
+    ],
+    "scientific_name": "Leuciscus leuciscus",
+    "status": "active",
+    "taxon_rank": "species",
+    "water_types": [
+      "freshwater",
+      "brackish"
+    ]
+  }
 ]
