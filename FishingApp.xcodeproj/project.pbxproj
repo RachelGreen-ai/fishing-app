@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B7C4D9E8A1F4C6D9E2B3A10 /* FishDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7C4D9E8A1F4C6D9E2B3A12 /* FishDetector.swift */; };
+		2B7C4D9E8A1F4C6D9E2B3A11 /* FishDetector.mlpackage in Resources */ = {isa = PBXBuildFile; fileRef = 2B7C4D9E8A1F4C6D9E2B3A13 /* FishDetector.mlpackage */; };
 		349DE05E48BEFE66BAA94DB5 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35A66C6758FE7A32715876B /* Models.swift */; };
 		4622715C43264B6D20292451 /* SpeciesCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17503BD0ED14420BBE71DC1 /* SpeciesCatalog.swift */; };
 		4C55AEE1259E36CB3793EB5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35F2B36F834E5849AB6CF563 /* Assets.xcassets */; };
@@ -20,6 +22,8 @@
 
 /* Begin PBXFileReference section */
 		1F3C15F3D14F49D9A6E1006D /* GeoSeasonalPrior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoSeasonalPrior.swift; sourceTree = "<group>"; };
+		2B7C4D9E8A1F4C6D9E2B3A12 /* FishDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishDetector.swift; sourceTree = "<group>"; };
+		2B7C4D9E8A1F4C6D9E2B3A13 /* FishDetector.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper.mlpackage; path = FishDetector.mlpackage; sourceTree = "<group>"; };
 		35F2B36F834E5849AB6CF563 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E892A8057C73FB50C538379 /* FishingAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingAppApp.swift; sourceTree = "<group>"; };
 		B23870F8DA1DBC83E501CD1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -53,6 +57,8 @@
 			isa = PBXGroup;
 			children = (
 				35F2B36F834E5849AB6CF563 /* Assets.xcassets */,
+				2B7C4D9E8A1F4C6D9E2B3A13 /* FishDetector.mlpackage */,
+				2B7C4D9E8A1F4C6D9E2B3A12 /* FishDetector.swift */,
 				E70605B7BBBC43FDA395924D /* FishSpeciesClassifier.mlpackage */,
 				BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */,
 				7E892A8057C73FB50C538379 /* FishingAppApp.swift */,
@@ -127,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C55AEE1259E36CB3793EB5E /* Assets.xcassets in Resources */,
+				2B7C4D9E8A1F4C6D9E2B3A11 /* FishDetector.mlpackage in Resources */,
 				AB087E31FD014151BF2A15B2 /* FishSpeciesClassifier.mlpackage in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B7C4D9E8A1F4C6D9E2B3A10 /* FishDetector.swift in Sources */,
 				71DA71CB036E574FD7281719 /* FishImageClassifier.swift in Sources */,
 				B9180EE4D70EC450998C6740 /* FishingAppApp.swift in Sources */,
 				DD91CC6CB08C36FB577206DF /* IdentifyView.swift in Sources */,

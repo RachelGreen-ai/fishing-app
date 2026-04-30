@@ -6,11 +6,15 @@ import UIKit
 struct IdentifyView: View {
     @StateObject private var locationProvider = LocationProvider()
     @StateObject private var imageClassifier = FishImageClassifier()
+    @StateObject private var fishDetector = FishDetector()
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImageData: Data?
     @State private var imageModelPredictions: [ImageModelPrediction] = []
     @State private var imageModelStatus = "Add or capture a fish photo."
+    @State private var fishDetectionResult: FishDetectionResult?
+    @State private var fishDetectionStatus = "Add or capture a fish photo."
     @State private var isClassifyingPhoto = false
+    @State private var isDetectingFish = false
     @State private var hasPhoto = false
     @State private var showCamera = false
     @State private var didAutoRequestLocation = false
@@ -110,6 +114,17 @@ struct IdentifyView: View {
                     .foregroundStyle(.secondary)
             }
 
+            if isDetectingFish {
+                ProgressView("Finding fish in frame")
+            } else {
+                Label(
+                    fishDetectionStatus,
+                    systemImage: fishDetectionResult?.foundFish == true ? "viewfinder.circle.fill" : "viewfinder"
+                )
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            }
+
             if !imageModelPredictions.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Top Image Matches")
@@ -182,9 +197,18 @@ struct IdentifyView: View {
             LabeledContent("Engine", value: "\(info.name) \(info.version)")
             LabeledContent("Type", value: info.family)
             LabeledContent("Core ML", value: imageClassifier.isModelBundled ? "FishSpeciesClassifier loaded" : "Awaiting FishSpeciesClassifier")
+            LabeledContent("Fish Detector", value: fishDetector.isModelBundled ? "FishDetector loaded" : "Awaiting FishDetector")
             Text(info.summary)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+
+            if isDetectingFish {
+                ProgressView("Finding fish")
+            } else {
+                Text(fishDetectionStatus)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
 
             if isClassifyingPhoto {
                 ProgressView("Classifying photo")
@@ -485,8 +509,11 @@ struct IdentifyView: View {
         selectedImageData = imageData
         imageModelPredictions = []
         imageModelStatus = "Photo ready. Preparing local context..."
+        fishDetectionResult = nil
+        fishDetectionStatus = "Finding fish in the photo..."
         requestAutomaticLocationContextIfNeeded()
 
+        await detectFishIfPossible()
         await classifySelectedPhotoIfPossible()
 
         if hasPhoto && consent.identification {
@@ -501,6 +528,8 @@ struct IdentifyView: View {
         selectedImageData = nil
         imageModelPredictions = []
         imageModelStatus = "Add or capture a fish photo."
+        fishDetectionResult = nil
+        fishDetectionStatus = "Add or capture a fish photo."
         result = nil
     }
 
@@ -508,6 +537,30 @@ struct IdentifyView: View {
         guard region.isEmpty, !didAutoRequestLocation else { return }
         didAutoRequestLocation = true
         locationProvider.requestRegion()
+    }
+
+    private func detectFishIfPossible() async {
+        guard let selectedImageData else {
+            return
+        }
+
+        guard fishDetector.isModelBundled else {
+            fishDetectionStatus = "FishDetector is not bundled yet."
+            return
+        }
+
+        isDetectingFish = true
+        fishDetectionStatus = "Finding fish in the selected photo..."
+        defer { isDetectingFish = false }
+
+        do {
+            let detectionResult = try await fishDetector.detect(imageData: selectedImageData)
+            fishDetectionResult = detectionResult
+            fishDetectionStatus = detectionResult.statusText
+        } catch {
+            fishDetectionResult = nil
+            fishDetectionStatus = error.localizedDescription
+        }
     }
 
     private func classifySelectedPhotoIfPossible() async {
