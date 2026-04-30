@@ -19,13 +19,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		35F2B36F834E5849AB6CF563 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F3C15F3D14F49D9A6E1006D /* GeoSeasonalPrior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoSeasonalPrior.swift; sourceTree = "<group>"; };
+		35F2B36F834E5849AB6CF563 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E892A8057C73FB50C538379 /* FishingAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingAppApp.swift; sourceTree = "<group>"; };
 		B23870F8DA1DBC83E501CD1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B3F3BDC62FF6A2E6E99914CC /* IdentifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyView.swift; sourceTree = "<group>"; };
 		BF6AB4FA748825E2202ECD08 /* FishImageClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishImageClassifier.swift; sourceTree = "<group>"; };
-		C1CF0EB6679C592407CA36A7 /* FishingApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FishingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1CF0EB6679C592407CA36A7 /* Catch ID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Catch ID.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D35A66C6758FE7A32715876B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		D697535A5208CED487670904 /* InferenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceService.swift; sourceTree = "<group>"; };
 		E70605B7BBBC43FDA395924D /* FishSpeciesClassifier.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper.mlpackage; path = FishSpeciesClassifier.mlpackage; sourceTree = "<group>"; };
@@ -36,7 +36,7 @@
 		40991318CD05B6518916984E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C1CF0EB6679C592407CA36A7 /* FishingApp.app */,
+				C1CF0EB6679C592407CA36A7 /* Catch ID.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -85,7 +85,7 @@
 			packageProductDependencies = (
 			);
 			productName = FishingApp;
-			productReference = C1CF0EB6679C592407CA36A7 /* FishingApp.app */;
+			productReference = C1CF0EB6679C592407CA36A7 /* Catch ID.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -98,7 +98,6 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					5C73D1246F4B50566A68673A = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -216,7 +215,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4A6536YY36;
 				INFOPLIST_FILE = ios/FishingApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -235,7 +234,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4A6536YY36;
 				INFOPLIST_FILE = ios/FishingApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
