@@ -66,6 +66,48 @@ python3 ml/scripts/create_classification_split.py \
   --taxonomy-json ml/fish_species_v1.taxonomy.json
 ```
 
+Report per-species coverage and enrichment gaps:
+
+```bash
+python3 ml/scripts/report_classification_dataset_coverage.py \
+  ml/data/classification/inaturalist_na_v2 \
+  --labels-json ml/fish_species_v1.labels.json \
+  --priority-json ml/angler_priority_v1.json \
+  --priority-region north-america \
+  --minimum-per-class 500 \
+  --target-per-class 1000
+```
+
+Target extra labeled iNaturalist images for the most important weak classes:
+
+```bash
+python3 ml/scripts/prepare_inaturalist_seed.py \
+  ml/data/benchmarks/inaturalist_na_enrichment_v3 \
+  --species-ids largemouth-bass bluegill channel-catfish rainbow-trout smallmouth-bass spotted-bass \
+  --max-per-species 700 \
+  --min-per-species 250 \
+  --image-size large \
+  --resume
+```
+
+Merge the base and enrichment manifests, then create the next split:
+
+```bash
+python3 ml/scripts/merge_classification_manifests.py \
+  ml/data/benchmarks/inaturalist_na_seed_v3/manifest.jsonl \
+  ml/data/benchmarks/inaturalist_na_seed_v2/manifest.jsonl \
+  ml/data/benchmarks/inaturalist_na_enrichment_v3/manifest.jsonl \
+  --labels-json ml/fish_species_v1.labels.json
+
+python3 ml/scripts/create_classification_split.py \
+  ml/data/benchmarks/inaturalist_na_seed_v3/manifest.jsonl \
+  ml/data/classification/inaturalist_na_v3 \
+  --mode symlink \
+  --min-per-class 500 \
+  --labels-json ml/fish_species_v1.labels.json \
+  --taxonomy-json ml/fish_species_v1.taxonomy.json
+```
+
 Validate label hierarchy:
 
 ```bash
@@ -138,6 +180,32 @@ ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
   --class-weight-region north-america \
   --class-weight-strength 0.5 \
   --fine-tune-learning-rate 7e-6
+```
+
+Train the next stronger MobileNetV3Large experiment after enrichment:
+
+```bash
+ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
+  ml/data/classification/inaturalist_na_v3 \
+  ml/artifacts/keras/mobilenet_v3_large_na_v3_strong_finetune \
+  --architecture mobilenet_v3_large \
+  --weights imagenet \
+  --epochs 20 \
+  --fine-tune-epochs 12 \
+  --fine-tune-layers 100 \
+  --full-fine-tune-epochs 4 \
+  --batch-size 32 \
+  --augmentation-strength strong \
+  --mixup-alpha 0.15 \
+  --optimizer adamw \
+  --weight-decay 1e-4 \
+  --lr-schedule cosine \
+  --label-smoothing 0.03 \
+  --class-weight-json ml/angler_priority_v1.json \
+  --class-weight-region north-america \
+  --class-weight-strength 0.5 \
+  --fine-tune-learning-rate 7e-6 \
+  --full-fine-tune-learning-rate 2e-6
 ```
 
 Train a YOLO26 classification baseline:

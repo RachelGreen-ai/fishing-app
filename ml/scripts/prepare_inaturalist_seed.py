@@ -37,6 +37,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--per-page", type=int, default=200)
     parser.add_argument("--sleep", type=float, default=0.2)
     parser.add_argument("--image-size", choices=["medium", "large", "original"], default="medium")
+    parser.add_argument(
+        "--species-ids",
+        nargs="+",
+        help="Optional subset of label ids to fetch, useful for targeted enrichment of weak classes.",
+    )
     parser.add_argument("--resume", action="store_true")
     return parser.parse_args()
 
@@ -215,6 +220,13 @@ def species_rows(args: argparse.Namespace, label: dict, taxon_id: int) -> tuple[
 def main() -> int:
     args = parse_args()
     labels = load_json(args.labels)
+    if args.species_ids:
+        requested = set(args.species_ids)
+        labels = [label for label in labels if label["id"] in requested]
+        missing = sorted(requested - {label["id"] for label in labels})
+        if missing:
+            raise SystemExit(f"Requested species ids were not found in labels: {missing}")
+
     taxonomy = load_json(args.taxonomy_json)
     taxonomy_by_id = {row["id"]: row for row in taxonomy}
     args.output_root.mkdir(parents=True, exist_ok=True)
