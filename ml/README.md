@@ -300,6 +300,143 @@ YOLO_CONFIG_DIR=/tmp/Ultralytics ml/.venv-yolo/bin/yolo classify train \
   patience=5
 ```
 
+Prepare a fish detector dataset from NOAA Labeled Fishes in the Wild:
+
+```bash
+python3 ml/scripts/prepare_noaa_lfiw_detection_seed.py \
+  docs/datasets/_LABELED-FISHES-IN-THE-WILD \
+  ml/data/detection/noaa_lfiw_seed_v1 \
+  --mode manifest-only
+
+python3 ml/scripts/prepare_yolo_detection_dataset.py \
+  ml/data/detection/noaa_lfiw_seed_v1/manifest.jsonl \
+  ml/data/detection/noaa_lfiw_yolo_v1 \
+  --mode symlink \
+  --val-fraction 0.15 \
+  --test-fraction 0.15
+```
+
+Prepare the Kaggle Large-Scale Fish Dataset as an additional fish localization seed:
+
+```bash
+python3 ml/scripts/prepare_large_scale_fish_dataset.py \
+  docs/datasets/largescalefishdata \
+  ml/data/detection/large_scale_fish_seed_v1 \
+  --mode manifest-only \
+  --val-fraction 0.15 \
+  --test-fraction 0.15
+```
+
+This script derives boxes from GT masks, skips `Shrimp` by default, and writes:
+
+- `manifest.jsonl` for detector training.
+- `classification_mapped.manifest.jsonl` for rows that map cleanly into the app taxonomy.
+- `source_report.json` with class counts and skipped rows.
+
+Merge the NOAA wild-fish seed with the large-scale segmentation seed:
+
+```bash
+python3 ml/scripts/merge_detection_manifests.py \
+  ml/data/detection/fish_detector_mix_v1/manifest.source.jsonl \
+  ml/data/detection/noaa_lfiw_seed_v1/manifest.jsonl \
+  ml/data/detection/large_scale_fish_seed_v1/manifest.jsonl
+
+python3 ml/scripts/prepare_yolo_detection_dataset.py \
+  ml/data/detection/fish_detector_mix_v1/manifest.source.jsonl \
+  ml/data/detection/fish_detector_mix_v1/yolo \
+  --mode symlink \
+  --val-fraction 0.15 \
+  --test-fraction 0.15
+```
+
+Train a lightweight fish detector for crop-before-classify experiments:
+
+```bash
+mkdir -p ml/artifacts/yolo
+curl -L \
+  https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo11n.pt \
+  -o ml/artifacts/yolo/yolo11n.pt
+
+YOLO_CONFIG_DIR=/tmp/Ultralytics ml/.venv-yolo/bin/yolo detect train \
+  data=ml/data/detection/noaa_lfiw_yolo_v1/dataset.yaml \
+  model=ml/artifacts/yolo/yolo11n.pt \
+  epochs=40 \
+  imgsz=640 \
+  batch=16 \
+  device=cpu \
+  project=$PWD/ml/artifacts/yolo \
+  name=fish_detector_noaa_lfiw_v1 \
+  exist_ok=True \
+  patience=8
+```
+
+Train the current mixed detector smoke run:
+
+```bash
+YOLO_CONFIG_DIR=/tmp/Ultralytics ml/.venv-yolo/bin/yolo detect train \
+  data=ml/data/detection/fish_detector_mix_v1/yolo/dataset.yaml \
+  model=ml/artifacts/yolo/yolo11n.pt \
+  epochs=5 \
+  imgsz=320 \
+  batch=16 \
+  device=cpu \
+  project=$PWD/ml/artifacts/yolo \
+  name=fish_detector_mix_v1_yolo11n_320_e5 \
+  exist_ok=True \
+  patience=3 \
+  workers=0
+```
+
+Evaluate the detector and build a cropped classifier benchmark manifest:
+
+```bash
+ml/.venv-yolo/bin/python ml/scripts/predict_ultralytics_detector.py \
+  ml/artifacts/yolo/fish_detector_noaa_lfiw_v1/weights/best.pt \
+  ml/data/detection/noaa_lfiw_yolo_v1/manifest.jsonl \
+  ml/data/detection/noaa_lfiw_yolo_v1 \
+  ml/runs/detection/fish_detector_noaa_lfiw_v1/noaa_lfiw_yolo_v1_predictions.jsonl \
+  --imgsz 640 \
+  --conf 0.25
+
+python3 ml/scripts/evaluate_detection_predictions.py \
+  ml/data/detection/noaa_lfiw_yolo_v1/manifest.jsonl \
+  ml/runs/detection/fish_detector_noaa_lfiw_v1/noaa_lfiw_yolo_v1_predictions.jsonl \
+  --score-threshold 0.25 \
+  --iou-threshold 0.5
+
+ml/.venv-yolo/bin/python ml/scripts/predict_ultralytics_detector.py \
+  ml/artifacts/yolo/fish_detector_noaa_lfiw_v1/weights/best.pt \
+  ml/data/classification/inaturalist_na_v2/test.manifest.jsonl \
+  ml/data/classification/inaturalist_na_v2 \
+  ml/runs/detection/fish_detector_noaa_lfiw_v1/inaturalist_na_v2_test_predictions.jsonl \
+  --imgsz 640 \
+  --conf 0.25
+
+python3 ml/scripts/crop_manifest_with_detections.py \
+  ml/data/classification/inaturalist_na_v2/test.manifest.jsonl \
+  ml/data/classification/inaturalist_na_v2 \
+  ml/runs/detection/fish_detector_noaa_lfiw_v1/inaturalist_na_v2_test_predictions.jsonl \
+  ml/data/classification/inaturalist_na_v2_detector_crops \
+  --min-score 0.25 \
+  --padding 0.08 \
+  --fallback full-image
+
+ml/.venv-mobilenet/bin/python ml/scripts/predict_keras_classifier.py \
+  ml/artifacts/keras/mobilenet_v3_large_na_v2_weighted_smooth/final.keras \
+  ml/artifacts/keras/mobilenet_v3_large_na_v2_weighted_smooth/labels.json \
+  ml/data/classification/inaturalist_na_v2_detector_crops/manifest.jsonl \
+  ml/data/classification/inaturalist_na_v2_detector_crops \
+  ml/runs/keras/mobilenet_v3_large_na_v2_weighted_smooth/detector_crops_predictions.jsonl \
+  --image-size 224 \
+  --top-k 5
+
+python3 ml/scripts/evaluate_predictions.py \
+  ml/data/classification/inaturalist_na_v2_detector_crops/manifest.jsonl \
+  ml/runs/keras/mobilenet_v3_large_na_v2_weighted_smooth/detector_crops_predictions.jsonl \
+  --prior-json ml/angler_priority_v1.json \
+  --prior-region north-america
+```
+
 Run predictions for evaluator metrics:
 
 ```bash

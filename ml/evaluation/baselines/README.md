@@ -46,3 +46,8 @@ Run these on `fish_id_gold_v1` in order:
 2. Apple Create ML baseline.
 3. Fishial pretrained classifier baseline.
 4. Our first trained `fish_species_v1` Core ML model.
+
+## Detector Baselines
+
+- `yolo11n_detector_noaa_lfiw_v1_smoke.md`: first NOAA-only fish detector smoke run.
+- `yolo11n_detector_mix_v1_320_e5.md`: mixed NOAA plus Kaggle large-scale fish detector run, including crop-before-classify checks against the current MobileNetV3Large classifier.
