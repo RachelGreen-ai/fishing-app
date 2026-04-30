@@ -51,3 +51,7 @@ Run these on `fish_id_gold_v1` in order:
 
 - `yolo11n_detector_noaa_lfiw_v1_smoke.md`: first NOAA-only fish detector smoke run.
 - `yolo11n_detector_mix_v1_320_e5.md`: mixed NOAA plus Kaggle large-scale fish detector run, including crop-before-classify checks against the current MobileNetV3Large classifier.
+
+## Auxiliary Classification Baselines
+
+- `mobilenet_v3_large_large_scale_aux_v1.md`: first Kaggle Large-Scale Fish Dataset auxiliary-pretraining experiment; useful for controlled Europe marine classes, but not promoted because it does not improve the North America classifier benchmark.

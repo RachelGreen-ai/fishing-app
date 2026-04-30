@@ -53,6 +53,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--monitor", default="val_accuracy")
     parser.add_argument("--early-stopping-patience", type=int, default=5)
     parser.add_argument("--fine-tune-batchnorm", action="store_true")
+    parser.add_argument(
+        "--initial-backbone-model",
+        type=Path,
+        help="Optional Keras model whose matching MobileNet backbone weights seed this run.",
+    )
     parser.add_argument("--export-coreml", action="store_true")
     return parser.parse_args()
 
@@ -277,6 +282,30 @@ def unfreeze_tail(
         )
 
 
+def mobilenet_backbone(model: tf.keras.Model, architecture: str) -> tf.keras.Model | None:
+    base = next((layer for layer in model.layers if architecture in layer.name.lower()), None)
+    if base is not None and isinstance(base, tf.keras.Model):
+        return base
+    return next((layer for layer in model.layers if isinstance(layer, tf.keras.Model)), None)
+
+
+def load_initial_backbone_weights(model: tf.keras.Model, architecture: str, model_path: Path | None) -> str | None:
+    if model_path is None:
+        return None
+    source_model = tf.keras.models.load_model(model_path, compile=False)
+    source_backbone = mobilenet_backbone(source_model, architecture)
+    target_backbone = mobilenet_backbone(model, architecture)
+    if source_backbone is None or target_backbone is None:
+        raise SystemExit("Could not find MobileNet backbone in source or target model")
+    if len(source_backbone.get_weights()) != len(target_backbone.get_weights()):
+        raise SystemExit(
+            "Initial backbone model is incompatible: backbone weight counts differ "
+            f"({len(source_backbone.get_weights())} vs {len(target_backbone.get_weights())})"
+        )
+    target_backbone.set_weights(source_backbone.get_weights())
+    return str(model_path)
+
+
 def dataset_steps(dataset: tf.data.Dataset) -> int:
     cardinality = tf.data.experimental.cardinality(dataset).numpy()
     if cardinality < 0:
@@ -332,6 +361,7 @@ def main() -> int:
     steps_per_epoch = dataset_steps(train_ds)
 
     model = build_model(args, labels)
+    initial_backbone_model = load_initial_backbone_weights(model, args.architecture, args.initial_backbone_model)
     class_weights = load_class_weights(args, labels)
     fit_class_weights = class_weights
     train_ds = apply_mixup(train_ds, args.mixup_alpha)
@@ -452,6 +482,7 @@ def main() -> int:
         "monitor": args.monitor,
         "early_stopping_patience": args.early_stopping_patience,
         "fine_tune_batchnorm": args.fine_tune_batchnorm,
+        "initial_backbone_model": initial_backbone_model,
         "test_metrics": {key: float(value) for key, value in test_metrics.items()},
         "history": {
             key: [float(value) for value in values]

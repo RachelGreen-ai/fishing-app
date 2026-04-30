@@ -281,6 +281,65 @@ ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
   --full-fine-tune-learning-rate 2e-6
 ```
 
+Prepare the clean classification subset from the Kaggle Large-Scale Fish Dataset:
+
+```bash
+python3 ml/scripts/create_classification_split.py \
+  ml/data/detection/large_scale_fish_seed_v1/classification_mapped.manifest.jsonl \
+  ml/data/classification/large_scale_fish_mapped_v1 \
+  --mode symlink \
+  --labels-json ml/fish_species_angler_v1.labels.json \
+  --taxonomy-json ml/fish_species_angler_v1.taxonomy.json \
+  --train 0.7 \
+  --validation 0.15 \
+  --test 0.15 \
+  --min-per-class 30
+```
+
+Train an auxiliary MobileNetV3Large backbone on the clean large-scale mapped labels:
+
+```bash
+ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
+  ml/data/classification/large_scale_fish_mapped_v1 \
+  ml/artifacts/keras/mobilenet_v3_large_large_scale_mapped_v1_aux \
+  --architecture mobilenet_v3_large \
+  --weights imagenet \
+  --image-size 224 \
+  --batch-size 32 \
+  --epochs 4 \
+  --fine-tune-epochs 2 \
+  --fine-tune-layers 40 \
+  --optimizer adamw \
+  --weight-decay 0.0001 \
+  --augmentation-strength medium \
+  --label-smoothing 0.03
+```
+
+Use that auxiliary backbone to seed a real app classifier experiment:
+
+```bash
+ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
+  ml/data/classification/inaturalist_na_v2 \
+  ml/artifacts/keras/mobilenet_v3_large_na_v2_aux_large_scale_seeded \
+  --architecture mobilenet_v3_large \
+  --weights imagenet \
+  --initial-backbone-model ml/artifacts/keras/mobilenet_v3_large_large_scale_mapped_v1_aux/final.keras \
+  --image-size 224 \
+  --batch-size 32 \
+  --epochs 16 \
+  --fine-tune-epochs 8 \
+  --fine-tune-layers 80 \
+  --optimizer adamw \
+  --weight-decay 0.0001 \
+  --augmentation-strength strong \
+  --label-smoothing 0.05 \
+  --class-weight-json ml/angler_priority_v1.json \
+  --class-weight-region north-america \
+  --class-weight-strength 0.5
+```
+
+Do not promote an auxiliary-seeded classifier unless it beats the current benchmark on top-1, top-3, macro recall, priority-weighted metrics, and lookalike groups.
+
 Train a YOLO26 classification baseline:
 
 ```bash
