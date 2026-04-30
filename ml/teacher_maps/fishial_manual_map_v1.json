@@ -1,0 +1,11 @@
+{
+  "notes": [
+    "Manual synonym overrides from Fishial scientific labels into the app angler taxonomy.",
+    "Micropterus nigricans is mapped to the app's Largemouth Bass label for fishing UX compatibility.",
+    "Leuciscus aspius is mapped to Asp, which this repo stores as Aspius aspius."
+  ],
+  "teacher_to_app": {
+    "Leuciscus aspius": "asp",
+    "Micropterus nigricans": "largemouth-bass"
+  }
+}

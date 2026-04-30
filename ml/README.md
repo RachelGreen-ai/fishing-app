@@ -17,6 +17,8 @@ The current iOS app already contains a Core ML/Vision adapter in `ios/FishingApp
 
 Dataset source notes and prioritization live in `docs/datasets/fish-dataset-registry.md`.
 
+The broader app label hierarchy and Fishial teacher-student plan live in `docs/ml-label-system-teacher-student.md`.
+
 Validate a prepared dataset before training:
 
 ```bash
@@ -115,6 +117,38 @@ python3 ml/scripts/validate_label_taxonomy.py \
   ml/fish_species_europe_v1.taxonomy.json \
   --labels-json ml/fish_species_europe_v1.labels.json \
   --aliases-json ml/fish_species_europe_v1.aliases.json
+```
+
+Validate the broader angler label hierarchy:
+
+```bash
+python3 ml/scripts/validate_label_taxonomy.py \
+  ml/fish_species_angler_v1.taxonomy.json \
+  --labels-json ml/fish_species_angler_v1.labels.json
+```
+
+Fetch Fishial teacher labels and map them into the app taxonomy:
+
+```bash
+mkdir -p ml/external
+curl -L \
+  https://raw.githubusercontent.com/fishial/fish-identification/refs/heads/main/labels.json \
+  -o ml/external/fishial_labels.json
+
+python3 ml/scripts/map_teacher_labels_to_taxonomy.py \
+  ml/fish_species_angler_v1.taxonomy.json \
+  ml/external/fishial_labels.json \
+  ml/teacher_maps/fishial_to_angler_v1.json \
+  --manual-map-json ml/teacher_maps/fishial_manual_map_v1.json
+```
+
+Collapse Fishial teacher predictions into app labels before evaluation:
+
+```bash
+python3 ml/scripts/collapse_teacher_predictions.py \
+  ml/runs/fishial/angler_v1/test_teacher_predictions.jsonl \
+  ml/teacher_maps/fishial_to_angler_v1.json \
+  ml/runs/fishial/angler_v1/test_predictions_collapsed.jsonl
 ```
 
 Train a first local Create ML baseline:

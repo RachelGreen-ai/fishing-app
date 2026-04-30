@@ -1,0 +1,277 @@
+[
+  {
+    "common_name": "Largemouth Bass",
+    "id": "largemouth-bass",
+    "scientific_name": "Micropterus salmoides"
+  },
+  {
+    "common_name": "Smallmouth Bass",
+    "id": "smallmouth-bass",
+    "scientific_name": "Micropterus dolomieu"
+  },
+  {
+    "common_name": "Spotted Bass",
+    "id": "spotted-bass",
+    "scientific_name": "Micropterus punctulatus"
+  },
+  {
+    "common_name": "Striped Bass",
+    "id": "striped-bass",
+    "scientific_name": "Morone saxatilis"
+  },
+  {
+    "common_name": "White Bass",
+    "id": "white-bass",
+    "scientific_name": "Morone chrysops"
+  },
+  {
+    "common_name": "Bluegill",
+    "id": "bluegill",
+    "scientific_name": "Lepomis macrochirus"
+  },
+  {
+    "common_name": "Pumpkinseed",
+    "id": "pumpkinseed",
+    "scientific_name": "Lepomis gibbosus"
+  },
+  {
+    "common_name": "Green Sunfish",
+    "id": "green-sunfish",
+    "scientific_name": "Lepomis cyanellus"
+  },
+  {
+    "common_name": "Black Crappie",
+    "id": "black-crappie",
+    "scientific_name": "Pomoxis nigromaculatus"
+  },
+  {
+    "common_name": "White Crappie",
+    "id": "white-crappie",
+    "scientific_name": "Pomoxis annularis"
+  },
+  {
+    "common_name": "Walleye",
+    "id": "walleye",
+    "scientific_name": "Sander vitreus"
+  },
+  {
+    "common_name": "Yellow Perch",
+    "id": "yellow-perch",
+    "scientific_name": "Perca flavescens"
+  },
+  {
+    "common_name": "Rainbow Trout",
+    "id": "rainbow-trout",
+    "scientific_name": "Oncorhynchus mykiss"
+  },
+  {
+    "common_name": "Brown Trout",
+    "id": "brown-trout",
+    "scientific_name": "Salmo trutta"
+  },
+  {
+    "common_name": "Brook Trout",
+    "id": "brook-trout",
+    "scientific_name": "Salvelinus fontinalis"
+  },
+  {
+    "common_name": "Lake Trout",
+    "id": "lake-trout",
+    "scientific_name": "Salvelinus namaycush"
+  },
+  {
+    "common_name": "Atlantic Salmon",
+    "id": "atlantic-salmon",
+    "scientific_name": "Salmo salar"
+  },
+  {
+    "common_name": "Chinook Salmon",
+    "id": "chinook-salmon",
+    "scientific_name": "Oncorhynchus tshawytscha"
+  },
+  {
+    "common_name": "Coho Salmon",
+    "id": "coho-salmon",
+    "scientific_name": "Oncorhynchus kisutch"
+  },
+  {
+    "common_name": "Channel Catfish",
+    "id": "channel-catfish",
+    "scientific_name": "Ictalurus punctatus"
+  },
+  {
+    "common_name": "Blue Catfish",
+    "id": "blue-catfish",
+    "scientific_name": "Ictalurus furcatus"
+  },
+  {
+    "common_name": "Flathead Catfish",
+    "id": "flathead-catfish",
+    "scientific_name": "Pylodictis olivaris"
+  },
+  {
+    "common_name": "Common Carp",
+    "id": "common-carp",
+    "scientific_name": "Cyprinus carpio"
+  },
+  {
+    "common_name": "Northern Pike",
+    "id": "northern-pike",
+    "scientific_name": "Esox lucius"
+  },
+  {
+    "common_name": "Muskellunge",
+    "id": "muskellunge",
+    "scientific_name": "Esox masquinongy"
+  },
+  {
+    "common_name": "Red Drum",
+    "id": "red-drum",
+    "scientific_name": "Sciaenops ocellatus"
+  },
+  {
+    "common_name": "Black Drum",
+    "id": "black-drum",
+    "scientific_name": "Pogonias cromis"
+  },
+  {
+    "common_name": "Spotted Seatrout",
+    "id": "spotted-seatrout",
+    "scientific_name": "Cynoscion nebulosus"
+  },
+  {
+    "common_name": "Summer Flounder",
+    "id": "flounder",
+    "scientific_name": "Paralichthys dentatus"
+  },
+  {
+    "common_name": "Red Snapper",
+    "id": "red-snapper",
+    "scientific_name": "Lutjanus campechanus"
+  },
+  {
+    "common_name": "Mangrove Snapper",
+    "id": "mangrove-snapper",
+    "scientific_name": "Lutjanus griseus"
+  },
+  {
+    "common_name": "Sheepshead",
+    "id": "sheepshead",
+    "scientific_name": "Archosargus probatocephalus"
+  },
+  {
+    "common_name": "Cobia",
+    "id": "cobia",
+    "scientific_name": "Rachycentron canadum"
+  },
+  {
+    "common_name": "Mahi-Mahi",
+    "id": "mahi-mahi",
+    "scientific_name": "Coryphaena hippurus"
+  },
+  {
+    "common_name": "Bluefish",
+    "id": "bluefish",
+    "scientific_name": "Pomatomus saltatrix"
+  },
+  {
+    "common_name": "Atlantic Mackerel",
+    "id": "atlantic-mackerel",
+    "scientific_name": "Scomber scombrus"
+  },
+  {
+    "common_name": "Yellowfin Tuna",
+    "id": "yellowfin-tuna",
+    "scientific_name": "Thunnus albacares"
+  },
+  {
+    "common_name": "European Perch",
+    "id": "european-perch",
+    "scientific_name": "Perca fluviatilis"
+  },
+  {
+    "common_name": "Zander",
+    "id": "zander",
+    "scientific_name": "Sander lucioperca"
+  },
+  {
+    "common_name": "European Eel",
+    "id": "european-eel",
+    "scientific_name": "Anguilla anguilla"
+  },
+  {
+    "common_name": "Roach",
+    "id": "roach",
+    "scientific_name": "Rutilus rutilus"
+  },
+  {
+    "common_name": "Rudd",
+    "id": "rudd",
+    "scientific_name": "Scardinius erythrophthalmus"
+  },
+  {
+    "common_name": "Common Bream",
+    "id": "common-bream",
+    "scientific_name": "Abramis brama"
+  },
+  {
+    "common_name": "Tench",
+    "id": "tench",
+    "scientific_name": "Tinca tinca"
+  },
+  {
+    "common_name": "European Grayling",
+    "id": "european-grayling",
+    "scientific_name": "Thymallus thymallus"
+  },
+  {
+    "common_name": "Wels Catfish",
+    "id": "wels-catfish",
+    "scientific_name": "Silurus glanis"
+  },
+  {
+    "common_name": "European Seabass",
+    "id": "european-seabass",
+    "scientific_name": "Dicentrarchus labrax"
+  },
+  {
+    "common_name": "Gilthead Seabream",
+    "id": "gilthead-seabream",
+    "scientific_name": "Sparus aurata"
+  },
+  {
+    "common_name": "Atlantic Cod",
+    "id": "cod",
+    "scientific_name": "Gadus morhua"
+  },
+  {
+    "common_name": "European Plaice",
+    "id": "plaice",
+    "scientific_name": "Pleuronectes platessa"
+  },
+  {
+    "common_name": "Asp",
+    "id": "asp",
+    "scientific_name": "Aspius aspius"
+  },
+  {
+    "common_name": "Common Barbel",
+    "id": "common-barbel",
+    "scientific_name": "Barbus barbus"
+  },
+  {
+    "common_name": "Chub",
+    "id": "chub",
+    "scientific_name": "Leuciscus cephalus"
+  },
+  {
+    "common_name": "Ide",
+    "id": "ide",
+    "scientific_name": "Leuciscus idus"
+  },
+  {
+    "common_name": "Common Dace",
+    "id": "common-dace",
+    "scientific_name": "Leuciscus leuciscus"
+  }
+]
