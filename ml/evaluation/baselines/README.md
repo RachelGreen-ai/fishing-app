@@ -56,3 +56,4 @@ Run these on `fish_id_gold_v1` in order:
 
 - `mobilenet_v3_large_large_scale_aux_v1.md`: first Kaggle Large-Scale Fish Dataset auxiliary-pretraining experiment; useful for controlled Europe marine classes, but not promoted because it does not improve the North America classifier benchmark.
 - `mobilenet_v3_large_na_v3_priority5.md`: first North America priority-5 iNaturalist enrichment run; improves top-1 and priority-weighted top-1, but is not auto-promoted because priority-weighted top-3 dips slightly.
+- `mobilenet_v3_large_na_v3_priority6.md`: adds bluegill to the priority enrichment set; first candidate to beat the current MobileNetV3Large benchmark on top-1, top-3, macro recall, and priority-weighted metrics.

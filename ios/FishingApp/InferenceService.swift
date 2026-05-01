@@ -3,11 +3,12 @@ import Foundation
 enum InferenceService {
     static let engineInfo = IdentificationEngineInfo(
         name: "Hybrid Local Identifier",
-        version: "0.3",
+        version: "0.4",
         family: "Core ML + geo-seasonal priors + optional traits",
-        summary: "Ranks the local species catalog from on-device image model predictions when available, then gently reranks with GPS/date/water context and optional visible traits.",
+        summary: "Ranks the local species catalog from the priority-6 on-device image classifier, then gently reranks with GPS/date/water context and optional visible traits.",
         limitations: [
             "Geo-seasonal priors are supporting signals only.",
+            "Low-confidence image predictions should stay reviewable.",
             "A visually strong rare catch should remain possible.",
             "Harvest decisions still require current local regulations."
         ]

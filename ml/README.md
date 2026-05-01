@@ -394,6 +394,74 @@ ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
   --class-weight-strength 0.5
 ```
 
+Add bluegill enrichment if priority-weighted top-3 regresses:
+
+```bash
+python3 ml/scripts/prepare_inaturalist_seed.py \
+  ml/data/benchmarks/inaturalist_na_bluegill_seed_v3 \
+  --labels ml/fish_species_v1.labels.json \
+  --taxonomy-json ml/fish_species_v1.taxonomy.json \
+  --species-ids bluegill \
+  --max-per-species 750 \
+  --min-per-species 500 \
+  --per-page 200 \
+  --sleep 0.15 \
+  --image-size medium \
+  --exclude-manifest-jsonl ml/data/benchmarks/inaturalist_na_seed_v2/manifest.jsonl \
+  --resume
+```
+
+Build the priority-6 dataset from priority-5 plus bluegill while keeping the
+`inaturalist_na_v2` test split frozen:
+
+```bash
+python3 ml/scripts/build_enriched_classification_dataset.py \
+  ml/data/classification/inaturalist_na_v3_priority6 \
+  --base-dataset-root ml/data/classification/inaturalist_na_v2 \
+  --enrichment-manifest-jsonl ml/data/benchmarks/inaturalist_na_priority5_seed_v3/manifest.jsonl \
+  --enrichment-manifest-jsonl ml/data/benchmarks/inaturalist_na_bluegill_seed_v3/manifest.jsonl \
+  --mode symlink \
+  --enrichment-validation-fraction 0.15 \
+  --seed 20260501
+```
+
+Continue training from the current best MobileNetV3Large classifier on the
+priority-6 split:
+
+```bash
+ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
+  ml/data/classification/inaturalist_na_v3_priority6 \
+  ml/artifacts/keras/mobilenet_v3_large_na_v3_priority6_continued \
+  --architecture mobilenet_v3_large \
+  --weights none \
+  --initial-model ml/artifacts/keras/mobilenet_v3_large_na_v2_weighted_smooth/final.keras \
+  --image-size 224 \
+  --batch-size 32 \
+  --epochs 8 \
+  --fine-tune-epochs 8 \
+  --fine-tune-layers 100 \
+  --learning-rate 0.0001 \
+  --fine-tune-learning-rate 0.000005 \
+  --optimizer adamw \
+  --weight-decay 0.0001 \
+  --augmentation-strength medium \
+  --label-smoothing 0.05 \
+  --class-weight-json ml/angler_priority_v1.json \
+  --class-weight-region north-america \
+  --class-weight-strength 0.5 \
+  --monitor val_accuracy \
+  --early-stopping-patience 4
+```
+
+Export the priority-6 candidate to iOS after it beats the benchmark:
+
+```bash
+ml/.venv-mobilenet/bin/python ml/scripts/export_keras_classifier_to_coreml.py \
+  ml/artifacts/keras/mobilenet_v3_large_na_v3_priority6_continued/final.keras \
+  ml/artifacts/keras/mobilenet_v3_large_na_v3_priority6_continued/labels.json \
+  ios/FishingApp/FishSpeciesClassifier.mlpackage
+```
+
 Train a YOLO26 classification baseline:
 
 ```bash
