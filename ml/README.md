@@ -340,6 +340,60 @@ ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
 
 Do not promote an auxiliary-seeded classifier unless it beats the current benchmark on top-1, top-3, macro recall, priority-weighted metrics, and lookalike groups.
 
+Download priority-5 iNaturalist enrichment for the weak/high-priority North America classes:
+
+```bash
+python3 ml/scripts/prepare_inaturalist_seed.py \
+  ml/data/benchmarks/inaturalist_na_priority5_seed_v3 \
+  --labels ml/fish_species_v1.labels.json \
+  --taxonomy-json ml/fish_species_v1.taxonomy.json \
+  --species-ids largemouth-bass smallmouth-bass spotted-bass rainbow-trout channel-catfish \
+  --max-per-species 750 \
+  --min-per-species 500 \
+  --per-page 200 \
+  --sleep 0.15 \
+  --image-size medium \
+  --exclude-manifest-jsonl ml/data/benchmarks/inaturalist_na_seed_v2/manifest.jsonl \
+  --resume
+```
+
+Build a priority-enriched classifier dataset while keeping the `inaturalist_na_v2` test split frozen:
+
+```bash
+python3 ml/scripts/build_enriched_classification_dataset.py \
+  ml/data/classification/inaturalist_na_v3_priority5 \
+  --base-dataset-root ml/data/classification/inaturalist_na_v2 \
+  --enrichment-manifest-jsonl ml/data/benchmarks/inaturalist_na_priority5_seed_v3/manifest.jsonl \
+  --mode symlink \
+  --enrichment-validation-fraction 0.15 \
+  --seed 20260430
+```
+
+Continue training from the current best MobileNetV3Large classifier on the priority-enriched split:
+
+```bash
+ml/.venv-mobilenet/bin/python ml/scripts/train_keras_mobilenet_classifier.py \
+  ml/data/classification/inaturalist_na_v3_priority5 \
+  ml/artifacts/keras/mobilenet_v3_large_na_v3_priority5_continued \
+  --architecture mobilenet_v3_large \
+  --weights none \
+  --initial-model ml/artifacts/keras/mobilenet_v3_large_na_v2_weighted_smooth/final.keras \
+  --image-size 224 \
+  --batch-size 32 \
+  --epochs 8 \
+  --fine-tune-epochs 8 \
+  --fine-tune-layers 100 \
+  --learning-rate 0.0001 \
+  --fine-tune-learning-rate 0.000005 \
+  --optimizer adamw \
+  --weight-decay 0.0001 \
+  --augmentation-strength medium \
+  --label-smoothing 0.05 \
+  --class-weight-json ml/angler_priority_v1.json \
+  --class-weight-region north-america \
+  --class-weight-strength 0.5
+```
+
 Train a YOLO26 classification baseline:
 
 ```bash

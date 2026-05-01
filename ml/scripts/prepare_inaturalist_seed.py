@@ -42,6 +42,13 @@ def parse_args() -> argparse.Namespace:
         nargs="+",
         help="Optional subset of label ids to fetch, useful for targeted enrichment of weak classes.",
     )
+    parser.add_argument(
+        "--exclude-manifest-jsonl",
+        type=Path,
+        action="append",
+        default=[],
+        help="Existing manifest(s) whose source_observation_id values should not be downloaded again.",
+    )
     parser.add_argument("--resume", action="store_true")
     return parser.parse_args()
 
@@ -49,6 +56,30 @@ def parse_args() -> argparse.Namespace:
 def load_json(path: Path):
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def load_jsonl(path: Path) -> list[dict]:
+    rows = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, start=1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError as exc:
+                raise SystemExit(f"{path}:{line_number}: invalid JSON: {exc}") from exc
+    return rows
+
+
+def excluded_observation_ids(paths: list[Path]) -> set[int]:
+    excluded = set()
+    for path in paths:
+        for row in load_jsonl(path):
+            observation_id = row.get("source_observation_id")
+            if observation_id is not None:
+                excluded.add(int(observation_id))
+    return excluded
 
 
 def slugify(value: str) -> str:
@@ -152,7 +183,12 @@ def infer_quality(observation: dict) -> str:
     return "low"
 
 
-def species_rows(args: argparse.Namespace, label: dict, taxon_id: int) -> tuple[list[dict], Counter]:
+def species_rows(
+    args: argparse.Namespace,
+    label: dict,
+    taxon_id: int,
+    excluded_observations: set[int],
+) -> tuple[list[dict], Counter]:
     species_id = label["id"]
     species_root = args.output_root / "images" / species_id
     rows = []
@@ -172,6 +208,9 @@ def species_rows(args: argparse.Namespace, label: dict, taxon_id: int) -> tuple[
             if not observation_id or observation_id in seen_observations:
                 continue
             seen_observations.add(observation_id)
+            if int(observation_id) in excluded_observations:
+                counters["skipped_excluded_observation"] += 1
+                continue
             selected = first_allowed_photo(observation, args.image_size)
             if not selected:
                 counters["skipped_no_allowed_photo_license"] += 1
@@ -229,6 +268,7 @@ def main() -> int:
 
     taxonomy = load_json(args.taxonomy_json)
     taxonomy_by_id = {row["id"]: row for row in taxonomy}
+    excluded_observations = excluded_observation_ids(args.exclude_manifest_jsonl)
     args.output_root.mkdir(parents=True, exist_ok=True)
 
     all_rows = []
@@ -243,7 +283,7 @@ def main() -> int:
     for label in labels:
         species_id = label["id"]
         taxon_id = resolve_taxon_id(label["scientific_name"])
-        rows, counters = species_rows(args, label, taxon_id)
+        rows, counters = species_rows(args, label, taxon_id, excluded_observations)
         if len(rows) < args.min_per_species:
             report["species"][species_id] = {
                 "taxon_id": taxon_id,

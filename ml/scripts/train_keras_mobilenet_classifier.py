@@ -58,6 +58,11 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Optional Keras model whose matching MobileNet backbone weights seed this run.",
     )
+    parser.add_argument(
+        "--initial-model",
+        type=Path,
+        help="Optional Keras model whose compatible layer weights seed this run.",
+    )
     parser.add_argument("--export-coreml", action="store_true")
     return parser.parse_args()
 
@@ -185,7 +190,7 @@ def build_model(args: argparse.Namespace, labels: list[str]) -> tf.keras.Model:
 
     weights = None if args.weights == "none" else args.weights
     base = backbone(args.architecture, args.image_size, weights)
-    base.trainable = weights is None
+    base.trainable = weights is None and not (args.initial_backbone_model or args.initial_model)
     x = base(x, training=False)
     x = tf.keras.layers.Dropout(args.dropout)(x)
     outputs = tf.keras.layers.Dense(len(labels), activation="softmax", name="species")(x)
@@ -306,6 +311,37 @@ def load_initial_backbone_weights(model: tf.keras.Model, architecture: str, mode
     return str(model_path)
 
 
+def load_initial_model_weights(model: tf.keras.Model, model_path: Path | None) -> dict | None:
+    if model_path is None:
+        return None
+    source_model = tf.keras.models.load_model(model_path, compile=False)
+    source_layers = {layer.name: layer for layer in source_model.layers}
+    loaded = []
+    skipped = []
+    for layer in model.layers:
+        source_layer = source_layers.get(layer.name)
+        if source_layer is None:
+            skipped.append(layer.name)
+            continue
+        source_weights = source_layer.get_weights()
+        target_weights = layer.get_weights()
+        if not source_weights and not target_weights:
+            continue
+        if len(source_weights) != len(target_weights):
+            skipped.append(layer.name)
+            continue
+        if any(source.shape != target.shape for source, target in zip(source_weights, target_weights)):
+            skipped.append(layer.name)
+            continue
+        layer.set_weights(source_weights)
+        loaded.append(layer.name)
+    return {
+        "model_path": str(model_path),
+        "loaded_layers": loaded,
+        "skipped_layers": skipped,
+    }
+
+
 def dataset_steps(dataset: tf.data.Dataset) -> int:
     cardinality = tf.data.experimental.cardinality(dataset).numpy()
     if cardinality < 0:
@@ -361,6 +397,9 @@ def main() -> int:
     steps_per_epoch = dataset_steps(train_ds)
 
     model = build_model(args, labels)
+    if args.initial_model and args.initial_backbone_model:
+        raise SystemExit("--initial-model and --initial-backbone-model are mutually exclusive")
+    initial_model = load_initial_model_weights(model, args.initial_model)
     initial_backbone_model = load_initial_backbone_weights(model, args.architecture, args.initial_backbone_model)
     class_weights = load_class_weights(args, labels)
     fit_class_weights = class_weights
@@ -482,6 +521,7 @@ def main() -> int:
         "monitor": args.monitor,
         "early_stopping_patience": args.early_stopping_patience,
         "fine_tune_batchnorm": args.fine_tune_batchnorm,
+        "initial_model": initial_model,
         "initial_backbone_model": initial_backbone_model,
         "test_metrics": {key: float(value) for key, value in test_metrics.items()},
         "history": {
